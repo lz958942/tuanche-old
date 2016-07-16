@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tuanche.cms.cheread.InfoReadMapper">
+     <select id="getBrand"  resultType="com.tuanche.cms.bean.Brand">
+         SELECT id,name,new_series as newSeriesId  FROM tc_brand  order by pinyin asc
+     </select>
+	  <select id="getStyle"  resultType="com.tuanche.cms.bean.Style">
+         SELECT style name,pid brandId,id ,ppid pid
+         FROM  tc_carstyle   a
+         WHERE a.type=0 
+         AND a.show=0 
+     </select>
+</mapper>

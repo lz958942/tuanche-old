@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<!-- namespace和定义的Mapper接口对应，并实现其中的方法 -->
+<mapper namespace="com.tuanche.cms.cheread.CarStyleMapper">
+	<select id="getBrand" resultType="com.tuanche.cms.bean.Brand">
+		select id, pinyin ,name from tc_brand
+	</select>  	
+	
+	<select id="getCarStyle" resultType="com.tuanche.cms.bean.Style">
+		select id, pid, style name from tc_carstyle where pid>0
+	</select>  	
+	
+	 <select id="getBrandsById"  resultType="brand" parameterType="java.lang.String">
+	         SELECT name,logo,id FROM tc_brand  a
+			 WHERE  id in (${ids})
+	</select>
+	
+</mapper>

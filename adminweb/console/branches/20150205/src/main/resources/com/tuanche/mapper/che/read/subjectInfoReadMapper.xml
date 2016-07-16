@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tuanche.mapper.che.read.SubjectInfoReadMapper">
+	<resultMap type="com.tuanche.bean.che.SubjectInfo" id="BaseResultMap">
+		<id column="id" jdbcType="INTEGER" javaType="integer" property="id"/>
+		<result column="username" jdbcType="VARCHAR" javaType="string" property="userName"/>
+		<result column="phone" jdbcType="INTEGER" javaType="string" property="phone"/>
+		<result column="new_subject_id" jdbcType="INTEGER" javaType="integer" property="newSubjectId"/>
+		<result column="new_kind_id" jdbcType="INTEGER" javaType="integer" property="newKindId"/>
+		<result column="car_license" jdbcType="VARCHAR" javaType="string" property="carLicense"/>
+		<result column="address" jdbcType="VARCHAR" javaType="string" property="address"/>
+		<result column="status" jdbcType="INTEGER" javaType="integer" property="status"/>
+		<result column="addtime" jdbcType="INTEGER" javaType="long" property="addTime"/>
+		<result column="ztName" jdbcType="VARCHAR" javaType="string" property="ztName"/>
+		<result column="styleName" jdbcType="VARCHAR" javaType="string" property="styleName"/>
+	</resultMap>
+	
+	<sql id="select_base_sql">
+	    SELECT ti.id,ti.`username`,ti.`phone`,ti.`car_license`,ti.`address`,ti.status,ti.`addtime`,ti.`new_subject_id`,ti.`new_kind_id`,ts.name AS ztName,tk.name AS styleName FROM tc_subject_info ti 
+	    LEFT JOIN tc_subject ts ON ti.`subject_id`=ts.id LEFT JOIN 
+	    tc_subject_kind tk ON ts.kindid=tk.id	
+    </sql>
+	
+	<select id="queryByPage" resultMap="BaseResultMap">
+		<include refid="select_base_sql"/>
+		where 
+		<foreach collection="condition" item="condition" separator="and">
+			${condition}
+		</foreach>
+		order by ti.id desc
+	</select>
+</mapper>
+	

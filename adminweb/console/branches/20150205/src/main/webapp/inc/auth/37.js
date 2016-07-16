@@ -1,0 +1,1 @@
+[{id:428,pId:221,name:'维度列表',url:'/keyword/toList',target:'manFrame'},{id:429,pId:221,name:'维度添加',url:'/keyword/toadd',target:'manFrame'},{id:222,pId:221,name:'关键词添加',url:'/keyword/add',target:'manFrame'},{id:223,pId:221,name:'关键词列表',url:'/keyword/list',target:'manFrame'},{id:221,pId:0,name:'关键词管理',url:'/keyword/list',target:'manFrame'},]

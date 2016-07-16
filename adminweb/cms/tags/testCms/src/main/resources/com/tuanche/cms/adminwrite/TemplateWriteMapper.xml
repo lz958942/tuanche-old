@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.cms.adminwrite.TemplateWriteMapper" >
+  <insert id="insert" parameterType="com.tuanche.cms.bean.Template" >
+    insert into t_cm_template (name, memo, type, pic, create_user_id, create_user_name, 
+      create_time, update_user_id, update_user_name, update_time,
+      content,template_path)
+    values ( #{name}, #{memo}, #{type}, #{pic}, #{createUserId}, #{createUserName}, 
+      now(), #{updateUserId}, #{updateUserName}, #{updateTime}, 
+      #{content},#{templatePath})
+  </insert>
+   <update id="update" parameterType="com.tuanche.cms.bean.Template" >
+    update t_cm_template
+    <set >
+      <if test="name != null" >
+        name = #{name},
+      </if>
+      <if test="memo != null" >
+        memo = #{memo},
+      </if>
+      <if test="type != null" >
+        type = #{type},
+      </if>
+      <if test="pic != null" >
+        pic = #{pic},
+      </if>
+      <if test="updateUserId != null" >
+        update_user_id = #{updateUserId},
+      </if>
+      <if test="updateUserName != null" >
+        update_user_name = #{updateUserName},
+      </if>
+        update_time = now(),
+      <if test="deleteFlay != null" >
+        delete_flay = #{deleteFlay},
+      </if>
+      <if test="content != null" >
+        content = #{content},
+      </if>
+      <if test="templatePath != null" >
+        template_path = #{templatePath},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+</mapper>

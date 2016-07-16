@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.mapper.admin.read.PromotionReadMapper">
+	<resultMap type="com.tuanche.bean.admin.Promotion" id="BaseResult">
+		<id column="id" property="id" javaType="integer" jdbcType="INTEGER"/>
+		<result column="city_id" property="cityId" javaType="integer" jdbcType="INTEGER"/>
+		<result column="city_code" property="cityCode" javaType="string" jdbcType="VARCHAR"/>
+		<result column="brand_id" property="brandId" javaType="integer" jdbcType="INTEGER"/>
+		<result column="money" property="money" javaType="string" jdbcType="DECIMAL"/>
+		<result column="spend_time" property="spendTime" javaType="String" jdbcType="DATE"/>
+		<result column="add_time" property="addTime" javaType="String" jdbcType="DATE"/>
+		<result column="admin_id" property="adminId" javaType="integer" jdbcType="INTEGER"/>
+	</resultMap>
+	<!-- 公用sql -->
+	<sql id="baseSql">
+		SELECT p.id,p.city_id,p.city_code,p.brand_id,p.money,p.spend_time,p.add_time,p.admin_id FROM t_promotion_expenses p
+	</sql>
+	<!-- 分页查询 -->
+	<select id="queryByPage" resultMap="BaseResult">
+		<include refid="baseSql"/>
+		<where>
+			<foreach collection="list" item="condition" separator="and">
+				${condition}
+			</foreach>
+		</where>
+		order by p.id desc
+	</select>
+	
+	<!-- 根据Id查询 -->
+	<select id="selectOne" resultMap="BaseResult" parameterType="int">
+		<include refid="baseSql"/> where id=#{id}
+	</select>
+	
+	<select id="selectSameCount" resultType="int" parameterType="map">
+		select count(*) from t_promotion_expenses where 1=1 
+			<if test="cityId!=null">
+				and city_id=#{cityId}
+			</if>
+			<if test="brandId!=null">
+				and brand_id=#{brandId}
+			</if>
+			<if test="spendTime!=null">
+				and spend_time like '%${spendTime}%'
+			</if>
+			<if test="id!=null">
+				<![CDATA[and id<>#{id}]]>
+			</if>
+	</select>
+</mapper>

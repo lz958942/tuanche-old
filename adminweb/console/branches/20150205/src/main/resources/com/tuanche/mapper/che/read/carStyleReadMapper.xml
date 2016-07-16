@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tuanche.mapper.che.read.CarStylesReadMapper">
+	<select id="getCarStyle" resultType="com.tuanche.bean.che.CarStyle">
+		<![CDATA[
+		  SELECT id,pid AS ids,style AS carStyleName 
+		  FROM tc_carstyle a
+		  where pid>0 
+		  and a.show=0
+		]]>
+	</select>
+	
+	<select id="getCarStyleById" parameterType="int" resultType="com.tuanche.bean.che.CarStyle">
+	
+		<![CDATA[SELECT id,style AS carStyleName FROM tc_carstyle where 1=1  and pid<>0]]>
+		<if test="pid!=null">
+			and pid=#{pid}
+		</if>
+	</select>
+	
+		<select id="getCarStyleOk" resultType="com.tuanche.bean.che.CarStyle">
+		<![CDATA[
+		  SELECT id,pid AS ids,style AS carStyleName 
+		  FROM tc_carstyle a
+		  where pid>0 
+		  and a.show=0 and a.type=0
+		]]>
+	</select>
+	
+	
+	
+</mapper>

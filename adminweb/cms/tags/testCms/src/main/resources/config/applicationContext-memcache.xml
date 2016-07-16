@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context-3.0.xsd
+	 http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+		<context:property-placeholder location="classpath*:*.properties" />
+	<bean name="memcachedClientBuilder" class="net.rubyeye.xmemcached.XMemcachedClientBuilder">
+		<constructor-arg>
+			<list>
+				<bean class="java.net.InetSocketAddress">
+					<constructor-arg><value>${memcached.addr}</value></constructor-arg>
+					<constructor-arg><value>${memcached.addr.port}</value></constructor-arg>
+				</bean>
+			</list>
+		</constructor-arg>
+		<constructor-arg>
+			<list>
+				<value>1</value>
+			</list>
+		</constructor-arg>
+		<property name="connectionPoolSize" value="${memcached.poolsize}"></property>
+		<property name="commandFactory">
+			<bean class="net.rubyeye.xmemcached.command.TextCommandFactory"></bean>
+		</property>
+		<property name="sessionLocator">
+			<bean class="net.rubyeye.xmemcached.impl.KetamaMemcachedSessionLocator"></bean>
+		</property>
+		<property name="transcoder">
+			<bean class="net.rubyeye.xmemcached.transcoders.SerializingTranscoder" />
+		</property>
+	</bean>
+	<bean name="memcachedClient" factory-bean="memcachedClientBuilder" factory-method="build" destroy-method="shutdown" />
+	 <context:component-scan base-package="com.tuanche.cms.service" /> 
+	 <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" /> 
+<!-- jedis -->
+<!-- 	<bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+		<property name="maxActive" value="500" />
+		<property name="maxIdle" value="500" />
+		<property name="maxWait" value="60000" />
+		<property name="testOnBorrow" value="false" />
+	</bean>
+	<bean id="redisSerializer" class="com.tuanche.commons.cache.redis.serializer.JdkSerializationRedisSerializer" />
+	<bean  id="giftRedisClient" name="zixunRedisClient"  class="com.tuanche.commons.cache.redis.client.TuancheJedisClient"
+		init-method="init" destroy-method="destroy">
+		<property name="prefix" value="${redis.key.prefix}"></property>
+		<property name="config" ref="jedisPoolConfig"></property>
+		<property name="serializer" ref="redisSerializer"></property>
+		<property name="address" value="${redis.zixun.address}"></property>
+	</bean>
+
+ -->
+</beans>

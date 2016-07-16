@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"
+	version="2.0">
+
+	<description>NameUtil Custom Functions</description>
+	<tlib-version>1.0</tlib-version>
+	<short-name>func</short-name>
+
+	<function>
+		<name>getLevel</name>
+		<function-class>com.tuanche.console.util.NameUtil</function-class>
+		<function-signature>java.lang.String getLevel(java.lang.Integer)</function-signature>
+	</function>
+	<function>
+		<name>getCity</name>
+		<function-class>com.tuanche.console.util.NameUtil</function-class>
+		<function-signature>java.lang.String getCity(java.lang.Integer)</function-signature>
+	</function>	
+	<function>
+		<name>getCityPY</name>
+		<function-class>com.tuanche.console.util.NameUtil</function-class>
+		<function-signature>java.lang.String getCity(java.lang.Integer)</function-signature>
+	</function>	
+	<function>
+		<name>getType</name>
+		<function-class>com.tuanche.console.util.NameUtil</function-class>
+		<function-signature>java.lang.String getType(java.lang.Integer)</function-signature>
+	</function>	
+	<!-- 1111 -->
+	<function>
+		<name>getCityPY</name>
+		<function-class>com.tuanche.console.util.NameUtil</function-class>
+		<function-signature>java.lang.String getCityPY(java.lang.Integer)</function-signature>
+	</function>	
+	<!-- wtk -->
+	<function>
+		<name>getquestionKind</name>
+		<function-class>com.tuanche.console.util.NameUtil</function-class>
+		<function-signature>java.lang.String getquestionKind(java.lang.Integer)</function-signature>
+	</function>
+	<function>
+		<name>getOnline</name>
+		<function-class>com.tuanche.console.util.NameUtil</function-class>
+		<function-signature>java.lang.String getOnline(java.lang.Integer)</function-signature>
+	</function>
+	<function>
+		<name>getIncluded</name>
+		<function-class>com.tuanche.console.util.NameUtil</function-class>
+		<function-signature>java.lang.String getIncluded(java.lang.Integer)</function-signature>
+	</function>	
+	<function>
+		<name>getWord</name>
+		<function-class>com.tuanche.console.util.NameUtil</function-class>
+		<function-signature>java.lang.String getWord(java.lang.Integer)</function-signature>
+	</function>
+	<function>
+		<name>getZXClass</name>
+		<function-class>com.tuanche.console.util.NameUtil</function-class>
+		<function-signature>java.lang.String getZXClass(java.lang.Integer)</function-signature>
+	</function>
+	<function>
+		<name>getStyleInfo</name>
+		<function-class>com.tuanche.console.util.NameUtil</function-class>
+		<function-signature>java.lang.String getStyleInfo(java.lang.String)</function-signature>
+	</function>
+	<!-- <function>
+		<name>getStyleInfoBrand</name>
+		<function-class>com.tuanche.console.util.NameUtil</function-class>
+		<function-signature>java.lang.String getStyleInfoBrand(java.lang.String)</function-signature>
+	</function> -->
+	
+	<function>
+		<name>getallCity</name>
+		<function-class>com.tuanche.console.util.NameUtil</function-class>
+		<function-signature>java.lang.String getallCity(java.lang.Integer)</function-signature>
+	</function>
+	<function>
+		<name>getallBrand</name>
+		<function-class>com.tuanche.console.util.NameUtil</function-class>
+		<function-signature>java.lang.String getallBrand(java.lang.Integer)</function-signature>
+	</function>
+	<function>
+		<name>getallStyle</name>
+		<function-class>com.tuanche.console.util.NameUtil</function-class>
+		<function-signature>java.lang.String getallStyle(java.lang.Integer)</function-signature>
+	</function>
+	<function>
+		<name>getPageType</name>
+		<function-class>com.tuanche.console.util.NameUtil</function-class>
+		<function-signature>java.lang.String getPageType(java.lang.Integer)</function-signature>
+	</function>
+	
+	<function>
+		<name>checkAuth</name>
+		<function-class>com.tuanche.console.web.AuthUtil</function-class>
+		<function-signature>java.lang.boolean checkAuth(java.lang.String)</function-signature>
+	</function>
+	
+	<function>
+		<name>getEditName</name>
+		<function-class>com.tuanche.console.util.NameUtil</function-class>
+		<function-signature>java.lang.String getEditName(java.lang.Integer)</function-signature>
+	</function>
+	<function>
+		<name>getBusinessName</name>
+		<function-class>com.tuanche.console.util.NameUtil</function-class>
+		<function-signature>java.lang.String getBusinessName(java.lang.String,java.util.Map)</function-signature>
+	</function>
+	
+	<function>
+		<name>inString</name>
+		<function-class>com.tuanche.console.util.NameUtil</function-class>
+		<function-signature>java.lang.boolean inString(java.lang.String,java.lang.String)</function-signature>
+	</function>
+	<function>
+		<name>getDistrictName</name>
+		<function-class>com.tuanche.console.util.NameUtil</function-class>
+		<function-signature>java.lang.String getDistrictName(java.lang.Integer)</function-signature>
+	</function>
+	
+	<function>
+		<name>getBrandName</name>
+		<function-class>com.tuanche.console.util.NameUtil</function-class>
+		<function-signature>java.lang.String getBrandName(java.lang.Integer)</function-signature>
+	</function>
+	<function>
+		<name>getCarstyleName</name>
+		<function-class>com.tuanche.console.util.NameUtil</function-class>
+		<function-signature>java.lang.String getCarstyleName(java.lang.Integer)</function-signature>
+	</function>
+	<function>
+		<name>getUsedCarstyle</name>
+		<function-class>com.tuanche.console.util.NameUtil</function-class>
+		<function-signature>java.lang.String getUsedCarstyle(java.lang.Integer)</function-signature>
+	</function>
+	<function>
+		<name>getUrl</name>
+		<function-class>com.tuanche.console.util.NameUtil</function-class>
+		<function-signature>java.lang.String getUrl(java.util.Map,java.lang.Long)</function-signature>
+	</function>
+	<function>
+		<name>getKindName</name>
+		<function-class>com.tuanche.console.util.NameUtil</function-class>
+		<function-signature>java.lang.String getKindName(java.lang.String)</function-signature>
+	</function>
+	<function>
+		<name>getPlateName</name>
+		<function-class>com.tuanche.console.util.NameUtil</function-class>
+		<function-signature>java.lang.String getPlateName(java.lang.String)</function-signature>
+	</function>
+	
+	<function>
+		<name>getcarStyleNameById</name>
+		<function-class>com.tuanche.console.util.NameUtil</function-class>
+		<function-signature>java.lang.String getcarStyleNameById(java.lang.Integer)</function-signature>
+	</function>
+	
+	<function>
+		<name>getPropertyOrClassByCode</name>
+		<function-class>com.tuanche.console.util.NameUtil</function-class>
+		<function-signature>java.lang.String getPropertyOrClassByCode(java.lang.Integer,java.lang.Integer)</function-signature>
+	</function>
+	
+	<function>
+		<name>getChannelName</name>
+		<function-class>com.tuanche.console.util.NameUtil</function-class>
+		<function-signature>java.lang.String getChannelName(java.lang.Integer)</function-signature>
+	</function>
+	
+	<!-- 积分后台 -->
+	<function>
+		<name>getGiftById</name>
+		<function-class>com.tuanche.console.util.NameUtil</function-class>
+		<function-signature>java.lang.String getGiftById(java.lang.Integer,java.lang.Integer)</function-signature>
+	</function>
+	<!-- 话题评论管理 -->
+	<function>
+		<name>getTopicId</name>
+		<function-class>com.tuanche.console.util.NameUtil</function-class>
+		<function-signature>java.lang.String getTopicId(java.lang.Integer,java.lang.Integer)</function-signature>
+	</function>
+	
+	<!-- 话题评论管理 -->
+	<function>
+		<name>getUser</name>
+		<function-class>com.tuanche.console.util.NameUtil</function-class>
+		<function-signature>java.lang.String getUser(java.lang.Integer)</function-signature>
+	</function>
+</taglib>  

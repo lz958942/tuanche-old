@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.mapper.che.write.GiftWriteMapper" >
+  
+  
+  <insert id="savegift" parameterType="com.tuanche.bean.che.GiftBean" useGeneratedKeys="true" keyProperty="id" >
+    insert into t_gift (id, img_url, number, gift_desc, gift_title, remain_number, 
+      gift_class, gift_source, exchange_type, exchange_number, exchange_time, 
+      show_end_time, show_start_time, create_time, create_uid, update_time, update_uid, 
+      gift_status,img_title,img_target_url)
+    values (#{id}, #{imgUrl}, #{number}, #{giftDesc}, #{giftTitle}, #{remainNumber}, 
+      #{giftClass}, #{giftSource}, #{exchangeType}, #{exchangeNumber}, #{exchangeTime}, 
+      #{showEndTime}, #{showStartTime}, #{createTime}, #{createUid}, #{updateTime}, #{updateUid}, 
+      #{giftStatus},#{imgTitle},#{imgTargetUrl})
+  </insert>
+  <update id="editGift" parameterType="com.tuanche.bean.che.GiftBean" >
+    update t_gift
+    <set >
+      <if test="imgUrl != null and imgUrl.length()>0" >
+        img_url = #{imgUrl},
+      </if>
+      <if test="number != null" >
+        number = #{number},
+      </if>
+      <if test="giftDesc != null and giftDesc.length()>0" >
+        gift_desc = #{giftDesc},
+      </if>
+      <if test="giftTitle != null and giftTitle.length()>0" >
+        gift_title = #{giftTitle},
+      </if>
+      <if test="remainNumber != null" >
+        remain_number = #{remainNumber},
+      </if>
+      <if test="giftClass != null" >
+        gift_class = #{giftClass},
+      </if>
+      <if test="giftSource != null" >
+        gift_source = #{giftSource},
+      </if>
+      <if test="exchangeType != null" >
+        exchange_type = #{exchangeType},
+      </if>
+      <if test="exchangeNumber != null" >
+        exchange_number = #{exchangeNumber},
+      </if>
+      <if test="exchangeTime != null" >
+        exchange_time = #{exchangeTime},
+      </if>
+      <if test="showEndTime != null" >
+        show_end_time = #{showEndTime},
+      </if>
+      <if test="showStartTime != null" >
+        show_start_time = #{showStartTime},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime},
+      </if>
+      <if test="createUid != null" >
+        create_uid = #{createUid},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime},
+      </if>
+      <if test="updateUid != null" >
+        update_uid = #{updateUid},
+      </if>
+      <if test="giftStatus != null" >
+        gift_status = #{giftStatus},
+      </if>
+      <if test="imgTitle != null" >
+        img_title = #{imgTitle},
+      </if>
+      <if test="imgTargetUrl != null" >
+        img_target_url = #{imgTargetUrl},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+ 	<update id="updateStatus">
+ 		 update t_gift set gift_status=#{type} ,update_time=NOW(),update_uid=#{uid}
+ 		 	where id=#{id}
+ 	</update>
+ 	
+ 	<update id="updateStatusFromIds">
+ 		update t_gift set gift_status=#{type} ,update_time=NOW(),update_uid=#{uid}
+ 		 	where id in 
+ 		 	<foreach item="ids" index="index" collection="ids" open="(" separator="," close=")">
+				${ids}
+			</foreach>
+ 	</update>
+</mapper>

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.cms.read.EmployeeReadMapper">
+	<sql id="fieldSql">
+	select 
+		id, 
+		emp_no empNo,
+		emp_name empName,
+		emp_login empLogin,
+		emp_email empEmail,
+		emp_pwd empPwd,
+		emp_gender empGender,
+		emp_phone empPhone,
+		emp_qq empQq,
+		ext_num extNum,
+		emp_wx empWx,
+		role_ids roleIds,
+		city_code cityCode,
+		dept_code deptCode,
+		position_code positionCode,
+		position_level positionLevel,
+		emp_status empStatus,
+		add_date addDate,
+		add_user addUser,
+		last_date lastDate,
+		last_user lastUser,
+		find_pwd_time findPwdTime,
+		isdel from t_employee where 1=1
+	</sql>
+	<select id="selectEmployeeByEmpLogin" resultType="Employee"
+		parameterType="java.lang.String">
+		<include refid="fieldSql"/>
+		and emp_login = #{empLogin} and isdel=0 and emp_status != 5
+	</select>
+	<select id="selectEmployeeById" resultType="Employee"
+		parameterType="java.lang.Integer">
+		<include refid="fieldSql"/>
+		and id=#{id}
+	</select>
+	<select id="selectEmployeeInit" resultType="MapBean" parameterType="java.util.Map">
+		select id,emp_name name,isdel,role_ids roleIds
+		from t_employee where 1=1 
+		<if test="isdel==null">
+			and isdel=0
+		</if>
+		<if test="cityCode != null">
+         and city_code like CONCAT('${cityCode}','%' )  
+		</if>
+		<if test="deptCode != null">
+			 and dept_code like CONCAT('${deptCode}','%' )  
+		</if>
+		<choose>
+			<when test="orderStr != null">
+				order by ${orderStr} desc
+			</when>
+		</choose>
+	</select>
+	
+	<select id="selectEmployeeByRoleIds" parameterType="java.lang.String"  resultType="Employee">
+			<include refid="fieldSql"/>
+			and role_ids like #{roleId}
+	</select>
+	
+	<select id="selectEmployeeByIds" parameterType="java.lang.String"  resultType="Employee">
+		SELECT head_url headUrl,a.emp_name empName,
+		b.group_number getGroup,b.total_cars totalCars,b.total_consumers totalConsumers,b.group_num groupNum,b.car_num sellNum,b.people_num activityNum,
+		c.brand_ids brandIds
+		FROM t_employee a
+		 LEFT JOIN t_sales_men  b
+		ON a.emp_no=b.emp_no 
+		LEFT JOIN (SELECT id,emp_id,brand_ids FROM sys_auth_emp  WHERE auth_status=1) c
+		ON a.id=c.emp_id
+		 WHERE a.id  IN (${ids})  
+			   AND emp_status in (2,3)
+			   AND a.isdel=0
+			   AND trim(head_url) IS NOT NULL
+			   AND TRIM(head_url) != ''
+			   AND isdel != -1
+			   AND role_ids = ',2,'
+    </select>
+    
+    <select id="selectEmployeeByCityId"  resultType="Employee">
+			SELECT head_url headUrl,a.emp_no empNo,a.emp_name empName,
+			b.group_number getGroup,b.total_cars totalCars,b.total_consumers totalConsumers,b.group_num groupNum,b.car_num sellNum,b.people_num activityNum,
+			c.brand_ids brandIds
+			FROM t_employee a
+			 LEFT JOIN t_sales_men  b
+			ON a.id=b.emp_id
+			LEFT JOIN (SELECT id,emp_id,brand_ids FROM sys_auth_emp  WHERE auth_status=1) c
+			ON a.id=c.emp_id
+			 WHERE a.city_code like  '${city_code}%'  
+			   AND emp_status in (2,3)
+			   AND a.isdel=0
+			    AND trim(head_url) IS NOT NULL
+			    AND TRIM(head_url) != ''
+			    AND isdel != -1
+			    AND role_ids = ',2,'
+			   <if test="limit>0">
+				   limit #{limit}
+				</if>
+    </select>
+</mapper>

@@ -1,0 +1,1 @@
+[{id:855,pId:738,name:'流量来源统计',url:'/pvday/pvdayList',target:'manFrame'},{id:739,pId:738,name:'收录统计管理',url:'/recordStatManage/recordStatView',target:'manFrame'},{id:740,pId:738,name:'流量统计管理',url:'/flowStatManage/flowStatView',target:'manFrame'},{id:738,pId:0,name:'页面统计',url:'/recordStatManage/recordStatView',target:'manFrame'},]

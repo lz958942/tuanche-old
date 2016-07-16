@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.mapper.che.read.GiftReadMapper" >
+  <sql id="Base_Column_List" >
+    id, 
+    img_url imgUrl, 
+    number, 
+    gift_desc giftDesc, 
+    gift_title giftTitle, 
+    remain_number remainNumber, 
+    gift_class giftClass, 
+    gift_source giftSource, 
+    exchange_type exchangeType, 
+    exchange_number exchangeNumber, 
+    exchange_time exchangeTime, 
+    show_end_time showEndTime, 
+    show_start_time showStartTime,
+    create_time createTime, 
+    create_uid createUid, 
+    update_time updateTime, 
+    update_uid updateUid,
+    gift_status giftStatus,
+    img_title imgTitle,
+    img_target_url imgTargetUrl
+  </sql>
+  <select id="selectByPrimaryKey"  resultType="com.tuanche.bean.che.GiftBean" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_gift
+    where id = #{id}
+  </select>
+  
+  <select id="homeByPage" resultType="com.tuanche.bean.che.GiftBean">
+  	SELECT  <include refid="Base_Column_List"/>  FROM t_gift WHERE 1=1 
+  	<if test="id!=null">
+  		AND id=#{id}
+  	</if>
+  	<if test="giftTitle!=null and giftTitle.length()>0 ">
+  		AND gift_title=#{giftTitle}
+  	</if>
+  	<if test="giftClass!=null">
+  		AND gift_class=#{giftClass}
+  	</if>
+  	<if test="exchangeType!=null">
+  		AND exchange_type=#{exchangeType}
+  	</if>
+  	<if test="giftSource!=null">
+  		AND gift_source=#{giftSource}
+  	</if>
+  	<if test="giftStatus==1">
+  		AND gift_status=1
+  	</if>
+  	<if test="giftStatus==0">
+  		AND gift_status=0
+  	</if>
+  	<if test="giftStatus==null">
+  	AND gift_status > -1
+  	</if>
+  	ORDER BY id DESC 
+  </select>
+  
+  <select id="findByid" resultType="com.tuanche.bean.che.GiftBean">
+  	SELECT
+		 <include refid="Base_Column_List" />
+	 FROM t_gift WHERE id=#{id}
+  </select>
+</mapper>

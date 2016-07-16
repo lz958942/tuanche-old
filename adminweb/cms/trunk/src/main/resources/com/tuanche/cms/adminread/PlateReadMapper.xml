@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.cms.adminread.PlateReadMapper" >
+  <resultMap id="BaseResultMap" type="com.tuanche.cms.bean.Plate" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="city_id" property="cityId" jdbcType="INTEGER" />
+    <result column="city_name" property="cityName" jdbcType="VARCHAR" />
+    <result column="tid" property="tid" jdbcType="INTEGER" />
+    <result column="tname" property="tname" jdbcType="VARCHAR" />
+    <result column="tpath" property="tpath" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    
+     <result column="ptype" property="ptype" jdbcType="INTEGER" />
+    
+    <result column="data_type" property="dataType" jdbcType="INTEGER" />
+    <result column="plate_name" property="plateName" jdbcType="VARCHAR" />
+    <result column="label" property="label" jdbcType="VARCHAR" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    
+    <result column="image_url" property="imageUrl" jdbcType="VARCHAR" />
+    <result column="hyperlink" property="hyperlink" jdbcType="VARCHAR" />
+    
+    <result column="con_count" property="conCount" jdbcType="INTEGER" />
+    <result column="data_fill_mode" property="dataFillMode" jdbcType="INTEGER" />
+    <result column="data_type_class" property="dataTypeClass" jdbcType="INTEGER" />
+    
+    <result column="descriction" property="descriction" jdbcType="VARCHAR" />
+    <result column="memo" property="memo" jdbcType="VARCHAR" />
+    <result column="image_width" property="imageWidth" jdbcType="INTEGER" />
+    <result column="image_hight" property="imageHight" jdbcType="INTEGER" />
+    <result column="create_user_id" property="createUserId" jdbcType="INTEGER" />
+    <result column="create_user_name" property="createUserName" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user_id" property="updateUserId" jdbcType="INTEGER" />
+    <result column="update_user_name" property="updateUserName" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="delete_flay" property="deleteFlay" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, city_id, city_name, tid, tname, type, data_type, plate_name, label, title, descriction, 
+    memo, image_width, image_hight, create_user_id, create_user_name, create_time, update_user_id, 
+    update_user_name, update_time, delete_flay,hyperlink,image_url,con_count,data_fill_mode,ptype,data_type_class
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_cm_plate
+    where id = #{id}
+  </select>
+  
+  <select id="getPlateByPage"  resultMap="BaseResultMap">
+  	 select 
+    <include refid="Base_Column_List" />
+    from t_cm_plate
+    where delete_flay = 1
+    <if test="cityId != null">
+   		and city_id = #{cityId}
+   	</if>
+    <if test="cityName != null">
+   		and city_name = #{cityName}
+   	</if>
+   	<if test="plateName != null">
+   		and plate_name LIKE CONCAT('%',#{plateName},'%')
+   	</if>
+    order by create_time desc
+  </select>
+  
+  <select id="getPlateByTlCityId" resultMap="BaseResultMap">
+  	 select 
+    <include refid="Base_Column_List" />
+    from t_cm_plate
+    where delete_flay = 1
+    and city_id = #{cityId}
+  </select>
+ <select id="getPlateBywhere" resultMap="BaseResultMap">
+  	 select 
+    <include refid="Base_Column_List" />
+    from t_cm_plate
+    where delete_flay = 1
+   <if test="cityId != null">
+   		and city_id = #{cityId}
+   	</if>
+   	<if test="ptype != null">
+   		and ptype = #{ptype}
+   	</if>
+  </select>
+  
+</mapper>

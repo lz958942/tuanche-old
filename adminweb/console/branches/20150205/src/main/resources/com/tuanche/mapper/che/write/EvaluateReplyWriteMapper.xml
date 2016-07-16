@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.mapper.che.write.EvaluateReplyWriteMapper" >
+  <insert id="saveComments" parameterType="com.tuanche.bean.che.EvaluateReplyBean" >
+     INSERT INTO
+      tc_evaluate_reply 
+      	(evaluate_id, reply_uid,reply_time,status, content)
+     VALUES
+     	(#{evaluateId}, #{replyUid}, #{replyTime},1, #{content})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.tuanche.bean.che.EvaluateReplyBean" >
+    update tc_evaluate_reply
+    set evaluate_id = #{evaluateId},
+      reply_uid = #{replyUid},
+      reply_time = #{replyTime},
+      update_uid = #{updateUid},
+      update_time = #{updateTime},
+      status = #{status},
+      content = #{content}
+    where id = #{id}
+  </update>
+</mapper>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.mapper.admin.write.ArticleWriteMapper">
+<insert id="addArticle"  parameterType="com.tuanche.bean.admin.Article">  
+		  	 INSERT INTO t_magazine_article(
+				magazine_id,
+				title,
+				content,
+				picture,
+				url,
+				build_emp,
+				build_time,
+				update_emp,
+				update_time,
+				article_status,
+				sort
+				)
+             VALUES
+            (
+             #{magazineId},
+             #{title},
+             #{content},
+             #{picture},
+             #{url},
+             #{buildEmp},
+             now(),
+             #{updateEmp}, 
+             now(),
+             #{articleStatus},
+             #{sort}
+            )
+		</insert>
+		<update id="updateArticle" > 
+		  UPDATE t_magazine_article SET    magazine_id=#{magazineId} ,title=#{title}, content=#{content},picture=#{picture},url=#{url},sort=#{sort},update_emp=#{updateEmp},update_time=now() 		  
+		  WHERE id =#{id}
+		</update>
+		<update id="updateArtStatus" > 
+		  UPDATE t_magazine_article SET    article_status=#{articleStatus}, update_emp=#{updateEmp},update_time=now() 		  
+		  WHERE id =#{id}
+
+		</update> 
+</mapper>

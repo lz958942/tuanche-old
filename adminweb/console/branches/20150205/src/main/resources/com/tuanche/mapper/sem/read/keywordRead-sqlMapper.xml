@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	<mapper namespace="com.tuanche.mapper.sem.read.DkeywordReadMapper">
+	<select id="getDownKeywordList" resultType="com.tuanche.bean.sem.DownKeyword">
+		select keywordId,title,groupId from t_keyword where accountId=#{accountId} order by campaignId asc,groupId asc,keywordId asc
+	</select>
+	</mapper>

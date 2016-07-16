@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.mapper.che.read.PicPicReadMapper">
+
+<sql id="pics">
+	 pic.id,pic.did,pic.bid,pic.cid,pic.uid,pic.classid,pic.score,pic.addtime,
+	 pic.propertyid,pic.name,pic.url,pic.burl,pic.murl,pic.surl,pic.turl,
+	 pic.create_uid createUid,pic.create_time createTime,pic.operation_uid operationUid,
+	 pic.operation_time operationTime,pic.is_new isNew,pic.desc,pic.colour_id colourId,
+	 pic.car_id carId,pic.pic_title picTitle,pic.collection_id  collectionId,pic.pic_cover  picCover,
+	 pic.status
+</sql>
+<select id="getPicAllByPage" resultType="com.tuanche.bean.che.PicPic">
+		SELECT  DISTINCT 
+	ta.name AS collectionName,tcc.name AS colourName,
+	<include refid="pics"/> FROM  tc_pic_pic pic  
+	LEFT JOIN tc_pic_colour tcc ON pic.colour_id=tcc.id
+	LEFT JOIN tc_pic_collection ta ON pic.collection_id=ta.id
+	WHERE 1=1 AND 
+	<if test="condition!=null">
+					<foreach collection="condition" item="condition" separator="AND">
+						${condition}
+					</foreach>
+					ORDER BY id DESC
+	</if>
+</select>
+
+<select id="findByID" resultType="com.tuanche.bean.che.PicPic">
+	SELECT ta.name AS collectionName,tcc.name AS colourName, <include refid="pics"/> FROM tc_pic_pic pic 
+	LEFT JOIN tc_pic_colour tcc ON pic.colour_id=tcc.id
+	LEFT JOIN tc_pic_collection ta ON pic.collection_id=ta.id
+	WHERE pic.id=#{id}
+</select>
+</mapper>

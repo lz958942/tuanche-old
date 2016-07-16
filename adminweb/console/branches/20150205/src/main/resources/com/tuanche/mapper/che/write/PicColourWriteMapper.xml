@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.mapper.che.write.PicColourWriteMapper">
+<insert id="insert"  parameterType="com.tuanche.bean.che.PicColour" useGeneratedKeys ="true" keyProperty= "id" >
+	INSERT INTO tc_pic_colour (name,create_time) VALUES(#{name} ,NOW())
+</insert>
+</mapper>

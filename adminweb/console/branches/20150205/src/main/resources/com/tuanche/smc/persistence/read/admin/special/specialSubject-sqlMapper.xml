@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须和mapper接口一致并实现其里面的方法 -->	
+<mapper namespace="com.tuanche.smc.persistence.read.admin.special.SpecialSubjectReadMapper">
+	<resultMap type="com.tuanche.smc.domain.specialSubject.SpecialSubject" id="BaseResultMap">
+		<id column="id" property="id" jdbcType="INTEGER"/>
+		<result column="sp_name" property="spName" jdbcType="VARCHAR"/>
+		<result column="content" property="content" jdbcType="VARCHAR"/>
+		<result column="abstract" property="spAbstract" jdbcType="VARCHAR"/>
+		<result column="zixun_ids" property="zixunIds" jdbcType="VARCHAR"/>
+		<result column="template_id" property="templateId" jdbcType="VARCHAR"/>
+		<result column="sp_status" property="spStatus" jdbcType="VARCHAR"/>
+		<result column="online" property="spOnline" jdbcType="VARCHAR"/>
+		<result column="keyword" property="keywords" jdbcType="VARCHAR"/>
+		<result column="sp_desc" property="spDesc" jdbcType="VARCHAR"/>
+		<result column="city_id" property="cityId" jdbcType="INTEGER"/>
+		<result column="brand_id" property="brandId" jdbcType="VARCHAR"/>
+		<result column="carStyle_id" property="carStyleId" jdbcType="VARCHAR"/>
+		<result column="operate_user_id" property="operateUserId" jdbcType="INTEGER"/>
+		<result column="operate_user_name" property="operateUserName" jdbcType="VARCHAR"/>
+		<result column="pub_date" property="pubDate" jdbcType="TIMESTAMP"/>
+		<result column="online_date" property="onlineDate" jdbcType="DATE"/>
+		<result column="zt_type" property="ztType" jdbcType="VARCHAR"/>
+		<result column="tp_name" property="tpName" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<!-- 公用查询sql语句 -->
+	<sql id="special_comSql">
+		<![CDATA[
+			select t.id,t.sp_name,t.content,t.abstract,t.zixun_ids,t.template_id,t.sp_status,
+					t.online,t.keyword,t.sp_desc,t.city_id,t.brand_id,t.carStyle_id,
+					t.operate_user_id,t.operate_user_name
+					,t.pub_date,t.online_date,t.zt_type
+			 from t_special t
+		]]>
+	</sql>
+	
+	<!-- 分页查询 -->
+	<select id="queryByPage" resultMap="BaseResultMap">
+			 <include refid="special_comSql"/>
+			<if test="conditions!=null">
+				where
+					<foreach collection="conditions" item="condition" separator="AND">
+						${condition}
+					</foreach>
+					order by t.id desc
+			</if>
+	</select>
+	
+	<select id="selectById" resultMap="BaseResultMap">
+		<include refid="special_comSql"/>
+		where t.id=#{id} and t.sp_status=1
+	</select>
+	
+	<select id="createFMAll" resultMap="BaseResultMap" parameterType="int">
+		<include refid="special_comSql"/>
+		where t.sp_status=1 and t.online=1
+		LIMIT #{i},20
+	</select>
+	
+	<select id="selectByIds" resultMap="BaseResultMap">
+		<include refid="special_comSql"/>
+		where id in
+		<foreach collection="array" item="id" open="(" close=")" separator=",">
+			${id}
+		</foreach>
+	</select>
+	
+	<select id="selectSpecialUser" resultMap="BaseResultMap">
+		SELECT DISTINCT t.operate_user_id,t.operate_user_name 
+		FROM t_special t 
+		WHERE t.`sp_status`='1'
+	</select>
+</mapper>

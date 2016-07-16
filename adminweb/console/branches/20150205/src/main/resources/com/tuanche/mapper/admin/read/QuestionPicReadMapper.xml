@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.mapper.admin.read.QuestionPicReadMapper">
+	<resultMap type="com.tuanche.bean.admin.QuestionPic" id="BaseResult">
+		<id column="id" property="id"  jdbcType="INTEGER"/>
+		<result column="sort" property="sort"/>		
+		<result column="title" property="title"/>
+		<result column="pic_url" property="picUrl" />
+		<result column="build_emp" property="buildEmp" jdbcType="INTEGER"/>		
+		<result column="build_time" property="buildTime"  />		
+		<result column="update_emp" property="updateEmp" jdbcType="INTEGER"/>		
+		<result column="update_time" property="updateTime" javaType="String"/>
+		<result column="href_url" property="hrefUrl" jdbcType="VARCHAR"/>
+		<result column="pic_status" property="picStatus"  />
+		</resultMap>
+		<!-- 公用sql -->
+	<sql id="baseSql">
+		SELECT id,sort,title,pic_url,build_emp,build_time,update_emp,update_time,href_url,pic_status FROM t_question_pic
+	</sql>
+		<!-- 查询所有未删除 -->
+	<select id="selectPicsByPage" resultMap="BaseResult" >
+	<include refid="baseSql"/> where pic_status > 0 ORDER BY pic_status DESC,sort
+	</select>
+	<select id="selectPicById" resultMap="BaseResult" parameterType="int">
+	<include refid="baseSql"/> where id=#{id}
+	</select>
+	
+</mapper>

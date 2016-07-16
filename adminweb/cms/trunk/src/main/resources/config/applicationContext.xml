@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"	
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd 
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+	<context:component-scan base-package="com.tuanche.cms.service,com.tuanche.cms.util,com.tuanche.cms.dao" />
+	<!-- 读数据库 -->
+	<bean id="erpReadDS" class="org.springframework.jndi.JndiObjectFactoryBean"> 
+        <property name="jndiName">
+			<value>java:comp/env/erp/read</value>
+		</property> 
+    </bean> 
+	<bean id="erpReadSF" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="erpReadDS" />
+		<property name="configLocation" value="classpath:config/console_mybatis_config.xml" />
+		<property name="mapperLocations">
+			<list>
+				<value>classpath:com/tuanche/cms/read/*Mapper.xml</value>
+			</list>
+		</property>
+	</bean>
+	<bean  id="erpMapper" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.tuanche.cms.read" />
+		<property name="sqlSessionFactory" ref="erpReadSF" />
+	</bean>
+	
+	<!-- 读che100数据库 -->
+	<bean id="cheReadDataSource" class="org.springframework.jndi.JndiObjectFactoryBean"> 
+         <property name="jndiName">
+			<value>java:comp/env/jdbc/che100/read</value>
+		</property>
+    </bean> 
+	<bean id="cheReadSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="cheReadDataSource" />
+		<property name="configLocation" value="classpath:config/console_mybatis_config.xml" />
+		<property name="mapperLocations">
+			<list>
+				<value>classpath:com/tuanche/cms/cheread/*Mapper.xml</value>
+			</list>
+		</property>
+	</bean>
+	<bean  id="cheReadMapper" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.tuanche.cms.cheread" />
+		<property name="sqlSessionFactory" ref="cheReadSessionFactory" />
+	</bean>
+	<!-- 读admin数据库 -->
+	<bean id="adminReadDataSource" class="org.springframework.jndi.JndiObjectFactoryBean"> 
+       <property name="jndiName">
+			<value>java:comp/env/jdbc/admin/read</value>
+		</property>
+    </bean> 
+	<bean id="adminReadSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="adminReadDataSource" />
+		<property name="configLocation" value="classpath:config/console_mybatis_config.xml" />
+		<property name="mapperLocations">
+			<list>
+				<value>classpath:com/tuanche/cms/adminread/*Mapper.xml</value>
+			</list>
+		</property>
+	</bean>
+	<bean  id="adminReadMapper" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.tuanche.cms.adminread" />
+		<property name="sqlSessionFactory" ref="adminReadSessionFactory" />
+	</bean>
+	<!-- 写admin数据库 -->
+		<bean id="adminWriteDataSource" class="org.springframework.jndi.JndiObjectFactoryBean"> 
+        <property name="jndiName">
+			<value>java:comp/env/jdbc/admin/write</value>
+		</property>
+    </bean> 
+	<bean id="adminWriteSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="adminWriteDataSource" />
+		<property name="configLocation" value="classpath:config/console_mybatis_config.xml" />
+		<property name="mapperLocations">
+			<list>
+				<value>classpath:com/tuanche/cms/adminwrite/*Mapper.xml</value>
+			</list>
+		</property>
+	</bean>
+	<bean  id="adminWriteMapper" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.tuanche.cms.adminwrite" />
+		<property name="sqlSessionFactory" ref="adminWriteSessionFactory" />
+	</bean>
+	
+	
+	
+</beans>

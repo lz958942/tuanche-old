@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<!-- namespace和定义的Mapper接口对应，并实现其中的方法 -->
+<mapper namespace="com.tuanche.smc.persistence.read.che100.CarStyleMapper">
+	<select id="getBrand" resultType="com.tuanche.smc.domain.base.Brand">
+		select id, pinyin ,name from tc_brand where `status`=1
+	</select>  	
+	<select id="getCarStyle" resultType="com.tuanche.smc.domain.base.Style">
+		select id, pid brandId, pid, style name from tc_carstyle where pid>0 and `show`=0 and type=0
+	</select>  	
+	
+	<select id="getCarStyleOk" resultType="com.tuanche.smc.domain.base.Style">
+		select id, pid brandId, pid, style name from tc_carstyle where pid>0 and `show`=0 and type=0
+	</select> 
+	
+	<select id="getBrands" resultType="com.tuanche.bean.che.Brand">
+		select id ,concat(upper(left(initial,1)),' ',name) as orderName,vender,name as name from tc_brand where status=1 order by initial asc
+	</select>
+	
+	<select id="selectxgpp" resultType="com.tuanche.smc.domain.specialSubject.SpecialContent" parameterType="int">
+         SELECT id,style AS stTitles,detail_url AS url FROM tc_carstyle WHERE  pid=#{id};
+	</select>
+	
+	<select id="selectCarName" resultType="string" parameterType="int">
+         SELECT style AS stTitles FROM tc_carstyle WHERE  id=#{id}
+	</select>
+</mapper>

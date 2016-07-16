@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.mapper.admin.write.QuestionWriteMapper">
+		<resultMap type="com.tuanche.bean.admin.Question" id="BaseResult">
+		<id column="id" property="id" javaType="integer" jdbcType="INTEGER"/>
+		<result column="content" property="content" javaType="string" jdbcType="VARCHAR"/>		
+		<result column="firstkind_id" property="firstkindId" javaType="integer" jdbcType="INTEGER"/>
+		<result column="secondkind_id" property="secondkindId" javaType="integer" jdbcType="INTEGER"/>
+		<result column="question_status" property="questionStatus" javaType="Byte" jdbcType="TINYINT"/>
+		<result column="build_emp" property="buildEmp" javaType="integer" jdbcType="INTEGER"/>		
+		<result column="build_time" property="buildTime" javaType="String" jdbcType="DATE"/>		
+		<result column="update_emp" property="updateEmp" javaType="integer" jdbcType="INTEGER"/>		
+		<result column="update_time" property="updateTime" javaType="String" jdbcType="DATE"/>
+		<result column="lable" property="lable" javaType="string" jdbcType="VARCHAR"/>
+		<result column="is_resolve" property="isResolve" javaType="Byte" jdbcType="TINYINT"/>
+		<result column="show_emp" property="showEmp" javaType="string" jdbcType="VARCHAR"/>
+		<result column="keyword" property="keyword" javaType="string" jdbcType="VARCHAR"/>
+		<result column="kd_id" property="kdId" javaType="string" jdbcType="VARCHAR"/>
+		<result column="is_recom" property="isRecom" javaType="Byte" jdbcType="TINYINT"/>
+		<result column="title" property="title" javaType="string" jdbcType="VARCHAR"/>
+		<result column="dimension" property="dimension" javaType="string" jdbcType="VARCHAR"/>
+		<result column="reply" property="reply" javaType="integer" jdbcType="INTEGER"/>
+		<result column="deduplication" property="deduplication" javaType="integer" jdbcType="INTEGER"/>
+		</resultMap>
+		
+		
+		<insert id="addQuestions"  parameterType="com.tuanche.bean.admin.Question">  
+		  	 INSERT INTO t_question(
+				content,
+				firstkind_id,
+				secondkind_id,
+				question_status,
+				build_emp,
+				build_time,
+				update_emp,
+				update_time,
+				lable,
+				is_resolve,
+				show_emp,
+				keyword,
+				kd_id,
+				is_recom,
+				title,
+				dimension,
+				reply
+				)
+             VALUES
+         <foreach collection="list" separator=","  item="question" index="index" >
+            (
+             #{question.content},
+             #{question.firstkindId},
+             #{question.secondkindId},
+             #{question.questionStatus},
+             #{question.buildEmp},
+             now(),
+             #{question.updateEmp}, 
+             now(),
+             #{question.lable},
+             #{question.isResolve},
+             #{question.showEmp},
+             #{question.keyword},
+             #{question.kdId},
+             #{question.isRecom},
+             #{question.title},
+             #{question.dimension},
+             0
+            )
+		</foreach>	
+		</insert>
+		<insert id="insertQuestion" useGeneratedKeys="true" keyProperty="id" parameterType="com.tuanche.bean.admin.Question">  
+	   INSERT INTO t_question(
+				content,
+				firstkind_id,
+				secondkind_id,
+				question_status,
+				build_emp,
+				build_time,
+				update_emp,
+				update_time,
+				lable,
+				is_resolve,
+				show_emp,
+				keyword,
+				kd_id,
+				is_recom,
+				title,
+				dimension,
+				reply
+				)
+             VALUES  
+	    	 (
+             #{content},
+             #{firstkindId},
+             #{secondkindId},
+             #{questionStatus},
+             #{buildEmp},
+             now(),
+             #{updateEmp}, 
+             now(),
+             #{lable},
+             #{isResolve},
+             #{showEmp},
+             #{keyword},
+             #{kdId},
+             #{isRecom},
+             #{title},
+             #{dimension},
+             0
+            ) 
+		</insert> 
+		<update id="updateQuestions" parameterType="map" >  
+   		UPDATE t_question SET  question_status= #{questionStatus},update_emp=#{buildEmp},update_time=now() WHERE id IN 
+		<foreach collection="list" index="index" item="id" open=" (" separator="," close=")">
+             #{id}
+         </foreach>
+    
+		</update>
+		<update id="resolve" parameterType="map" >  
+   		UPDATE t_question SET  is_resolve= #{Resolve},update_emp=#{buildEmp},update_time=now() WHERE id =#{id}    
+		</update>
+		<delete id="deleteQuestion" parameterType="list">  
+    	DELETE FROM t_question WHERE id IN  
+    	<foreach collection="list" index="index" item="questionIds" open="(" separator="," close=")">   
+        #{questionIds}   
+    	</foreach>  
+		</delete>  
+		<update id="deleteOneQuestion" > 
+		UPDATE t_question SET  question_status= #{questionStatus},update_emp=#{buildEmp},update_time=now() WHERE id =#{id}
+		</update>
+		<!-- 删除详情 -->
+		<update id="deleteContent">
+		update t_question set content = null,update_emp=#{userId},update_time=now() where id = #{id}
+		</update>
+		<!-- 更改详情 -->
+		<update id="updateContent">
+		update t_question set content = #{content},update_emp=#{userId},update_time=now() where id = #{id}
+		</update>
+		<!-- 更改所属话题分类、车型 -->
+		<update id="modify">
+		update t_question set firstkind_id=#{firstkindId},secondkind_id=#{secondkindId},brand_id=#{brandId},carstyle_id=#{carstyleId},update_emp=#{userId},update_time=now() where id = #{id}
+		</update>
+		<update id="isRecom" parameterType="map" > 
+		UPDATE t_question SET  is_recom= #{isRecom},update_emp=#{buildEmp},update_time=now() WHERE id =#{id}
+		</update>
+		<!-- 修改问题回复数 -->
+		<update id="updateReply" > 
+		UPDATE t_question SET  reply= #{reply} WHERE id =#{id}
+		</update>
+		
+		<update id="updateReplys" > 
+		UPDATE t_question SET reply = 
+		CASE  id
+		<foreach collection="list" index="index" item="id">
+		WHEN #{id} THEN (SELECT COUNT(1) FROM t_question_answer WHERE  question_id=#{id} AND answer_status=4)
+   		</foreach>
+   		END
+		WHERE id IN
+		<foreach collection="list" index="index" item="id" open=" (" separator="," close=")">
+             #{id}
+         </foreach>
+		</update>
+		<update id="updateDeduplication">
+			update t_question set deduplication=1 WHERE id IN
+		<foreach collection="list" index="index" item="id" open=" (" separator="," close=")">
+             #{id}
+        </foreach>
+		</update>
+		
+		<delete id="delete">
+			delete from t_question WHERE id IN 
+			<foreach collection="list" index="index" item="id" open=" (" separator="," close=")">
+             #{id}
+         </foreach>
+		</delete>
+		<update id="batchUpdate">
+			update t_question set
+			<if test="firstkindId != null and firstkindId != ''">
+				firstkind_id=#{firstkindId},
+			</if>
+			<if test="secondkindId != null and secondkindId != ''">
+			secondkind_id=#{secondkindId},
+			</if>
+			<if test="brandId != 0">
+			brand_id=#{brandId},
+			</if>
+			<if test="carstyleId != 0">
+			carstyle_id=#{carstyleId},
+			</if>
+			update_emp=#{userId},update_time=now()
+			where id in
+			<foreach collection="list" index="index" item="id" open=" (" separator="," close=")">
+             #{id}
+         	</foreach>
+		</update>
+</mapper>

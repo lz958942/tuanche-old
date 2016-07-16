@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace和定义的Mapper接口对应，并实现其中的方法 -->
+<mapper namespace="com.tuanche.smc.persistence.read.admin.zixun.HotWordReadMapper">
+	
+	<select id="getHotWordsByZixunId" resultType="com.tuanche.smc.domain.zixun.HotWord">
+		SELECT id id, zixun_id zixunId, hot_word keyword, url url FROM t_zixun_hotword WHERE zixun_id = #{zixunId} ORDER BY order_index 
+	</select>
+</mapper>

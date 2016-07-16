@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tuanche.smc.persistence.read.admin.special.SpecialContentReadMapper">
+	
+	<resultMap type="specialTitles" id="BaseResultMap">
+		<id column="id" jdbcType="INTEGER" property="id"></id>
+		<result column="sp_id" jdbcType="INTEGER" property="spId"/>
+		<result column="title" jdbcType="VARCHAR" property="stTitles"/>
+		<result column="content" jdbcType="VARCHAR" property="stContents"/>
+		<result column="url" jdbcType="VARCHAR" javaType="string" property="titleUrl"/>
+		<result column="pic_url" jdbcType="VARCHAR" property="listPics"/>
+		<result column="type" jdbcType="VARCHAR" property="stType"/>
+		<result column="status" jdbcType="VARCHAR" property="status"/>
+		<result column="sort" jdbcType="INTEGER" property="sort"/>
+		<result column="banner" jdbcType="VARCHAR" property="banner"/>
+	</resultMap>
+	
+	<select id="selectContentById" resultMap="BaseResultMap" parameterType="int">
+		select t.id,t.sp_id,t.title,t.content,t.url,t.type,t.sort 
+		from t_special_content t 
+		where t.sp_id=#{id} and t.type='3' and t.status='1' 
+		ORDER BY t.sort DESC
+	</select>
+	
+	<select id="selectPicsById" resultMap="BaseResultMap" parameterType="int">
+		select t.id,t.sp_id,t.title,t.pic_url,t.url,t.type 
+		from t_special_content t 
+		where t.sp_id=#{id} and t.type='2' and t.status='1' 
+		ORDER BY t.sort DESC
+	</select>
+	
+	<select id="selectOneById" resultMap="BaseResultMap" parameterType="int">
+		select t.id,t.sp_id,t.pic_url,t.banner
+		from t_special_content t 
+		where t.sp_id=#{id} and t.type='1' and t.status='1'
+	</select>
+	
+	<select id="selectOldTemp" resultMap="BaseResultMap" parameterType="int">
+	    SELECT tc.title,tc.`content`,tc.url,tc.`pic_url`,tc.type,tc.`sort` 
+		FROM t_special_content tc 
+		WHERE sp_id=#{id} AND TYPE IN(4,5,6,7,8) 
+		ORDER BY tc.type,tc.sort DESC
+	</select>
+	
+	<select id="selectXGEndList" resultMap="BaseResultMap" parameterType="map">
+		SELECT id as url,keyword AS title 
+		FROM `seo_keyword` sk 
+		WHERE LEVEL='3' AND online='1' AND sk.keyword LIKE '%${carName}%' 
+		ORDER BY update_time DESC LIMIT 0,20
+	</select>
+	
+	<select id="selectxgppNoBrand" resultMap="BaseResultMap">
+		SELECT NAME AS title,CONCAT("zx-",url) AS url 
+	    FROM t_zixun_class 
+		WHERE LEVEL=1 AND city_attr=0 AND STATUS=1
+        UNION 
+        SELECT a.name AS title,CONCAT('zt-',b.url,'/',a.url) AS url 
+        FROM t_zixun_class a LEFT JOIN t_zixun_class b ON a.pid=b.id 
+        WHERE a.status=1 AND a.city_attr=0 AND a.level=2
+	</select>
+	
+	<select id="selectPics" resultMap="BaseResultMap" parameterType="int">
+		SELECT pic_url 
+		FROM t_special_content 
+		WHERE (TYPE='1' OR TYPE='2') AND sp_id=#{id}
+	</select>
+	
+	<select id="selectWQList" resultMap="BaseResultMap">
+		SELECT tc.title,tc.`content`,tc.url,tc.`pic_url`,tc.type 
+		FROM t_special_content tc 
+		WHERE TYPE='10' 
+		ORDER BY tc.sort DESC
+	</select>
+	
+	<select id="selectlunboPic" resultMap="BaseResultMap">
+		SELECT tc.title,tc.`content`,tc.url,tc.`pic_url`,tc.type 
+		FROM t_special_content tc 
+		WHERE TYPE='2' and sp_id='0' ORDER BY tc.sort DESC
+	</select>
+	
+	<select id="selectAllPics" resultMap="BaseResultMap">
+		SELECT pic_url FROM t_special_content WHERE (TYPE='1' OR TYPE='2') AND sp_id in
+		<foreach collection="array" item="id" open="(" separator="," close=")">
+			${id}
+		</foreach>
+	</select>
+</mapper>

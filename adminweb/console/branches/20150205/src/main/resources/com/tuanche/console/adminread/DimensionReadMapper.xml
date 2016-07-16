@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.console.adminread.DimensionReadMapper">
+	<resultMap type="com.tuanche.console.bean.Dimension" id="BaseResultMap">
+		<id column="id" property="id" jdbcType="INTEGER" javaType="integer"></id>
+		<result column="die_name" property="dieName" jdbcType="VARCHAR" javaType="string"/>
+		<result column="status" property="status" jdbcType="VARCHAR" javaType="string"/>
+		<result column="keywords" property="keywords" jdbcType="VARCHAR" javaType="string"/>
+		<result column="operate_user_id" property="operateUserId" jdbcType="INTEGER" javaType="integer"/>
+		<result column="operate_user_name" property="operateUserName" jdbcType="VARCHAR" javaType="string"/>
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" javaType="string"/>
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" javaType="string"/>
+	</resultMap>
+
+	 <select id="queryByPage" resultMap="BaseResultMap">
+		 	select d.id,d.die_name,d.status,d.keywords,d.operate_user_id,d.operate_user_name,d.create_time,d.update_time
+		 	from seo_keyword_dimension d
+		 	where
+		 	<foreach collection="conditions" item="condition" separator="AND">
+		 		${condition}
+		 	</foreach>
+		 	order by d.id desc
+	</select>
+	
+	<select id="selectDimensionById" parameterType="int" resultMap="BaseResultMap">
+		select d.id,d.die_name,d.status,d.keywords,d.operate_user_id,d.operate_user_name,d.create_time,d.update_time
+		 from seo_keyword_dimension d where d.id=#{id} and d.status='1'
+	</select>
+	
+	<select id="selectOperate" resultMap="BaseResultMap">
+		SELECT DISTINCT d.operate_user_id,d.operate_user_name FROM seo_keyword_dimension d WHERE d.`status`='1'
+	</select>
+	
+	<select id="selectDieName" resultMap="BaseResultMap">
+		select d.die_name from seo_keyword_dimension d where d.status='1'
+	</select>
+</mapper>

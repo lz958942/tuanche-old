@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tuanche.smc.persistence.write.admin.special.SpecialContentWriteMapper">
+	<insert id="addSpecialTitles" keyProperty="id" useGeneratedKeys="true">
+		<selectKey keyProperty="id" resultType="int">
+			select last_insert_id() as id from t_special_content limit 1
+		</selectKey>
+		insert into t_special_content(sp_id,title,content,url,type,status,sort)values
+		<foreach collection="array" item="specialContent"  separator=",">
+			(${specialContent.spId},
+			${specialContent.stTitles},
+			${specialContent.stContents},
+			${specialContent.titleUrl},
+			${specialContent.stType},
+			${specialContent.status},
+			${specialContent.sort})
+		</foreach>
+	</insert>
+	
+	<insert id="addpicUrl" keyProperty="id" useGeneratedKeys="true">
+		<selectKey keyProperty="id" resultType="int">
+			select last_insert_id() as id from t_special_content limit 1
+		</selectKey>
+		insert into t_special_content(sp_id,type,pic_url,title,status)values
+		<foreach collection="array" item="specialContent"  separator=",">
+			(${specialContent.spId},
+			${specialContent.stType},
+			${specialContent.listPicsInsert},
+			${specialContent.picTitle},
+			${specialContent.status})
+		</foreach>
+	</insert>
+	
+	<insert id="addOnePicUrl" parameterType="specialTitles">
+		<selectKey keyProperty="id" resultType="int">
+			select last_insert_id() as id from t_special_content limit 1
+		</selectKey>
+		insert into t_special_content(sp_id,pic_url,type,status,banner)values
+		(
+			#{spId},
+			#{onePicInsert},
+			#{stType},
+			#{status},
+			#{banner}
+		)
+	</insert>
+	
+	<update id="updateSpecialTitles" parameterType="specialTitles">
+		update t_special_content t 
+		<set>
+			t.title=#{stTitles},
+			t.content=#{stContents},
+			t.url=#{titleUrl},
+			t.type=#{stType},
+			t.status=#{status},
+			t.sort=#{sort}
+		</set>	
+			where t.id =#{id};
+	</update>
+	
+	<update id="updatePicUrl" parameterType="specialTitles">
+		update t_special_content t 
+		<set>
+			t.title=#{picTitle},
+			t.pic_url=#{listPicsInsert},
+			t.type=#{stType},
+			t.status=#{status}
+		</set>
+		where t.id=#{id}
+	</update>
+	
+	<update id="updateOnePicUrl" parameterType="specialTitles">
+		update t_special_content t 
+		<set>
+			t.pic_url=#{onePicInsert},
+			t.type=#{stType},
+			t.status=#{status},
+			t.banner=#{banner}
+		</set>
+		where t.id=#{id}
+	</update>
+	
+	<update id="deletePic" parameterType="int">
+		update t_special_content t set t.status='2' where id=#{id}
+	</update>
+	
+	<update id="updateStatus" parameterType="int">
+		UPDATE t_special_content SET STATUS='2' WHERE sp_id=#{id}
+	</update>
+	
+	<update id="deletePics">
+		update t_special_content set status='2' where sp_id in
+		<foreach collection="array" item="id" open="(" separator="," close=")">
+			${id}
+		</foreach>
+	</update>
+</mapper>

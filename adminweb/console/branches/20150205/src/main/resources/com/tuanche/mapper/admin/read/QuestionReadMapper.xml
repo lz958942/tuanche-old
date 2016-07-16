@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.mapper.admin.read.QuestionReadMapper">
+		<resultMap type="com.tuanche.bean.admin.Question" id="BaseResult">
+		<id column="id" property="id" javaType="integer" jdbcType="INTEGER"/>
+		<result column="content" property="content" javaType="string" />		
+		<result column="firstkind_id" property="firstkindId" javaType="integer" jdbcType="INTEGER"/>
+		<result column="secondkind_id" property="secondkindId" javaType="integer" jdbcType="INTEGER"/>
+		<result column="question_status" property="questionStatus" javaType="Byte" jdbcType="TINYINT"/>
+		<result column="build_emp" property="buildEmp" javaType="integer" jdbcType="INTEGER"/>		
+		<result column="build_time" property="buildTime" javaType="String" jdbcType="DATE"/>		
+		<result column="update_emp" property="updateEmp" javaType="integer" jdbcType="INTEGER"/>		
+		<result column="update_time" property="updateTime" javaType="String" jdbcType="DATE"/>
+		<result column="lable" property="lable" javaType="string" jdbcType="VARCHAR"/>
+		<result column="is_resolve" property="isResolve" javaType="Byte" jdbcType="TINYINT"/>
+		<result column="show_emp" property="showEmp" javaType="string" jdbcType="VARCHAR"/>
+		<result column="keyword" property="keyword" javaType="string" jdbcType="VARCHAR"/>
+		<result column="kd_id" property="kdId" javaType="string" jdbcType="VARCHAR"/>
+		<result column="is_recom" property="isRecom" javaType="Byte" jdbcType="TINYINT"/>
+		<result column="title" property="title" javaType="string" jdbcType="VARCHAR"/>
+		<result column="dimension" property="dimension" javaType="string" jdbcType="VARCHAR"/>
+		<result column="reply" property="reply" javaType="integer" jdbcType="INTEGER"/>	
+		<result column="brand_id" property="brandId" javaType="integer" jdbcType="INTEGER"/>
+		<result column="carstyle_id" property="carstyleId" javaType="integer" jdbcType="INTEGER"/>
+		<result column="deduplication" property="deduplication" javaType="integer" jdbcType="INTEGER"/>
+			
+		</resultMap>
+	<!-- 公用sql -->
+	<sql id="baseSql">
+	SELECT id,content,firstkind_id,secondkind_id,question_status,build_emp,build_time,update_emp,update_time,lable,is_resolve,show_emp,keyword,kd_id,is_recom,title,dimension,reply,brand_id,carstyle_id FROM t_question	
+	</sql>
+	<!-- 查询特定条件查询 -->
+	<select id="queryByPage" resultMap="BaseResult" parameterType="com.tuanche.bean.admin.Question">
+		<include refid="baseSql"/> WHERE 1=1
+		<if test="id!=null">
+		and id=#{id}
+		</if>
+		<if test="content!=null">
+		and content=#{content}
+		</if>
+		<if test="firstkindId!=null">
+		and firstkind_id=#{firstkindId}
+		</if>
+		<if test="secondkindId!=null">
+		and secondkind_id=#{secondkindId}
+		</if>
+		<if test="questionStatus!=null">
+		and question_status=#{questionStatus}
+		</if>
+		<if test="buildEmp!=null">
+		and build_emp=#{buildEmp}
+		</if>
+		<if test="buildTime!=null">
+		and build_time like '%${buildTime}%'
+		</if>
+		<if test="updateEmp!=null">
+		and update_emp=#{updateEmp}
+		</if>
+		<if test="updateTime!=null">
+		and update_time like '%${updateTime}%'
+		</if>
+		<if test="lable!=null">
+		and lable like '%${lable}%'
+		</if>
+		<if test="isResolve!=null">
+		and is_resolve=#{isResolve}
+		</if>
+		<if test="showEmp!=null">
+		and show_emp=#{showEmp}
+		</if>
+		<if test="keyword!=null">
+		and keyword like '%${keyword}%'
+		</if>
+		<if test="kdId!=null">
+		and kd_id like '%${kdId}%'
+		</if>
+		<if test="isRecom!=null">
+		and is_recom = #{isRecom}
+		</if>
+		<if test="title!=null">
+		and title  like '%${title}%'
+		</if>
+		<if test="dimension!=null">
+		and dimension = #{dimension}
+		</if>
+		<if test="deduplication!=null">
+		and deduplication = #{deduplication}
+		</if>
+		<if test="reply==0">
+		and reply = 0
+		</if>
+		<if test="reply==1">
+		and reply >0
+		</if>
+		ORDER BY question_status DESC,update_time DESC
+	</select>
+	<!-- 啊啊啊 -->
+		<select id="selectAlls" resultMap="BaseResult" parameterType="com.tuanche.bean.admin.Question">
+		<include refid="baseSql"/> WHERE 1=1
+		<if test="title!=null">
+		and title like '%${title}%'
+		</if>
+		<if test="firstkindId!=null">
+		and firstkind_id=#{firstkindId}
+		</if>
+		<if test="secondkindId!=null">
+		and secondkind_id=#{secondkindId}
+		</if>
+		<if test="questionStatus!=null">
+		and question_status=#{questionStatus}
+		</if>
+		<if test="isResolve!=null">
+		and is_resolve=#{isResolve}
+		</if>
+		<if test="isRecom!=null">
+		and is_recom=#{isRecom}
+		</if>
+	</select>
+	<!-- 查询单个问题 -->
+		<select id="selectQuestion" resultMap="BaseResult" parameterType="int">
+		<include refid="baseSql"/> where id=#{id}
+	</select>
+	<!-- 根据二级分类id 查询问题个数 -->
+	<select id="selectAnsCount" resultType="int" parameterType="int">
+		SELECT COUNT(1) FROM t_question where secondkind_id=#{secondkindId} and question_status=4
+	</select>
+	<!-- 获取所有提问标题 -->
+	<select id="selectQuestions" resultMap="BaseResult">
+		<include refid="baseSql"/>
+	</select>
+</mapper>

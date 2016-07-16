@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tuanche.console.cheread.CityReadMapper">
+      <select id="getCity"  resultType="com.tuanche.console.bean.City">
+          SELECT  id,dname,py,citycode
+          FROM  tc_district  
+          WHERE   open_status IN (1,2,3)
+     </select>
+      <select id="getAllCity"  resultType="com.tuanche.console.bean.City">
+          SELECT  id,dname,py,citycode
+          FROM  tc_district
+     </select>
+</mapper>

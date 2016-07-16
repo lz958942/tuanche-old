@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.cms.adminwrite.TlcityWriteMapper" >
+  <sql id="Base_Column_List" >
+    id, city_id, city_name, tid, tname, pic, locked, create_user_id, create_user_name, 
+    create_time, update_user_id, update_user_name, update_time, delete_flay,tlcitytype
+  </sql>
+  <insert id="insert" parameterType="com.tuanche.cms.bean.Tlcity" >
+    insert into t_cm_tlcity (city_id, city_name, tid, tname, pic, locked, create_user_id, 
+      create_user_name, create_time, update_user_id, update_user_name, update_time, 
+       content,tlcitytype)
+    values (#{cityId}, #{cityName}, #{tid}, #{tname}, #{pic}, #{locked}, #{createUserId}, 
+      #{createUserName}, now(), #{updateUserId}, #{updateUserName}, #{updateTime}, 
+      #{content},#{tlcitytype})
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tuanche.cms.bean.Tlcity" >
+    update t_cm_tlcity
+    <set >
+      <if test="cityId != null" >
+        city_id = #{cityId},
+      </if>
+      <if test="cityName != null" >
+        city_name = #{cityName},
+      </if>
+      <if test="tid != null" >
+        tid = #{tid},
+      </if>
+      <if test="tname != null" >
+        tname = #{tname},
+      </if>
+      <if test="pic != null" >
+        pic = #{pic},
+      </if>
+      <if test="locked != null" >
+        locked = #{locked},
+      </if>
+      <if test="updateUserId != null" >
+        update_user_id = #{updateUserId},
+      </if>
+      <if test="updateUserName != null" >
+        update_user_name = #{updateUserName},
+      </if>
+        update_time = now(),
+      <if test="deleteFlay != null" >
+        delete_flay = #{deleteFlay},
+      </if>
+      <if test="content != null" >
+        content = #{content},
+      </if>
+      <if test="tlcitytype != null" >
+        tlcitytype = #{tlcitytype},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+</mapper>

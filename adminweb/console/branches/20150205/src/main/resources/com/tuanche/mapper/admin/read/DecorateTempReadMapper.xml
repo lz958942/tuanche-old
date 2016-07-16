@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.mapper.admin.read.DecorateTempReadMapper">
+	<resultMap type="com.tuanche.bean.admin.DecorateTemp" id="BaseResultMap">
+		<id column="id" property="id" javaType="integer" jdbcType="INTEGER"></id>
+		<result column="base_id" property="baseId" javaType="integer" jdbcType="INTEGER"/>
+		<result column="baseTitle" property="baseTitle" javaType="string" jdbcType="VARCHAR"/>
+		<result column="plate_id" property="plateId" javaType="integer" jdbcType="INTEGER"/>
+		<result column="add_user_id" property="addUserId" javaType="integer" jdbcType="INTEGER"/>
+		<result column="title" property="title" javaType="string" jdbcType="VARCHAR"/>
+		<result column="title_content_style" property="titleContentStyle" javaType="string" jdbcType="VARCHAR"/>
+		<result column="title_show_style" property="titleShowStyle" javaType="string" jdbcType="VARCHAR"/>
+		<result column="isdel" property="isDel" javaType="string" jdbcType="VARCHAR"/>
+		<result column="sort" property="sort" javaType="string" jdbcType="VARCHAR"/>
+		<result column="add_user_name" property="addUserName" javaType="string" jdbcType="VARCHAR"/>
+		<result column="add_time" property="addTime" javaType="string" jdbcType="TIMESTAMP"/>
+	</resultMap>
+	
+	<select id="selectTempByPage" resultMap="BaseResultMap">
+		SELECT t.id,t.base_id,t.plate_id,t.title,t.title_show_style,
+       		   t.title_content_style,t.add_user_id,t.sort,t.add_user_name,
+       		   t.add_time,b.title as baseTitle
+        FROM t_decorate_temp t
+		LEFT JOIN t_decorate_base b
+		ON t.`base_id`=b.`id`
+		WHERE 1=1 AND
+		<foreach collection="list" item="condition" separator="AND">
+			${condition}
+		</foreach>
+		ORDER BY t.id DESC
+	</select>
+	
+	<select id="selectPlateById" resultMap="BaseResultMap">
+		SELECT id,base_id,plate_id,title,title_show_style,
+			   title_content_style,sort,add_user_id,
+			   add_user_name,add_time
+		FROM t_decorate_temp
+		WHERE id=#{id}
+	</select>
+</mapper>

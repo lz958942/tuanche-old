@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.cms.adminread.ContentReadMapper" >
+  <resultMap id="BaseResultMap" type="com.tuanche.cms.bean.Content" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="city_id" property="cityId" jdbcType="INTEGER" />
+    <result column="city_name" property="cityName" jdbcType="VARCHAR" />
+    <result column="sort" property="sort" jdbcType="INTEGER" />
+    <result column="plate_id" property="plateId" jdbcType="INTEGER" />
+    <result column="plate_name" property="plateName" jdbcType="VARCHAR" />
+    <result column="data_type" property="dataType" jdbcType="INTEGER" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="descriction" property="descriction" jdbcType="VARCHAR" />
+    <result column="imag_url" property="imagUrl" jdbcType="VARCHAR" />
+    <result column="hyperlink" property="hyperlink" jdbcType="VARCHAR" />
+    <result column="con_id" property="conId" jdbcType="INTEGER" />
+    <result column="create_user_id" property="createUserId" jdbcType="INTEGER" />
+    <result column="create_user_name" property="createUserName" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user_id" property="updateUserId" jdbcType="INTEGER" />
+    <result column="update_user_name" property="updateUserName" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="delete_flay" property="deleteFlay" jdbcType="INTEGER" />
+    
+    <result column="group_leader_id" property="groupLeaderId" jdbcType="INTEGER" />
+     <result column="car_type_id" property="carTypeId" jdbcType="INTEGER" />
+     <result column="expand" property="expand" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, city_id,city_name,sort, plate_id, plate_name, data_type, title, descriction, imag_url, hyperlink, con_id, 
+    create_user_id, create_user_name, create_time,car_type_id, update_user_id, update_user_name, expand,
+    update_time, delete_flay,group_leader_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_cm_content
+    where id = #{id} and delete_flay = 1;
+  </select>
+  
+  <select id="getContentByPage" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+   select 
+    <include refid="Base_Column_List" />
+    from t_cm_content
+    where  delete_flay = 1
+    and plate_id = #{plateId}
+     order by sort desc
+    </select>
+     
+    <select id="getMaxSortByPlateId" resultType="java.lang.Integer"  parameterType="java.lang.Integer">
+   	 SELECT MAX(sort) sort FROM t_cm_content WHERE plate_id = #{plateId}
+    </select>
+    
+    <select id="getContentLimitByPlateId" resultMap="BaseResultMap" parameterType="java.util.Map">
+   select 
+    <include refid="Base_Column_List" />
+    from t_cm_content
+    where  delete_flay = 1
+    and plate_id = #{plateId}
+    order by sort desc
+    LIMIT 0,#{count}
+    </select>
+    
+</mapper>

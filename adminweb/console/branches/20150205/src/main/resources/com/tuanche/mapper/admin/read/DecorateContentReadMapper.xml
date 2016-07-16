@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.mapper.admin.read.DecorateContentReadMapper">
+	<resultMap type="com.tuanche.bean.admin.DecorateContent" id="BaseResultMap">
+		<id column="id" property="id" javaType="integer" jdbcType="INTEGER"></id>
+		<result column="base_id" property="baseId" javaType="integer" jdbcType="INTEGER"/>
+		<result column="temp_id" property="tempId" javaType="integer" jdbcType="INTEGER"/>
+		<result column="title" property="dctitle" javaType="string" jdbcType="VARCHAR"/>
+		<result column="sort" property="dcSort" javaType="string" jdbcType="VARCHAR"/>
+		<result column="content" property="content" javaType="string" jdbcType="VARCHAR"/>
+		<result column="pic_url" property="picUrl" javaType="string" jdbcType="VARCHAR"/>
+		<result column="isdel" property="isdel" javaType="string" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<select id="selectContentById" parameterType="int" resultMap="BaseResultMap">
+		SELECT c.id,c.base_id,c.temp_id,c.pic_url,c.title,c.sort,c.content,c.isdel
+		FROM t_decorate_content c 
+		WHERE c.`isdel`='0' AND id=#{id}
+	</select>
+	
+	<select id="selectContentByIdResult" parameterType="int" resultType="int">
+		SELECT count(c.id)
+		FROM t_decorate_content c 
+		WHERE c.`isdel`='0' AND c.id=#{id}
+	</select>
+	
+	<select id="selectContentByBaseId" parameterType="int" resultMap="BaseResultMap">
+		SELECT c.`id`,c.`base_id`,c.`temp_id`,c.`sort`,c.`pic_url`,c.title,
+			   c.`content`,t.`title_content_style` AS style 
+		FROM t_decorate_content c 
+		LEFT JOIN t_decorate_temp t 
+		ON c.`temp_id`=t.`id` 
+		WHERE c.temp_id=#{id} AND t.`isdel`='0' AND c.isdel='0'
+		ORDER BY t.sort DESC    
+	</select>
+</mapper>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.mapper.admin.write.GmsCityWriteMapper" >
+  <sql id="Base_Column_List" >
+    id, city_id, city_name, title, begin_time, end_time, address, image, url, is_show, 
+    is_delete, create_time, create_user_id, create_user_name, update_time, update_user_id, 
+    update_user_name
+  </sql>
+  <insert id="addGcm" useGeneratedKeys="true" keyProperty="id" parameterType="com.tuanche.bean.admin.GmsCity">
+    insert into t_tch_city ( city_id, city_name, title, begin_time, end_time, address, 
+      image, url, is_show, is_delete,create_time, create_user_id, create_user_name,periods_num,online,address_number, address_desc)
+    values ( #{cityId}, #{cityName}, #{title}, #{beginTime}, #{endTime}, #{address}, 
+      #{image}, #{url}, #{isShow}, 1, now(), #{createUserId}, #{createUserName},#{periodsNum},1,#{addressNumber}, #{addressDesc})
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tuanche.bean.admin.GmsCity" >
+    update t_tch_city
+    <set >
+      <if test="cityId != null" >
+        city_id = #{cityId},
+      </if>
+      <if test="periodsNum != null" >
+        periods_num = #{periodsNum},
+      </if>
+      <if test="cityName != null" >
+        city_name = #{cityName},
+      </if>
+      <if test="title != null" >
+        title = #{title},
+      </if>
+      <if test="beginTime != null" >
+        begin_time = #{beginTime},
+      </if>
+      <if test="endTime != null" >
+        end_time = #{endTime},
+      </if>
+      <if test="address != null" >
+        address = #{address},
+      </if>
+      <if test="image != null" >
+        image = #{image},
+      </if>
+      <if test="url != null" >
+        url = #{url},
+      </if>
+      <if test="isShow != null" >
+        is_show = #{isShow},
+      </if>
+      <if test="isDelete != null" >
+        is_delete = #{isDelete},
+      </if>
+        update_time = now(),
+      <if test="updateUserId != null" >
+        update_user_id = #{updateUserId},
+      </if>
+      <if test="updateUserName != null" >
+        update_user_name = #{updateUserName},
+      </if>
+      <if test="online != null" >
+        online = #{online},
+      </if>
+      <if test="addressNumber != null" >
+        address_number = #{addressNumber},
+      </if>
+      <if test="addressDesc != null" >
+        address_desc = #{addressDesc},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+  
+</mapper>

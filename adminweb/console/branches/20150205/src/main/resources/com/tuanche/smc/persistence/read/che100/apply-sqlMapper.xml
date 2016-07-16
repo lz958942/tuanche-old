@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tuanche.smc.persistence.read.che100.ApplyReadMapper">
+	<sql id="whereSql">
+		where 1=1
+		<if test="districtIds !=null">
+			and did in 
+			<foreach collection="districtIds" item="did"  open="(" separator="," close=")">
+				#{did}
+			</foreach>
+		</if>
+		<if test="districtId>0">
+			and did=#{districtId}
+		</if>
+		<if test="sid != null">
+			and sid=#{sid}
+		</if>
+		<if test="newsid != null">
+			and account_code=''
+		</if>
+		<if test="starttime!=null">
+			and addtime>=unix_timestamp(#{starttime})
+		</if>
+		<if test="endtime!=null">
+			and unix_timestamp(#{endtime})>=addtime
+		</if>
+		<if test="brandId>0">
+			and brand_id=#{brandId}
+		</if>
+		<if test="accountCode != null">
+			and account_code=#{accountCode}
+		</if>
+		<if test="brandIds !=null">
+		 	and brand_id in 
+		 	<foreach collection="brandIds" item="bid"  open="(" separator="," close=")">
+				#{bid}
+			</foreach>
+		</if>
+	</sql>
+	<select id="selectwhere" resultType="ApplyNum">
+		SELECT  COUNT(DISTINCT(phone)) AS sum ,did AS districtId,brand_id AS brandId,account_code AS accountCode FROM `tc_apply`  
+		<include refid="whereSql"/>
+		<if test="qib != null">
+			GROUP BY districtId,<if test="brandId > 0">brandId,</if>accountCode
+		</if>
+	</select>
+	<select id="selectApplyList" resultType="Apply">
+		select kid,id,name,phone,brand_id brandId,did districtId,cid carstyleId,from_unixtime(addtime,'%Y-%m-%d %H:%i:%s') bmtime,knowprice,state,buyway,getcartime,remarks,account_code accountCode,biz_code bizCode,ip,sid,newsid,bmtype,position from tc_apply
+		<include refid="whereSql"/>
+		order by districtId asc,bmtime desc
+	</select>
+	<select id="selectTimeApplyNum" resultType="ApplyNum">
+		select count(distinct(phone)) as num,newsid,sid,from_unixtime(addtime,'%Y-%m-%d %H') as bmtime from tc_apply
+		<include refid="whereSql"/>
+		group by sid ,bmtime order by sid asc,bmtime desc
+	</select>
+	
+	<select id="selectDayApply" resultType="ApplyNum">
+		select did as districtId,count(distinct(phone)) as num,from_unixtime(addtime,'%Y-%m-%d') as bmtime from tc_apply 
+		<include refid="whereSql"/>
+		group by did,bmtime order by did asc, bmtime asc
+	</select>
+	<select id="selectApplyDisSum" resultType="ApplyNum">
+		select ${line} ${group},count(distinct(phone)) as sum from tc_apply 
+		<include refid="whereSql"/>
+		group by ${group}
+	</select>
+	<select id="selectTimeApplyDisSum" resultType="ApplyNum">
+		select count(distinct(phone)) as num,from_unixtime(addtime,'%Y-%m-%d') as bmtime from tc_apply 
+		<include refid="whereSql"/>
+		group by bmtime
+	</select>
+	
+	<select id="selectDayBrandApply" resultType="ApplyNum">
+		select brand_id brandId,cid carstyleId,count(distinct(phone)) as num,from_unixtime(addtime,'%Y-%m-%d') as bmtime from tc_apply 
+		<include refid="whereSql"/>
+		group by ${group},bmtime order by bmtime asc
+	</select>
+	
+	<select id="selectTimeApply" resultType="ApplyNum">
+		select sid,count(distinct(phone)) as num,from_unixtime(addtime,'%Y-%m-%d %H') as bmtime from tc_apply 
+		<include refid="whereSql"/>
+		group by sid,bmtime order by bmtime asc
+	</select>
+	
+	<select id="selectAccountApply" resultType="ApplyNum">
+		select newsid,account_code accountCode,count(distinct(phone)) as num,from_unixtime(addtime,'${timeType}') as bmtime from tc_apply 
+		<include refid="whereSql"/>
+		group by ${type},bmtime order by bmtime asc
+	</select>
+	
+	
+	<sql id="positionWhereSql">
+		where 1=1 
+		<if test="districtId>0">
+			and did=#{districtId}
+		</if>
+		<if test="starttime!=null">
+			and addtime>=unix_timestamp(#{starttime})
+		</if>
+		<if test="endtime!=null">
+			and unix_timestamp(#{endtime})>=addtime
+		</if>
+		<if test="bmtype>0">
+			and bmtype=#{bmtype}
+		</if>
+		<if test="position>0">
+			and position=#{position}
+		</if>
+		and bmtype>=100 and position>0
+	</sql>
+	
+	<select id="selectCityDayPosition" resultType="ApplyNum">
+	select did as districtId,bmtype,count(phone) as num,from_unixtime(addtime,'${timeType}') as bmtime from tc_apply 
+		<include refid="positionWhereSql"/>
+	group by bmtime,bmtype order by bmtime desc
+	</select>
+	<select id="selectAllCity" resultType="ApplyNum">
+	select did as districtId,bmtype,count(phone) as num from tc_apply 
+		<include refid="positionWhereSql"/>
+	group by districtId,bmtype order by districtId asc
+	</select>
+	
+	<select id="selectPosition" resultType="ApplyNum">
+		select bmtype,position,count(phone) as num from tc_apply 
+			<include refid="positionWhereSql"/>
+		group by position,bmtype
+	</select>
+	
+
+	
+</mapper>

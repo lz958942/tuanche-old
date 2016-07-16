@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.cms.adminwrite.AdContentWriteMapper">
+<insert id="addAdContent"  parameterType="com.tuanche.cms.bean.AdContent">  
+		INSERT INTO adv_position_content(
+  		adv_position_content.channel ,
+  		ad_type ,
+  		adv_position_content.name,
+  		adv_position_content.describe,
+  		location_code ,
+  		adv_position_content.width,
+ 		adv_position_content.height,
+  		adv_position_content.status,
+  		group_name,flag )
+             VALUES
+            (
+             #{channel},
+             #{adType},
+             #{locationName},
+             #{describe},
+             #{locationCode},
+             #{width},
+             #{height},
+             #{status},
+             #{groupName},
+             #{flag}
+            )
+</insert>
+<update id="openAdContent" >
+ 	 update adv_position_content
+           set status=1
+           where id=#{id}
+</update>
+<delete id="delById" parameterType="java.lang.String">  
+       delete from adv_position_content where id=#{id} 
+</delete>  
+<update id="updateAdContent" parameterType="com.tuanche.cms.bean.AdContent">
+ 	 update adv_position_content
+           set channel=#{channel},
+				ad_type=#{adType},
+				name=#{locationName},
+				adv_position_content.describe=#{describe},
+				location_code=#{locationCode},
+				width=#{width},
+				height=#{height},
+				status= #{status},
+				group_name= #{groupName}
+           		where id=#{id}
+</update>
+<update id="openContent">
+ 	 update adv_position_content
+           set status= #{status}
+           		where id=#{id}
+</update>
+ 
+ <insert id="assignCiy"  parameterType="com.tuanche.cms.bean.AdPosition">  
+		INSERT INTO adv_position_local(
+  		adv_position_local.position_content_id,
+  		adv_position_local.city_id,
+  		adv_position_local.flag)
+             VALUES
+            (
+             #{adContentId},
+             #{cityId},
+             #{flag}
+            )
+</insert>
+
+<update id="deleteContentbyId">
+ 	 update adv_position_content
+           set flag=0
+           		where id=#{id}
+</update>
+</mapper>

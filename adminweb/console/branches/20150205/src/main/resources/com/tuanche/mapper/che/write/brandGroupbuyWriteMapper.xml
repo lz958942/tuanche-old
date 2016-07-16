@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	<mapper namespace="com.tuanche.mapper.che.write.BrandGroupbuyWriteMapper">
+		<insert id="insert" useGeneratedKeys="true" keyProperty="id">
+			insert into t_brand_groupbuy 
+			(
+			city_id,
+			city_code,
+			brand_id,
+			saler_id,
+			title,
+			groupbuy_place,
+			web_url,
+			groupbuy_date,
+			base_num,
+			open_groupbuy_num,
+			groupbuy_state,
+			groupbuy_light,
+			add_user_id,
+			add_date,
+			prompt
+			
+			)
+			values
+			(
+				#{cityId},
+				#{cityCode},
+				#{brandId},
+				#{salerId},
+				#{title},
+				#{groupbuyPlace},
+				#{webUrl},
+				#{groupbuyDate},
+				#{baseNum},
+				#{openGroupbuyNum},
+				#{groupbuyState},
+				#{groupbuyLight},
+				#{addUserId},
+				now(),
+				#{prompt}
+			)
+		</insert>
+		<update id="update">
+			update t_brand_groupbuy 
+				set saler_id=#{salerId},
+					title=#{title},
+					groupbuy_date=#{groupbuyDate},
+					groupbuy_place=#{groupbuyPlace},
+					base_num=#{baseNum},
+					open_groupbuy_num=#{openGroupbuyNum},
+					groupbuy_state=#{groupbuyState},
+					groupbuy_light=#{groupbuyLight},
+					last_user_id=#{lastUserId},
+					prompt=#{prompt},
+					last_up_date=now()
+			where id=#{id}
+		</update>
+	<update id="updateState">
+		update t_brand_groupbuy set isdel=#{state} where 1=1
+		<if test="id>0">
+		 and id=#{id}
+		</if>
+		<if test="cityId>0">
+			and city_id=#{cityId} and brand_id=#{brandId}
+		</if>
+	</update>
+	<update id="batchUpdate">
+		UPDATE t_brand_groupbuy SET 
+		groupbuy_light=#{content} ,
+		last_user_id=#{uid},
+		last_up_date=NOW()
+		WHERE city_id=#{cityId} AND groupbuy_state=#{stateName}
+	</update>
+	
+	
+	<update id="updateStateByBrand">
+		UPDATE t_brand_groupbuy SET isdel=#{type} where brand_id=#{pid}  
+	</update>
+	<update id="updateStateByBrandCityId">
+		UPDATE t_brand_groupbuy SET isdel=#{type} where brand_id=#{pid} AND city_id=#{cityId}  
+	</update>
+	
+	
+	<update id="brandCascadeDelBycar">
+		UPDATE   t_brand_groupbuy SET  isdel=-1  WHERE brand_id=#{bid}  AND  city_id IN (
+			SELECT  DISTINCT  a.city_id FROM t_carstyle_groupbuy  a
+			LEFT  JOIN (
+			SELECT  city_id,COUNT(1)  num  FROM  t_carstyle_groupbuy WHERE   brand_id=#{bid}  AND 
+			isdel=0  
+			GROUP BY city_id
+			)  b
+			ON  a.city_id=b.city_id  
+			WHERE  a.brand_id=#{bid}   AND 
+			b.num IS NULL 
+			)
+		
+	</update>
+	
+	
+	<update id="brandCascadeRestoreBycar">
+		UPDATE   t_brand_groupbuy SET  isdel=0  WHERE brand_id=#{bid}  AND  city_id IN (
+		SELECT  DISTINCT  a.city_id FROM t_carstyle_groupbuy  a
+		LEFT  JOIN (
+		SELECT  city_id,COUNT(1)  num  FROM  t_carstyle_groupbuy WHERE   brand_id=#{bid}  AND 
+		isdel=0  
+		GROUP BY city_id
+		)  b
+		ON  a.city_id=b.city_id  
+		WHERE  a.brand_id=#{bid}   AND 
+		b.num IS NOT NULL 
+		)
+	</update>
+	
+	</mapper>

@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	<mapper namespace="com.tuanche.mapper.tongji.read.PvtotalReadMapper">
+		<resultMap id="flowStatResult" type="flowStat">
+	  		<result property="domain" column="host" />
+	  		<result property="date" column="date" />
+	  		<result property="dataType" column="source_type" />
+	  		<result property="pv" column="pv" />
+	  		<result property="uv" column="uv" />
+	  		<result property="click" column="click" />
+	  		<result property="source" column="date_type" />
+	 	</resultMap>
+	 	<select id="selectDate" resultMap="flowStatResult">
+	 	SELECT DISTINCT DATE_FORMAT(DATE,'%Y-%m-%d') AS DATE FROM `tongji_pvtotal_day` UNION SELECT DATE FROM `tongji_flow_stat`  GROUP BY 
+		DATE ORDER BY DATE
+	 	</select>
+	 	
+	 	<select id="selectDomain" resultMap="flowStatResult">
+	 	SELECT DISTINCT HOST AS domain FROM `tongji_pvtotal_day` WHERE date_type!=1 UNION SELECT  domain FROM `tongji_flow_stat`	 	
+	 	GROUP BY 
+		domain ORDER BY domain
+	 	</select>
+	 	
+	 	<!-- <select id="queryAllListByPage" resultMap="flowStatResult"> -->
+	 	<select id="seleAllList" resultMap="flowStatResult" parameterType="flowStat">
+	 		select date, domain AS host, data_type AS source_type, sum(pv) as pv, sum(uv) as uv from tongji_flow_stat
+        	<where>
+        	<if test="startDate != null and startDate != ''">
+        		<![CDATA[
+        			date >= str_to_date(#{startDate}, '%Y-%m-%d')
+        		]]>
+        	</if>
+        	<if test="endDate != null and endDate != ''">
+        		<![CDATA[
+        			and date <= str_to_date(#{endDate}, '%Y-%m-%d')
+        		]]>
+        	</if>
+        	<if test="domain != null and domain != ''">
+        		and domain = #{domain}
+        	</if>
+        	<if test="dataType != '' and dataType != null">
+        		and data_type = #{dataType}
+        	</if>
+        	</where>
+        	GROUP BY date 
+			UNION 
+			SELECT DATE_FORMAT(STR_TO_DATE(`date`,'%Y%m%d'),'%Y-%m-%d') AS `date`,
+					host,
+					source_type,
+					pv,
+					uv 
+			FROM `tongji_pvtotal_day`
+			WHERE 1=1
+			<if test="startDate != null and startDate != ''">
+				AND
+        		<![CDATA[
+        			date >= DATE_FORMAT(STR_TO_DATE(#{startDate},'%Y-%m-%d'),'%Y%m%d')
+        		]]>
+        	</if>
+        	<if test="endDate != null and endDate != ''">
+        		<![CDATA[
+        			and date <= DATE_FORMAT(STR_TO_DATE(#{endDate} ,'%Y-%m-%d'),'%Y%m%d')
+        		]]>
+        	</if>
+        	<if test="domain != null and domain != ''">
+        		and host = #{domain} and date_type=2
+        	</if>
+        	<if test="dataType!= null and dataType== 'seo'">
+        		and source_type = 1
+        	</if>
+        	<if test="dataType!= null and dataType== 'sem'">
+        		and source_type = 2
+        	</if>
+        	<if test="domain == null or domain == ''">
+        		and  date_type=1
+        	</if>
+        	<if test="dataType== null or dataType== ''">
+        		and source_type = 0
+        	</if>
+        	order BY date
+	 	</select>
+	 	<!-- 时间条件 -->
+		<select id="seleAllDate" resultMap="flowStatResult" parameterType="flowStat">
+	 		select date, domain AS host, data_type AS source_type, sum(pv) as pv, sum(uv) as uv from tongji_flow_stat
+        	<where>
+        	<if test="startDate != null and startDate != ''">
+        		<![CDATA[
+        			date >= str_to_date(#{startDate}, '%Y-%m-%d')
+        		]]>
+        	</if>
+        	<if test="endDate != null and endDate != ''">
+        		<![CDATA[
+        			and date <= str_to_date(#{endDate}, '%Y-%m-%d')
+        		]]>
+        	</if>
+        	<if test="domain != null and domain != ''">
+        		and domain = #{domain}
+        	</if>
+        	<if test="dataType != '' and dataType != null">
+        		and data_type = #{dataType}
+        	</if>
+        	</where>
+        	GROUP BY date 
+			UNION 
+			SELECT DATE_FORMAT(STR_TO_DATE(`date`,'%Y%m%d'),'%Y-%m-%d') AS `date`,
+					host,
+					source_type,
+					pv,
+					uv 
+			FROM `tongji_pvtotal_day`
+			WHERE 1=1
+			<if test="startDate != null and startDate != ''">
+			 AND
+        		<![CDATA[
+        			date >= DATE_FORMAT(STR_TO_DATE(#{startDate},'%Y-%m-%d'),'%Y%m%d')
+        		]]>
+        	</if>
+        	<if test="endDate != null and endDate != ''">
+        		<![CDATA[
+        			and date <= DATE_FORMAT(STR_TO_DATE(#{endDate} ,'%Y-%m-%d'),'%Y%m%d')
+        		]]>
+        	</if>
+        	<if test="domain != null and domain != ''">
+        		and host = #{domain} and date_type=2
+        	</if>
+        	<if test="dataType!= null and dataType== 'seo'">
+        		and source_type = 1
+        	</if>
+        	<if test="dataType!= null and dataType== 'sem'">
+        		and source_type = 2
+        	</if>
+        	<if test="domain == null or domain == ''">
+        		and  date_type=1
+        	</if>
+        	<if test="dataType== null or dataType== ''">
+        		and source_type = 0
+        	</if>
+        	group by date
+        	order by date
+	 	</select>
+	 	<!--分页查询-->
+	 		 	<select id="selectAllList" resultMap="flowStatResult" parameterType="flowStat">
+	 		select date, domain AS host, data_type AS source_type, sum(pv) as pv, sum(uv) as uv from tongji_flow_stat
+        	<where>
+        	<if test="startDate != null and startDate != ''">
+        		<![CDATA[
+        			date >= str_to_date(#{startDate}, '%Y-%m-%d')
+        		]]>
+        	</if>
+        	<if test="endDate != null and endDate != ''">
+        		<![CDATA[
+        			and date <= str_to_date(#{endDate}, '%Y-%m-%d')
+        		]]>
+        	</if>
+        	<if test="domain != null and domain != ''">
+        		and domain = #{domain}
+        	</if>
+        	<if test="dataType != '' and dataType != null">
+        		and data_type = #{dataType}
+        	</if>
+        	</where>
+			GROUP BY `date`
+			UNION 
+			SELECT DATE_FORMAT(STR_TO_DATE(`date`,'%Y%m%d'),'%Y-%m-%d') AS `date`,
+					host,
+					source_type,
+					pv,
+					uv 
+			FROM `tongji_pvtotal_day`
+			 WHERE 1=1
+			<if test="startDate != null and startDate != ''">
+			AND
+        		<![CDATA[
+        			date >= DATE_FORMAT(STR_TO_DATE(#{startDate},'%Y-%m-%d'),'%Y%m%d')
+        		]]>
+        	</if>
+        	<if test="endDate != null and endDate != ''">
+        		<![CDATA[
+        			and date <= DATE_FORMAT(STR_TO_DATE(#{endDate} ,'%Y-%m-%d'),'%Y%m%d')
+        		]]>
+        	</if>
+        	<if test="domain != null and domain != ''">
+        		and host = #{domain} and date_type=2
+        	</if>
+        	<if test="dataType!= null and dataType== 'seo'">
+        		and source_type = 1
+        	</if>
+        	<if test="dataType!= null and dataType== 'sem'">
+        		and source_type = 2
+        	</if>
+        	<if test="domain == null or domain == ''">
+        		and  date_type=1
+        	</if>
+        	<if test="dataType== null or dataType== ''">
+        		and source_type = 0
+        	</if>
+        	
+			ORDER BY date DESC
+        	LIMIT #{star},#{en}
+	 	</select>
+
+	 	<select id="queryFlowStatListByPage" resultMap="flowStatResult" parameterType="flowStat">
+	 		select DATE_FORMAT(DATE,'%Y-%m-%d') as date, host, date_type,pv,uv,click,source_type from tongji_pvtotal_day
+        	<where>
+        	<if test="startDate != null and startDate != ''">
+        		<![CDATA[
+        			date >= DATE_FORMAT(STR_TO_DATE(#{startDate},'%Y-%m-%d'),'%Y%m%d')
+        		]]>
+        	</if>
+        	<if test="endDate != null and endDate != ''">
+        		<![CDATA[
+        			and date <= DATE_FORMAT(STR_TO_DATE(#{endDate} ,'%Y-%m-%d'),'%Y%m%d')
+        		]]>
+        	</if>
+        	<if test="domain != null and domain != ''">
+        		and host = #{domain} and date_type=2
+        	</if>
+        	<if test="dataType!= null and dataType== 'seo'">
+        		and source_type = 1
+        	</if>
+        	<if test="dataType!= null and dataType== 'sem'">
+        		and source_type = 2
+        	</if>
+        	<if test="domain == null or domain == ''">
+        		and  date_type=1
+        	</if>
+        	<if test="dataType== null or dataType== ''">
+        		and source_type = 0
+        	</if>
+        	</where>
+        	ORDER BY DATE DESC
+	 	</select>
+	 	
+	 	<select id="queryFlowStatList" resultMap="flowStatResult" parameterType="flowStat">
+	 		select  DATE_FORMAT(DATE,'%Y-%m-%d') as date, host, date_type,pv,uv,click,source_type from tongji_pvtotal_day
+        	<where>
+        	<if test="startDate != null and startDate != ''">
+        		<![CDATA[
+        			date >= DATE_FORMAT(STR_TO_DATE(#{startDate},'%Y-%m-%d'),'%Y%m%d')
+        		]]>
+        	</if>
+        	<if test="endDate != null and endDate != ''">
+        		<![CDATA[
+        			and date <=DATE_FORMAT(STR_TO_DATE(#{endDate},'%Y-%m-%d'),'%Y%m%d')
+        		]]>
+        	</if>
+        	<if test="domain != null and domain != ''">
+        		and host = #{domain} and date_type=2
+        	</if>
+        	<if test="dataType!= null and dataType== 'seo'">
+        		and source_type = 1
+        	</if>
+        	<if test="dataType!= null and dataType== 'sem'">
+        		and source_type = 2
+        	</if>
+        	<if test="domain == null or domain == ''">
+        		and  date_type=1
+        	</if>
+        	<if test="dataType== null or dataType== ''">
+        		and source_type = 0
+        	</if>
+        	</where>
+        	ORDER BY DATE ASC
+	 	</select>
+	</mapper>

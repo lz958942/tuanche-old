@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.console.adminwrite.DimensionWriteMapper">
+	<resultMap type="com.tuanche.console.bean.Dimension" id="BaseResultMap">
+		<id column="id" property="id" jdbcType="INTEGER" javaType="integer"></id>
+		<result column="die_name" property="dieName" jdbcType="VARCHAR" javaType="string"/>
+		<result column="status" property="status" jdbcType="VARCHAR" javaType="string"/>
+		<result column="keywords" property="keywords" jdbcType="VARCHAR" javaType="string"/>
+		<result column="operate_user_id" property="operateUserId" jdbcType="INTEGER" javaType="integer"/>
+		<result column="operate_user_name" property="operateUserName" jdbcType="VARCHAR" javaType="string"/>
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" javaType="string"/>
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" javaType="string"/>
+	</resultMap>
+	<insert id="insertDimension"  useGeneratedKeys="true">
+		<selectKey resultType="int" keyProperty="id">
+			select last_insert_id() as id from seo_keyword_dimension limit 1
+		</selectKey>
+		insert into seo_keyword_dimension(die_name,keywords,operate_user_id,operate_user_name)values
+			<foreach collection="array" item="dimension" separator=",">
+				(${dimension.dieName},
+				${dimension.keywords},
+				${dimension.operateUserId},
+				${dimension.operateUserName})
+			</foreach>
+	</insert>
+	
+	<update id="update">
+		update seo_keyword_dimension 
+		<set>
+			<if test="dieName!=null">
+				die_name=#{dieName},
+			</if>
+			<if test="keywords!=null">
+				keywords=#{keywords},
+			</if>
+			<if test="operateUserId!=null">
+				operate_user_id=#{operateUserId},
+			</if>
+			<if test="operateUserName!=null">
+				operate_user_name=#{operateUserName},
+			</if>
+			<if test="createTime!=null">
+				create_time=#{createTime},
+			</if>
+			update_time=now()
+		</set>
+		where id=#{id}
+	</update>
+	
+	<update id="deleteDie" parameterType="int">
+		update seo_keyword_dimension d set d.status='-1' where d.id=#{id}
+	</update>
+	
+	<update id="deleteAllDim">
+		update seo_keyword_dimension  set status='-1' where id in
+		<foreach collection="array" item="id" open="(" separator="," close=")">
+			${id}
+		</foreach>
+		
+	</update>
+</mapper>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.mapper.che.write.AdContentPositionWriteMapper">
+<update id="openContentLocation">
+ 	 update rec_position_local
+           set status= #{contentPositiontatus}
+           		where id=#{contentPositionId}
+</update>
+
+<update id="deleteContentPositionById">
+ 	 update rec_position_local  set
+          <if test="sta!=null">
+          status=#{sta}
+          </if>
+          <if test="sta==null">
+          flag=0
+          </if>
+           		where id=#{contentPositionId}
+</update>
+<update id="updateImg">
+	 update rec_position_local
+           set 
+           <if test="path!=null and path.length()>0">
+            url=#{path},
+           </if>
+           	   pic_title=#{picTitle},
+           	   pic_desc=#{picDesc},
+           	   update_time=NOW(),
+           	   update_uid=#{uid},
+           	   target_url=#{turl}
+           		where id=#{id}
+</update>
+</mapper>

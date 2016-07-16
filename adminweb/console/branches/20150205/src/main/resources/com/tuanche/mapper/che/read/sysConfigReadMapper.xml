@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.mapper.che.read.SysConfigReadMapper" >
+  <resultMap id="BaseResultMap" type="com.tuanche.bean.che.SysConfig" >
+    <result column="id" property="id" jdbcType="INTEGER" />
+    <result column="key" property="key" jdbcType="VARCHAR" />
+    <result column="desc" property="desc" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="create_uid" property="createUid" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime"/>
+  </resultMap>
+  <sql id="countAll">
+  	id,`key`,`desc`,`name`,`code`,`status`,create_uid,create_time
+  </sql>
+  <!-- 分页 -->
+  <select id="selectAllByPage" resultMap="BaseResultMap">
+  
+  SELECT  <include refid="countAll"/>
+		 FROM sys_config AS t 
+			<if test="condition!=null">
+			WHERE
+					<foreach collection="condition" item="condition" separator="AND">
+						${condition}
+					</foreach>
+					ORDER BY t.id DESC
+			</if>
+	</select>
+	<select id="updateBefore" resultMap="BaseResultMap">
+		SELECT <include refid="countAll"/> 
+		FROM `sys_config` t  WHERE t.id=#{id} AND t.status>-1
+	</select>
+	<select id="verification" resultMap="BaseResultMap">
+		SELECT id FROM `sys_config` WHERE `key`=#{key} AND `code`=#{code} AND status > -1
+	</select>
+	<select id="getCodeByKey" resultMap="BaseResultMap">
+		SELECT code,name FROM sys_config  WHERE `key` IN 
+		<foreach item="key" index="index" collection="key" open="(" separator="," close=")">
+		#{key}
+		</foreach>
+		AND status > -1
+	</select>
+	<select id="getCodeByKeyFromString" resultMap="BaseResultMap">
+			SELECT 
+				`code`,`name`,`desc`  FROM sys_config  WHERE `key` =#{key} 
+			AND STATUS > -1 
+	</select>
+	<select id="getCodeByKeyAndcode" resultMap="BaseResultMap">
+			SELECT 
+				code,name FROM sys_config  WHERE `key` =#{key}  AND code=#{code}
+			AND status > -1
+	</select>
+	<select id="getCodeByKeyResuitInt" resultType="java.lang.Integer">
+	 SELECT MAX(`code`)  FROM  sys_config  WHERE `key`=#{key} AND `status` >-1 
+	</select>
+</mapper>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.mapper.che.write.EvaluatePicWriteMapper" >
+ 	<update id="passPic">
+	UPDATE tc_evaluate_pic
+    SET
+      state = #{state},
+      aprroval_time=(SELECT NOW()),
+      aprroval_user=#{editId}
+    WHERE id = #{id}
+ 	</update>
+ 	<update id="batchPass">
+ 	UPDATE tc_evaluate_pic
+    SET
+      state = 1,
+     aprroval_time=(SELECT NOW()),
+     aprroval_user=#{editId}
+    WHERE id = #{id}
+ 	</update>
+ 	<insert id="insertPic">
+ 		INSERT INTO 
+ 			tc_evaluate_pic
+ 			  (evaluate_id,pic,state,create_time) 
+ 			     VALUES 
+ 			       (#{picid},#{src},'0',NOW());
+ 	</insert>
+ 	<update id="UpdatePic">
+ 	UPDATE 
+      tc_evaluate_pic 
+    SET
+      pic = #{src} 
+    WHERE evaluate_id =#{eid}
+ 	</update>
+ 	<delete id="deleteReviewPic">
+ 		   DELETE FROM  tc_evaluate_pic   WHERE  evaluate_id=#{eid}
+ 	</delete>
+</mapper>

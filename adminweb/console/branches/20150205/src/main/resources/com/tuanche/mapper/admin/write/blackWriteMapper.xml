@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.mapper.admin.write.BlackWriteMapper" >
+  <insert id="saveBlack" parameterType="com.tuanche.bean.admin.Black" >
+    insert into t_black (word, type,status,create_uid,create_time
+      )
+    values ( #{word}, #{type},1,#{createUid},(SELECT NOW())
+      )
+  </insert>
+  <update id="update" parameterType="com.tuanche.bean.admin.Black" >
+    update t_black
+    set word = #{word},
+      type = #{type},
+      status=#{status},
+      update_uid=#{updateUid},
+      update_time=(SELECT NOW())
+    where id = #{id}
+  </update>
+</mapper>

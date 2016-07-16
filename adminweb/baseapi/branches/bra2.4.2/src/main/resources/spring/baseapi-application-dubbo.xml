@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+	http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+	<dubbo:application name="base-api" />
+
+	<!-- 使用zk注册中心暴露服务地址 -->
+	<dubbo:registry protocol="zookeeper" address="zookeeper.tuanche.com:2181" />
+
+	<dubbo:reference id="week.signUp" interface="com.tuanche.week.api.SignUp" check="false" timeout="9000" connections="10" />
+
+	<dubbo:reference id="week.WeekFailureQuartzProxy" interface="com.tuanche.week.api.WeekFailureQuartz" check="false" timeout="9000" connections="10"></dubbo:reference>
+
+	<dubbo:reference id="ecar.ecarBaseDataServiceProxy" interface="com.tuanche.basedata.api.EcarBaseDataApi" check="false" />
+	
+	<dubbo:reference id="baseData.CarInfoServiceProxy" interface="com.tuanche.basedata.api.CarInfoApi" check="false" timeout="9000" connections="10"></dubbo:reference>
+	
+	<dubbo:reference id="baseData.baseDataServiceProxy" interface="com.tuanche.basedata.api.BaseDataApi" check="false" timeout="9000" connections="10"></dubbo:reference>
+	
+	<dubbo:reference id="boutiqueApplicationProxy" interface="com.tuanche.basedata.api.BoutiqueApplicationApi" check="false" timeout="9000" connections="10"></dubbo:reference>
+	
+</beans>

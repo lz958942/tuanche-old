@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.mapper.admin.read.TopicReviewReadMapper">
+  
+  <sql id="Base_Column_List" >
+    id, topic_id topicId, comment, backer_num backerNum, floor_num floorNum, audit_status auditStatus, id_delete idDelete, user_id userId, user_name userName, 
+    add_time addTime, update_user_id updateUserId, update_time update_time,`sort`
+  </sql>
+  <select id="findByid" resultType="com.tuanche.bean.admin.TopicReview" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_question_topic_comment
+    where id = #{id}
+  </select>
+  
+  <select id="reviewListByPage" resultType="com.tuanche.bean.admin.TopicReview">
+  	SELECT <include refid="Base_Column_List"/> FROM t_question_topic_comment
+  	 WHERE id_delete =1
+  	 <if test="topicId!=null">
+  	  AND topic_id=#{topicId}
+  	 </if>
+  	 <if test="auditStatus!=null">
+  	 	AND audit_status=#{auditStatus}
+  	 </if>
+  	 <if test="topicId!=null">
+  	 	AND topic_id=#{topicId}
+  	 </if>
+  	 ORDER BY sort ASC
+  </select>
+  
+  
+</mapper>

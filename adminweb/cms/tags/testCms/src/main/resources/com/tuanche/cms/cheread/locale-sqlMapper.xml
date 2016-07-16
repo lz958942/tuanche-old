@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<!-- namespace和定义的Mapper接口对应，并实现其中的方法 -->
+<mapper namespace="com.tuanche.cms.cheread.CityMapper">
+	
+  	<select id="getCityDist" resultType="com.tuanche.cms.bean.CityDist" useCache="true">
+		SELECT id localid, dname localname, pid, py dirName, left(py,1) pyPre FROM tc_district  WHERE level =3 
+	</select>
+  	
+  	
+</mapper>

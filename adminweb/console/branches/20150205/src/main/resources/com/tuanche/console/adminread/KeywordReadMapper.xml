@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.console.adminread.KeywordReadMapper">
+	<sql id="fieldSql">
+		SELECT
+		id,
+		keyword word,
+		level,
+		pid,
+		baidu_index baiduIndex,
+		online,
+		included,
+		rank,
+		t.describe,
+		uv,
+		city_id cityId,
+		type,
+		add_userid addUserId,
+		add_time addDate,
+		kd_id kdId,
+		brand_id brandId,
+		carStyle_id carStyleId
+		FROM seo_keyword t WHERE 1=1
+	</sql>
+	 <sql id="search">
+        
+		<if test="online>-1">
+		   AND  t.online=#{online}
+		</if>
+		<if test="included>-1">
+		   AND  t.included=#{included}
+		</if>
+		<if test="rank>-1">
+		   AND  t.rank=#{rank}
+		</if>
+		<if test="level>-1">
+		   AND  t.level=#{level}
+		</if>
+		<if test="cityId>-1">
+		   AND  t.city_id=#{cityId}
+		</if>
+		<if test="type>-1">
+		   AND  t.type=#{type}
+		</if>
+		<if test="addUserId>-1">
+		   AND  t.add_userid=#{addUserId}
+		</if>
+		<if test="word!=null">
+		   AND  t.keyword=#{word}
+		</if>
+		<if test="brandId!=null">
+		   AND  t.brand_id=#{brandId}
+		</if>
+		<if test="carStyleId!=null">
+		   AND  t.carStyle_id=#{carStyleId}
+		</if>
+		<if test="dimName!=null">
+		   AND  d.die_name like '%${dimName}%'
+		</if>
+		<if test="startDate!=null and endDate!=null">
+		    AND  add_time BETWEEN #{startDate}  AND concat(#{endDate},' 23')
+		</if>
+		<if test="startDate!=null and endDate==null">
+		      <![CDATA[ AND  add_time > #{startDate}  ]]>   
+		</if>
+		<if test="startDate==null and endDate!=null">
+		   
+		    <![CDATA[ AND  add_time < concat(#{endDate},' 23') ]]>   
+		</if>
+	  </sql>
+	<select id="findByWord" resultType="com.tuanche.console.bean.Keyword"  >
+	       SELECT
+				id,
+				keyword word,
+				level,
+				pid,
+				baidu_index baiduIndex,
+				online,
+				included,
+				rank,
+				t.describe,
+				uv,
+				city_id cityId,
+				type,
+				add_userid addUserId,
+				brand_id brandId,
+				carStyle_id carStyleId,
+				add_time addDate
+		   FROM seo_keyword t where t.keyword in
+				 <foreach collection="words" item="word" separator="OR" open="(" close=")">
+				       #{word}
+				 </foreach>
+	 </select>
+    <select id="count" resultType="java.lang.Integer" parameterType="com.tuanche.console.bean.Keyword">
+        SELECT count(*)
+		FROM seo_keyword t  LEFT JOIN seo_keyword_dimension d ON t.kd_id=d.id
+		where 1=1 
+			 <if test="online>-1">
+	   			AND  t.online=#{online}
+				</if>
+			 <if test="included>-1">
+	   			AND  t.included=#{included}
+			</if>
+			<if test="rank>-1">
+	  		    AND  t.rank=#{rank}
+			</if>
+	        <if test="uv>-1">
+	            AND  t.uv=#{uv}
+			</if>
+				<if test="level>-1">
+		   AND  t.level=#{level}
+			</if>
+			<if test="cityId>-1">
+			   AND  t.city_id=#{cityId}
+			</if>
+			<if test="type>-1">
+			   AND  t.type=#{type}
+			</if>
+			<if test="word!=null">
+			   AND  t.keyword=#{word}
+			</if>
+			<if test="dimName!=null">
+			   AND  d.die_name like '%${dimName}%'
+			</if>
+			<if test="addUserId>-1">
+		   	   AND  t.add_userid=#{addUserId}
+			</if>
+			<if test="brandId!=null">
+		   	   AND  t.brand_id=#{brandId}
+			</if>
+			<if test="carStyleId!=null">
+		   	   AND  t.carStyle_id=#{carStyleId}
+			</if>
+			<if test="startDate!=null and endDate!=null">
+			    AND  add_time BETWEEN #{startDate}  AND concat(#{endDate},' 23')
+			</if>
+			<if test="startDate!=null and endDate==null">
+			      <![CDATA[ AND  add_time > #{startDate}  ]]>   
+			</if>
+			<if test="startDate==null and endDate!=null">
+			    <![CDATA[ AND  add_time < concat(#{endDate},' 23') ]]>   
+			</if>
+   </select>
+	 <select id="findParentByLevel" parameterType="java.lang.Integer" resultType="com.tuanche.console.bean.Keyword">
+	 		<include refid="fieldSql"/> 
+	 		AND level=#{plevel}
+	 </select>
+	 <select id="find" parameterType="com.tuanche.console.bean.Keyword" resultType="com.tuanche.console.bean.Keyword">
+	 		SELECT
+		t.id,
+		t.keyword word,
+		t.level,
+		t.pid,
+		t.baidu_index baiduIndex,
+		t.online,
+		t.included,
+		t.rank,
+		t.describe,
+		t.uv,
+		t.city_id cityId,
+		t.type,
+		t.add_userid addUserId,
+		t.add_time addDate,
+		t.kd_id kdId,
+		t.brand_id brandId,
+		t.carStyle_id carStyleId,
+		d.die_name dimName
+		FROM seo_keyword t LEFT JOIN seo_keyword_dimension d  ON t.kd_id=d.id
+		where 1=1 
+	 		<include refid="search"/>
+	 		ORDER BY t.id DESC 
+	 		<if test="start>=0 and limit>0">
+				    LIMIT #{start}, #{limit}
+			</if>
+	 </select>
+	 <select id="getKeyWord"  resultType="com.tuanche.console.bean.Keyword">
+        <include refid="fieldSql"/>
+     </select>
+     <select id="findByid" parameterType="java.lang.Integer" resultType="com.tuanche.console.bean.Keyword">
+	 		<include refid="fieldSql"/> 
+	 		AND id=#{id}
+	 </select>
+	  <select id="findAllWord" resultType="String">
+	 		 SELECT keyword  from seo_keyword
+	 </select>
+	 <select id="findIdsByKdId" resultType="int" >
+	 	SELECT id FROM seo_keyword  WHERE  kd_id IN
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+ 		AND online=1 AND LEVEL=3  ORDER BY RAND() LIMIT 0,30
+	 </select>
+	 <select id="findKeyword" resultType="string" parameterType="int">
+	 		 SELECT keyword FROM  seo_keyword WHERE id =#{id}
+	 </select>
+</mapper>

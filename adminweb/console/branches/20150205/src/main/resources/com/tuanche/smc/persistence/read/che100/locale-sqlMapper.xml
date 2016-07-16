@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<!-- namespace和定义的Mapper接口对应，并实现其中的方法 -->
+<mapper namespace="com.tuanche.smc.persistence.read.che100.CityMapper">
+	
+  	<select id="getCityDist" resultType="com.tuanche.smc.domain.base.CityDist" useCache="true">
+		SELECT id localid, dname localname, pid, py dirName, left(py,1) pyPre FROM tc_district  WHERE level =3 
+	</select>
+	<select id="getCitys" resultType="com.tuanche.bean.che.City">
+		select citycode cityCode,id,concat(upper(left(domain,1)),' ',dname) as orderName,dname as name,py 
+		from tc_district where level=3 and open_status in (1,2)  order by domain asc
+	</select>
+</mapper>

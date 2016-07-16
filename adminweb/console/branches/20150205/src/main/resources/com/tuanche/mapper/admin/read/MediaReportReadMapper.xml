@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.mapper.admin.read.MediaReportReadMapper" >
+  <sql id="Base_Column_List" >
+    id, title, url, report_source reportSource , report_time reportTime, status, create_uid createUid,create_time createTime, update_uid updateUid, 
+    update_time updateTime,publish_uid publishUid
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultType="com.tuanche.bean.admin.MediaReport" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_media_report
+    where id = #{id}
+  </select>
+  <select id="selectAllByPage" resultType="com.tuanche.bean.admin.MediaReport">
+  	SELECT 
+  	  <include refid="Base_Column_List"/>
+ 		FROM t_media_report WHERE 1=1 AND 
+ 		<if test="condition!=null">
+					<foreach collection="condition" item="condition" separator="AND">
+						${condition}
+					</foreach>
+					ORDER BY id DESC
+			</if>
+  </select>
+  <select id="getMediaReportById" resultType="com.tuanche.bean.admin.MediaReport">
+  		SELECT <include refid="Base_Column_List"/> FROM t_media_report  WHERE id=#{id}
+  </select>
+  <select id="titleRepetition" resultType="com.tuanche.bean.admin.MediaReport">
+  	SELECT id FROM t_media_report  WHERE title=#{title} AND status > -1
+  </select>
+</mapper>

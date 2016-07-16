@@ -1,0 +1,90 @@
+@charset "utf-8";
+/*@margin & padding */
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, fieldset, legend, input, button, textarea, p, blockquote, th, td,i,b { margin: 0; padding: 0; }
+fieldset, img { border: 0; }
+/*@remove focus outline style, doesn't work at IE-win */
+:focus { outline: 0; }
+address, caption, cite, code, dfn, em, th, var, optgroup { font-style: normal; font-weight: normal; }
+h1, h2, h3, h4, h5, h6,.heiti,.msyh,.title { font-size: 100%; font-weight: bold; }
+abbr, acronym { border: 0; font-variant: normal; }
+/*@make form componets inherit form theirs patent */
+input, button, textarea, select, optgroup, option { font:inherit;  }
+code, kbd, samp, tt { font-size: 100%; }
+code,cite { display:none; }
+/*@purpose To enable resizing for IE */
+/*@branch For IE6-Win, IE7-Win */
+input, button, textarea, select { *font-size:100%; color:inherit;}
+ol, ul { list-style: none; }
+/* tables still need 'cellspacing="0"' in the markup */
+table { border-collapse: collapse; border-spacing: 0; }
+/* remember to highlight anchors and inserts somehow! */
+:link, :visited, ins { text-decoration: none; }
+blockquote, q { quotes: none; }
+blockquote:before, blockquote:after, q:before, q:after { content: ''; content: none; }
+b { font-weight:normal; }
+
+.clear { display: block; clear: both; overflow: hidden; height: 0; font: 0/0 arial; *zoom:1; }
+.clearfix:after,.c:after { content: "."; display: block; height: 0; clear: both; visibility: hidden;  *zoom:1; }
+.clearfix,.c { display:block; *zoom:1; }
+.cb {clear:both;}
+
+.l { float: left; _display:inline; }
+.r { float: right; clear: right; _display:inline; }
+
+a { outline: none; cursor: pointer; text-decoration: none; color:#2A78B4; }
+:link, :visited { text-decoration: none;}
+a:hover{ text-decoration:underline; color:#f60; }
+
+
+/****shuangbiao  zhangxiaotong@2011-12-29*********************************************************************************************************/
+.pu_ms{margin-top:10px;}
+.tab1{ padding-left:10px;}
+.tab1 li{float:left;font-size:12px;border-radius: 5px 5px 0 0;border:1px solid #AAAAAA;margin-right:6px;padding:3px 12px;background:#E6E6E6;position:relative; z-index:900;}
+.tab1 li a{color:#000;}
+.white{ background:#fff!important;}.bt{ border-bottom:#fff solid 1px!important;}
+.con1{height:38px;border-top:1px solid #AAAAAA; position:relative; z-index:6;top:-1px;border-bottom:1px solid #AAAAAA;}
+.tab2{margin-top:6px;margin-left:10px;}
+.tab2 li{float:left;padding:3px 12px;font-size:12px;}
+.tab2 li a{color:#000;}
+.green{background-color:#37c37c;}
+.green a{color:#fff!important;}
+.con2{border:1px solid #AAAAAA;border-top:none!important;padding:6px 10px;}
+.con2 table{font-size:12px;}
+.con2 table tr {margin-bottom:10px!important;height:30px;}
+.wd334{text-align:left;}
+.con2 table input{width:334px;padding:3px;}
+.con2 table h3,.con2 table p{margin:0px;padding:0px;line-height:18px;}
+.pl10{padding-left:10px;}
+.btn{height:25px;font-size:12px;margin-left:30px; display:inline;width:80px!important;}
+#form1{margin-top:20px;width:793px; text-align:right;padding-right:60px;}
+.ljxg{width:862px;font-size:12px;margin-top:10px;}
+.tt1{float:left;width:65px;}
+.ljxg dt,.ljxg_con{float:right;width:790px;}
+.ljxg dt{font-weight:bold;margin-bottom:10px;}
+
+/****shuangbiao  zhangxiaotong@2011-12-29*********************************************************************************************************/
+
+/****tuwen  zhangxiaotong@2011-12-29*********************************************************************************************************/
+.mb10{margin-bottom:10px;}
+.sel{width:100px}
+.text1{width:724px!important;font-size:12px;padding:0 3px;vertical-align:middle;}
+.con2 p{color:#ff0000; line-height:18px;}
+.con2 a{margin-left:10px;}
+/****tuwen  zhangxiaotong@2011-12-29*********************************************************************************************************/
+
+/****zhuanti  zhangxiaotong@2011-12-29*********************************************************************************************************/
+.cum{font-size:12px;height:30px;}
+.cum div{float:left;line-height:30px}
+.cum div span{margin-right:25px;}
+.cum .xs{float:right;margin:0px;padding:0px;height:30px;}
+.zhuant tr td{padding:6px; border:#999999 solid 1px;}
+.zhuant{border:#999999 solid 1px;}
+.list{margin:0px;padding:0px;padding-top:6px;}
+.check{width:10px!important}
+.list li{float:left;padding:3px 8px;height:12px;line-height:12px;border-right:#CCCCCC solid 1px;}
+.bln{ border-right:none!important;}
+.zhuant h3{padding-left:18px!important;}
+.page{ text-align:center; position:relative}
+.page a{padding:6px;background-color:#FFFFFF;}
+.dw{ position:absolute;right:10px;*top:5px}
+/****zhuanti  zhangxiaotong@2011-12-29*********************************************************************************************************/

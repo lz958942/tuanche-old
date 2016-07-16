@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.mapper.che.read.BrandkReadMapper" >
+  <resultMap id="BaseResultMap" type="com.tuanche.bean.che.BrandDomain" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="tid" property="tid" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="enname" property="enname" jdbcType="CHAR" />
+    <result column="logo" property="logo" jdbcType="VARCHAR" />
+    <result column="cname" property="cname" jdbcType="VARCHAR" />
+    <result column="series" property="series" jdbcType="VARCHAR" />
+    <result column="sort" property="sort" jdbcType="TINYINT" />
+    <result column="addtime" property="addtime" jdbcType="INTEGER" />
+    <result column="initial" property="initial" jdbcType="VARCHAR" />
+    <result column="pinyin" property="pinyin" jdbcType="VARCHAR" />
+    <result column="new_series" property="newSeries" jdbcType="TINYINT" />
+    <result column="contry" property="contry" jdbcType="TINYINT" />
+    <result column="vender" property="vender" jdbcType="BIT" />
+    <result column="level" property="level" jdbcType="CHAR" />
+    <result column="status" property="status" jdbcType="INTEGER"/>
+    <result column="create_user_id" property="createUserId" jdbcType="INTEGER" />
+    <result column="update_time" property="updateTime"/>
+    <result column="update_user_id" property="updateUserId" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime"/>
+    <result column="pid" property="pid"/>
+    <result column="brand_pic" property="brndPic"/>
+     <result column="public_mark" property="publicMark"/>
+   
+  </resultMap>
+  <!-- 所有字段 -->
+  <sql id="Base_Column_List_table">
+  	<![CDATA[
+  	select 
+   t.id,  t.tid,  t.name,  t.enname,  t.logo,  t.cname,  t.series,  t.sort,  t.addtime, 
+     t.initial,  t.pinyin,  t.new_series,  t.contry,  t.vender,  t.level,  t.sta,  t.create_user_id,  t.update_time, 
+     t.update_user_id,  t.create_time,  t.firm_name ,t.public_mark
+     from tc_brand t
+    ]]>
+  </sql>
+  <!-- 所有字段不带表 -->
+  <sql id="Base_Column_List" >
+  	<![CDATA[
+   id,  tid, name, enname, logo, cname, series, sort, addtime, 
+    initial, pinyin, new_series, contry, vender, level, sta, create_user_id, update_time, 
+    update_user_id, create_time ,public_mark
+    ]]>
+  </sql>
+  <!-- 查询一级品牌分页
+   -->
+    <sql id="Base_Column_List_stairBrandBypage" >
+  	<![CDATA[
+  	select 
+   t.id,t.enname, t.logo, t.name, 
+    t.initial, t.pinyin, t.contry,t.create_user_id, t.update_time, 
+    t.update_user_id, t.create_time,t.cname,t.id,t.pid,t.new_series,
+    t.series,t.vender,t.brand_pic,t.public_mark
+  	 from tc_brand t
+    ]]>
+  </sql>
+  <!-- 查看一级品牌带二级品牌分页 -->
+      <sql id="Stair_electToBrandList" >
+  	<![CDATA[
+  	select 
+    t.vender,t.id,t.name,t.new_series,t.pid,t.public_mark
+  	 from tc_brand t
+    ]]>
+  </sql>
+  
+  <!-- 通过id查询品牌 -->
+  <select id="getBrandBuId" resultMap="BaseResultMap" parameterType="int" >
+    
+    <include refid="Base_Column_List_stairBrandBypage" />
+    
+    where t.id = #{stairBrand}
+  </select>
+  	<!-- 分页查询 -->
+	<select id="selectAllByPage" resultMap="BaseResultMap">
+		<include refid="Base_Column_List_stairBrandBypage"/>
+			<if test="conditions!=null">
+				where
+					<foreach collection="conditions" item="condition" separator="AND">
+						${condition}
+					</foreach>
+					
+					 order by t.id desc 
+			</if>
+	</select>
+	<select id="electToBrandList" parameterType="int" resultMap="BaseResultMap">
+		<include refid="Stair_electToBrandList"/>
+		WHERE pid=#{stairBrand}
+	</select>
+	
+	<select id="selectBrandAll" resultMap="BaseResultMap">
+	select t.name,t.id,t.pinyin
+	from tc_brand t  where t.status=1 
+	ORDER BY pinyin
+	</select>
+	
+	<select id="selectTwoBrandSeel" resultMap="BaseResultMap">
+	SELECT t.id,t.name,t.vender,t.pid FROM tc_brand t 
+			<if test="conditions!=null">
+				where
+					<foreach collection="conditions" item="condition" separator="AND">
+						${condition}
+					</foreach>
+					order by t.id desc
+			</if>
+	</select>
+	
+	<!--   
+	#################################### 不带一级品牌###################################################3
+	 -->
+	 
+	 <!--   查询品牌所有不带分页 -->
+	  <sql id="new_Base_Column_List_table">
+  	<![CDATA[
+  	select 
+   	t.id, t.enname, t.logo, t.cname,  t.series, t.pinyin,  t.new_series,  t.contry,  t.vender, t.status,  t.create_user_id,  t.update_time, 
+     t.update_user_id, t.create_time,t.series,t.public_mark
+     from tc_brand t
+    ]]>
+	</sql>
+	
+  	<!-- 分页查询品牌 -->
+	<select id="newselectAllByPage" resultMap="BaseResultMap">
+		<include refid="new_Base_Column_List_table"/>
+			<if test="conditions!=null">
+				where
+					<foreach collection="conditions" item="condition" separator="AND">
+						${condition}
+					</foreach>
+					order by t.id desc
+			</if>
+	</select>
+	
+	<select id="newgetBrandBuId" resultMap="BaseResultMap" parameterType="int" >
+    	<include refid="new_Base_Column_List_table"/>
+   	 where t.id = #{id}
+  </select>
+  <select id="getBrandByName" resultMap="BaseResultMap">
+  	select name from tc_brand where status=1 AND name=#{name}
+  </select>
+  <select id="getBrandNameId" resultMap="BaseResultMap">
+  	select id,name,pinyin from tc_brand where status=1
+  </select>
+  <select id="updateBrandPicBeff" resultMap="BaseResultMap">
+  	SELECT brand_pic,id FROM `tc_brand` WHERE id=#{id}
+  </select>
+</mapper>

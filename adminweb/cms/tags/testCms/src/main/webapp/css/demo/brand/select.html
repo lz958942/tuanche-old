@@ -1,0 +1,88 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link type="text/css" rel="stylesheet" href="../../base.css" />
+<link type="text/css" rel="stylesheet" href="../../bootstrap.min.css" />
+<link type="text/css" rel="stylesheet" href="../../jquery.ui.custom.css" />
+<!--[if lt IE 9]>
+<link type="text/css" rel="stylesheet" href="../css/jquery.ui.ie.css"/>
+<![endif]-->
+<link type="text/css" rel="stylesheet" href="../../zTreeStyle.css" />
+<link type="text/css" rel="stylesheet" href="../../common.css" />
+<script type="text/javascript" src="../../../js/WdatePicker/WdatePicker.js"></script>
+<script type="text/javascript" src="../../../js/jquery.js" charset="UTF-8"></script>
+<script type="text/javascript" src="../../../js/bootstrap.js" charset="UTF-8"></script>
+<script type="text/javascript" src="../../../js/jquery-ui.js" charset="UTF-8"></script>
+<script type="text/javascript" src="../../../js/jquery.form.js"></script>
+<script type="text/javascript" src="../../../js/jquery.validate.js" charset="UTF-8"></script>
+<script type="text/javascript" src="../../../js/jquery.metadata.js" charset="UTF-8"></script>
+<script type="text/javascript" src="../../../js/jquery.columnmanager.pack.js" charset="UTF-8"></script>
+<script type="text/javascript" src="../../../js/base.js"></script>
+<script type="text/javascript" src="../../../js/agreement.js"></script>
+<script type="text/javascript" src="../../../js/ztree.js" charset="UTF-8"></script>
+<script type="text/javascript" src="../../../js/erp_public.js"></script>
+<style type="text/css">
+.selectBrand,
+.selectAlp{ width:95%; margin:0 auto; padding:0 0 10px 0;}
+.selectBrand li{ float:left; padding:0 10px 5px 0; width:130px;}
+.selectBrand li.brand_tit{ float:none; width:100%; border-bottom:solid 1px #e3e3e3; clear:both; margin:0 0 5px 0; font-weight:bold;}
+
+.selectAlp li{ float:left; width:20px; padding:0 5px 0 5px; text-align:center; cursor:pointer;}
+.selectAlp li.allbrand{ width:55px;}
+.selectAlp li.cur{ background:#0099CC; color:#fff;}
+</style>
+<title>团车网CMS后台管理系统</title>
+</head>
+<body>
+<div id="man_zone">
+<br /><br /><br /><br /><br /><br /><br /><br /><br />
+	<a href="javascript:;" class="btn" onclick="bPopupBtn('选择品牌','brand_1.html',callbacks_1,'800')">选择品牌（多选）</a>
+<br /><br />
+    <a href="javascript:;" class="btn" onclick="bPopupBtn('选择品牌','brand_2.html',callbacks_2,'800')">选择品牌（单选）</a>
+<br /><br />
+<div id="result"></div>
+<br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+</div>
+
+
+
+</body>
+<script type="text/javascript">
+	var callbacks_1  ={
+					"保存":function(){
+						var val = '';
+						$('input[type="checkbox"]').each(function(){
+							 if($(this).attr("checked")){
+								val += $(this).val()+',';
+							 };
+						});
+						if (val.length > 0 ){
+							val = val.substring(0, val.length-1);
+						};
+						$("#result").text('你选择的品牌是：'+val);						
+						$(this).dialog("close");
+					},
+					"取消":function(){
+						$(this).dialog("close");
+					}};
+	var callbacks_2  ={
+					//"保存":function(){
+//						var val = $('input:radio[name=brand]:checked').val();
+//						$("#result").text('你选择的品牌是：'+val);
+//						$(this).dialog("close");
+//					},
+//					"取消":function(){
+//						$(this).dialog("close");
+//					}
+};
+
+$("#selectBrand input[type='radio']").live('click', function(){
+	var val = $('input:radio[name=brand_radio]:checked').val();
+	$("#result").text('你选择的品牌是：'+val);
+	$(".ui-dialog").hide();
+	$(".ui-widget-overlay").remove();
+});
+
+</script>
+</html>

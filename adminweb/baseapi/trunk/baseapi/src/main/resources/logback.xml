@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<configuration debug="false" scan="true">
+	<property name="log.path" value="../logs/corp"/>
+
+	<appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d{HH:mm:ss} [%5p] %C{0}.%M - %m%n</pattern>
+		</encoder>
+	</appender>
+	<appender name="usedcar.log" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${log.path}/corp.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${log.path}/corp-%d{yyyyMMdd}.log</fileNamePattern>
+			<maxHistory>5</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%d{HH:mm:ss} [%5p] %C{0}.%M - %m%n</pattern>
+		</encoder>
+	</appender>
+
+	<logger name="com.tuanche.usedcar" level="WARN" additivity="false">
+		<appender-ref ref="usedcar.log"/>
+	</logger>
+
+	<logger name="org.springframework" level="WARN" />
+	<logger name="org.springframework.web" level="WARN" />
+
+	<root level="INFO">
+		<appender-ref ref="stdout"/>
+	</root>
+</configuration>

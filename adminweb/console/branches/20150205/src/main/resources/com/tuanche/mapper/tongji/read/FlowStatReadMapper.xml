@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	<mapper namespace="com.tuanche.mapper.tongji.read.FlowStatReadMapper">
+		<resultMap id="flowStatResult" type="flowStat">
+	  		<result property="id" column="id" />
+	  		<result property="domain" column="domain" />
+	  		<result property="date" column="date" />
+	  		<result property="dataType" column="data_type" />
+	  		<result property="pv" column="pv" />
+	  		<result property="uv" column="uv" />
+	  		<result property="pvuv" column="pv_uv" />
+	 	</resultMap>
+	 	
+	 	<select id="queryFlowStatListByPage" resultMap="flowStatResult" parameterType="flowStat">
+	 		select id, date, domain, data_type, sum(pv) as pv, sum(uv) as uv, pv_uv from tongji_flow_stat
+        	<where>
+        	<if test="startDate != null and startDate != ''">
+        		<![CDATA[
+        			date >= str_to_date(#{startDate}, '%Y-%m-%d')
+        		]]>
+        	</if>
+        	<if test="endDate != null and endDate != ''">
+        		<![CDATA[
+        			and date <= str_to_date(#{endDate}, '%Y-%m-%d')
+        		]]>
+        	</if>
+        	<if test="domain != null and domain != ''">
+        		and domain = #{domain}
+        	</if>
+        	<if test="dataType != '' and dataType != null">
+        		and data_type = #{dataType}
+        	</if>
+        	</where>
+        	GROUP BY date ORDER BY DATE DESC
+	 	</select>
+	 	<select id="queryFlowStatList" resultMap="flowStatResult" parameterType="flowStat">
+	 		select id, date, domain, data_type, sum(pv) as pv, sum(uv) as uv, pv_uv from tongji_flow_stat
+        	<where>
+        	<if test="startDate != null and startDate != ''">
+        		<![CDATA[
+        			date >= str_to_date(#{startDate}, '%Y-%m-%d')
+        		]]>
+        	</if>
+        	<if test="endDate != null and endDate != ''">
+        		<![CDATA[
+        			and date <= str_to_date(#{endDate}, '%Y-%m-%d')
+        		]]>
+        	</if>
+        	<if test="domain != null and domain != ''">
+        		and domain = #{domain}
+        	</if>
+        	<if test="dataType != '' and dataType != null">
+        		and data_type = #{dataType}
+        	</if>
+        	</where>
+        	GROUP BY date ORDER BY DATE ASC;
+	 	</select>
+		<select id="isExist" parameterType="flowStat" resultType="java.lang.Integer">
+		   	select count(*) from tongji_flow_stat
+			<where>
+				<if test="id != null">
+					id != #{id}
+				</if>
+	        	<if test="date != null and date != ''">
+	        		<![CDATA[
+	        			and date = str_to_date(#{date}, '%Y-%m-%d')
+	        		]]>
+	        	</if>
+				<if test="domain != null and domain != ''">
+					and domain = #{domain}
+				</if>
+				<if test="dataType != null and dataType != ''">
+					and data_type = #{dataType}
+				</if>
+			</where>
+		</select>
+	 	<select id="queryFlowStatById" resultMap="flowStatResult" parameterType="java.lang.Integer">
+	 		select * from tongji_flow_stat where id = #{id}
+	 	</select>
+	</mapper>

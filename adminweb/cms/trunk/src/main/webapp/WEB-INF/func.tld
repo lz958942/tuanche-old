@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"
+	version="2.0">
+
+	<description>NameUtil Custom Functions</description>
+	<tlib-version>1.0</tlib-version>
+	<short-name>func</short-name>
+
+	<function>
+		<name>getChannelName</name>
+		<function-class>com.tuanche.cms.util.NameUtil</function-class>
+		<function-signature>java.lang.String getChannelName(java.lang.Integer)</function-signature>
+	</function>
+	<function>
+		<name>getAdTypeName</name>
+		<function-class>com.tuanche.cms.util.NameUtil</function-class>
+		<function-signature>java.lang.String getAdTypeName(java.lang.Integer)</function-signature>
+	</function>
+	<function>
+		<name>getCityName</name>
+		<function-class>com.tuanche.cms.util.NameUtil</function-class>
+		<function-signature>java.lang.String getCityName(java.lang.Integer)</function-signature>
+	</function>
+	
+	<function>
+		<name>isEqual</name>
+		<function-class>com.tuanche.cms.util.NameUtil</function-class>
+		<function-signature>java.lang.Boolean isEqual(java.lang.Integer,java.lang.Integer)</function-signature>
+	</function>
+	
+</taglib>  

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.mapper.che.read.ReviewMapper" >
+  <resultMap id="BaseResultMap" type="com.tuanche.bean.che.Review" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="apply_id" property="applyId" jdbcType="INTEGER" />
+    <result column="carstyle_id" property="carstyleId" jdbcType="INTEGER" />
+    <result column="comment_total" property="commentTotal" jdbcType="INTEGER" />
+    <result column="comment_price" property="commentPrice" jdbcType="INTEGER" />
+    <result column="comment_service" property="commentService" jdbcType="INTEGER" />
+    <result column="comment_shop" property="commentShop" jdbcType="INTEGER" />
+    <result column="comment" property="comment" jdbcType="VARCHAR" />
+    <result column="ishavepic" property="ishavepic" jdbcType="INTEGER" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+     <result column="source" property="source" jdbcType="INTEGER" />
+     <result column="is_cream" property="isCream" jdbcType="INTEGER" />
+  	<result column="edit_id" property="editId" jdbcType="INTEGER" />
+  	<result column="modify_time" property="modifyTime"/>
+  	<result column="create_time" property="createtime"/>
+  	<result column="is_reply" property="isReply"/>
+  	<result column="brand_id" property="brandId"/>
+  	<result column="eva_name" property="evaName"/>
+  	<result column="city_id" property="cityId"/>
+  	<result column="carstyle_model_id" property="carstyleModelId"/>
+  	<result column="mem_id" property="memId"/>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, apply_id, carstyle_id, comment_total, comment_price, comment_service, comment_shop, 
+    comment, ishavepic, state,source,is_reply
+  </sql>
+
+   <sql id="Base_Column_List_t" >
+    t.id,  t.apply_id,  t.carstyle_id,  t.comment_total,  t.comment_price,  t.comment_service,  t.comment_shop, 
+     t.comment,  t.ishavepic ,t.source,t.is_reply
+  </sql>
+  
+  <!-- 审核通过得 -->
+  <!-- t.apply_id,  t.carstyle_id,  t.comment_total,  t.comment_price,t.comment_shop, --> 
+  <sql id="Base_Column_List_t_pass" >
+    t.id,t.carstyle_id,t.comment,t.ishavepic,t.source,t.modify_time,t.edit_id,t.is_cream,t.is_reply,t.mem_id
+  </sql>
+  
+  <select id="getParticular" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tc_evaluate
+    where id = #{id}
+  </select>
+  <select id="getReviewAllByPage" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from tc_evaluate
+    where state=0 ORDER BY id DESC
+  </select>
+<!-- 分页 -->
+  <select id="searchByPage" resultMap="BaseResultMap">
+  SELECT 
+  <if test="type==1">
+  	<!-- 未通过de -->
+   <include refid="Base_Column_List_t" />
+   </if>
+   <if test="type==2">
+   <!-- 通过de -->
+    <include refid="Base_Column_List_t_pass" />
+   </if>
+		 FROM tc_evaluate AS t
+			<if test="search!=null">
+			WHERE
+					<foreach collection="search" item="condition" separator="AND">
+						${condition}
+					</foreach>
+					ORDER BY t.id DESC
+			</if>
+	</select>
+	<select id="reviewHomeByPage" resultMap="BaseResultMap">
+		SELECT 
+		id,carstyle_id,comment, ishavepic,create_time ,brand_id,is_cream,eva_name,city_id
+		FROM  tc_evaluate 
+		<if test="search!=null">
+			WHERE
+					<foreach collection="search" item="condition" separator="AND">
+						${condition}
+					</foreach>
+					ORDER BY id DESC
+			</if>
+	</select>
+	<select id="getReviewByid" resultMap="BaseResultMap">
+		SELECT
+			id,ishavepic,brand_id,carstyle_id,comment,is_cream,create_time,eva_name,city_id,carstyle_model_id,comment_total,comment_price,comment_service,comment_shop
+		FROM  tc_evaluate 
+		WHERE state=0 AND id=#{id}
+	</select>
+</mapper>

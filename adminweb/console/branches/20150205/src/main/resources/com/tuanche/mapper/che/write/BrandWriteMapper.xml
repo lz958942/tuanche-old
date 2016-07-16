@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.mapper.che.write.BrandWriteMapper" >
+
+<!-- useGeneratedKeys="true" keyProperty="id" -->
+  <insert id="brandSave" parameterType="com.tuanche.bean.che.BrandDomain" useGeneratedKeys="true" keyProperty="id" >
+    insert into tc_brand
+    
+        (tid,name, enname,logo,cname,series,sort,addtime,initial,pinyin,
+    	new_series,contry,vender,level,status,create_user_id,update_time,
+      	update_user_id,create_time,pid,brand_pic,public_mark)
+      values(
+        #{tid},#{name},#{enname},#{logo},#{cname},#{series},#{sort},#{addtime},#{initial},
+      #{pinyin},#{newSeries},#{contry},#{vender},#{level},#{status},#{createUserId},#{updateTime},
+      #{updateUserId},#{createTime},#{pid},#{brndPic},#{publicMark}
+    )
+ </insert>
+  <update id="brandOneUpdate" parameterType="com.tuanche.bean.che.BrandDomain" >
+    update tc_brand
+    set
+        name = #{name},
+        logo = #{logo},                                 
+        cname = #{cname},
+     	initial = #{initial},
+        pinyin = #{pinyin},
+        new_series = #{newSeries},
+        contry = #{contry},
+        vender = #{vender},
+        update_time = #{updateTime},
+        update_user_id = #{updateUserId},
+        public_mark=#{publicMark}
+        <if test="brndPic!=null">
+        , brand_pic=#{brndPic}
+        </if>
+    where id = #{id}
+  </update>
+ <update id="updateBrandPic">
+ 	UPDATE `tc_brand` SET brand_pic=#{path} WHERE id=#{id}
+ </update>
+  <!-- 4444444444444444444444444444444444444444444444444444444444444444444444 -->
+  <update id="newDelBrand">
+  	 update tc_brand 
+  	 set 
+  	 status=0 ,
+  	 update_time=(SELECT NOW()),
+  	  update_user_id = #{updateUserId}
+  	 where id=#{id}
+  </update>
+ 
+</mapper>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.mapper.admin.write.PromotionWriteMapper">
+	<resultMap type="com.tuanche.bean.admin.Promotion" id="BaseResult">
+		<id column="id" property="id" javaType="integer" jdbcType="INTEGER"/>
+		<result column="city_id" property="cityId" javaType="integer" jdbcType="INTEGER"/>
+		<result column="city_code" property="cityCode" javaType="string" jdbcType="VARCHAR"/>
+		<result column="brand_id" property="brandId" javaType="integer" jdbcType="INTEGER"/>
+		<result column="money" property="money" javaType="string" jdbcType="DECIMAL"/>
+		<result column="spend_time" property="spendTime" javaType="String" jdbcType="DATE"/>
+		<result column="add_time" property="addTime" javaType="String" jdbcType="DATE"/>
+		<result column="admin_id" property="adminId" javaType="integer" jdbcType="INTEGER"/>
+	</resultMap>
+	<insert id="addPromotion"  parameterType="com.tuanche.bean.admin.Promotion">  
+		  	 INSERT INTO t_promotion_expenses (
+				city_id,
+				city_code,
+				brand_id,
+				money,
+				spend_time,
+				add_time,
+				admin_id
+				)
+             VALUES
+         <foreach collection="list" separator=","  item="promotion" index="index" >
+            (
+             #{promotion.cityId},
+             #{promotion.cityCode},
+             #{promotion.brandId},
+             #{promotion.money},
+             #{promotion.spendTime},
+			 now(),
+             #{promotion.adminId}
+            )
+		</foreach>	
+</insert>
+	
+	<update id="toUpdate" parameterType="com.tuanche.bean.admin.Promotion">
+		update t_promotion_expenses
+		<set>
+			<if test="cityId!=null">
+				city_id=#{cityId},
+			</if>
+			<if test="cityCode!=null">
+				city_code=#{cityCode},
+			</if>
+			<if test="brandId!=null">
+				brand_id=#{brandId},
+			</if>
+			<if test="money!=null">
+				money=#{money},
+			</if>
+			<if test="spendTime!=null">
+				spend_time=#{spendTime},
+			</if>
+			<if test="adminId!=null">
+				admin_id=#{adminId},
+			</if>
+			add_time=now()
+			where id=#{id}
+		</set>
+	</update>
+	
+	<delete id="delete" parameterType="int">
+		delete from t_promotion_expenses where id=#{id}
+	</delete>
+	<!-- 插入前删除相同插入时间的数据 -->
+	<delete id="deleteByTime" parameterType="Map">
+		delete from t_promotion_expenses where spend_time like '%${spendTime}%'
+	</delete>
+	<!-- 插入后删除城市，品牌，推广费用为空的数据 -->
+	<delete id="deleteNulls" >
+	DELETE FROM t_promotion_expenses WHERE city_id IS NULL OR brand_id IS NULL OR money IS NULL
+	</delete>
+	
+
+</mapper>

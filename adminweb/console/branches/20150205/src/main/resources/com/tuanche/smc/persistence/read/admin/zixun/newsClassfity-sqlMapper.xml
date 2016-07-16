@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace和定义的Mapper接口对应，并实现其中的方法 -->
+<mapper namespace="com.tuanche.smc.persistence.read.admin.zixun.NewsClassfityMapper">
+
+		<sql id="sel">
+			select 
+			t.id,
+			t.pid,
+			t.level,
+			t.name,
+			t.code,
+			t.url,
+			t.status,
+			t.keyword,
+			t.title,
+			t.city_attr cityAttr 
+			from t_zixun_class t where t.status >-1
+		</sql>
+
+		<select id="getNewsClassfityByPage" resultType="com.tuanche.smc.domain.base.NewsClassify">
+				<include refid="sel"/>		
+		</select>
+		
+		<select id="getNewsClassfity" resultType="com.tuanche.smc.domain.base.NewsClassify">
+				<include refid="sel"/>		
+		</select>
+		
+		<select id="getNewsClassfityChild" resultType="java.lang.Integer">
+				<include refid="sel"/>
+				  and t.pid = #{id}
+				  limit 0,1
+		</select>
+		
+		<select id="getNewsClassfityOnlineChild" resultType="java.lang.Integer">
+				<include refid="sel"/>
+				  and t.pid = #{id}
+				  and t.status = 1
+				  limit 0,1
+		</select>
+		
+		<select id="getNewsClassfitySelectiveByPage" resultType="com.tuanche.smc.domain.base.NewsClassify" >
+				<include refid="sel"/>
+				<foreach  collection="cons"  item="con">
+						and ${con}
+				</foreach>
+		</select>
+		
+		<select id="getNewsClassfityByIdByPage" resultType="com.tuanche.smc.domain.base.NewsClassify" >
+				select * , t.city_attr cityAttr from t_zixun_class t where t.status >-1
+				and id = #{id}
+		</select>
+		
+		
+		
+		<select id="getClassUrl" resultType="java.lang.String">
+				select url from t_zixun_class t 
+				where t.pid = #{pId}
+			    and url=#{url} 
+			    <if test="id > 0" >
+			    	and  (id  &gt;#{id} or id &lt;#{id}) 
+			    </if>
+			    and t.status >-1
+			    limit 0,1
+		</select>
+		
+</mapper>

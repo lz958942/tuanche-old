@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	<mapper namespace="com.tuanche.mapper.tongji.write.PvtotalWriteMapper">
+		<!-- <insert id="addFlowStat" parameterType="flowStat" useGeneratedKeys="true" keyProperty="id" >
+			insert into tongji_flow_stat
+			(date, domain, data_type, pv, uv, pv_uv) 
+			values 
+			(str_to_date(#{date}, '%Y-%m-%d'), #{domain}, #{dataType}, #{pv}, #{uv}, #{pvuv})
+		</insert>
+		<insert id="importFlowStat" parameterType="flowStat" useGeneratedKeys="true" keyProperty="id" >
+			insert into tongji_flow_stat
+			(date, domain, data_type, pv, uv, pv_uv) 
+			values 
+			(str_to_date(#{date}, '%m/%d/%Y'), #{domain}, #{dataType}, #{pv}, #{uv}, #{pvuv})
+		</insert>
+		
+		<update id="updateFlowStat" parameterType="flowStat">
+			update tongji_flow_stat
+			set
+			date = str_to_date(#{date}, '%Y-%m-%d'),
+			domain = #{domain},
+			pv = #{pv},
+			uv = #{uv},
+			pv_uv = #{pvuv}
+			where
+			id = #{id}
+		</update>
+		
+		<delete id="deleteFlowStat" parameterType="java.lang.Integer">
+			delete from tongji_flow_stat where id = #{id}
+		</delete>
+		
+		<delete id="deleteFlowStatByDate" parameterType="flowStat">
+			delete from tongji_flow_stat
+        	<where>
+        	<if test="startDate != null and startDate != ''">
+        		<![CDATA[
+        			date >= str_to_date(#{startDate}, '%Y-%m-%d')
+        		]]>
+        	</if>
+        	<if test="endDate != null and endDate != ''">
+        		<![CDATA[
+        			and date <= str_to_date(#{endDate}, '%Y-%m-%d')
+        		]]>
+        	</if>
+        	<if test="dataType != null and dataType != ''">
+        		and data_type = #{dataType}
+        	</if>
+        	</where>
+		</delete> -->
+	</mapper>

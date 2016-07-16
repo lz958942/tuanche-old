@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace和定义的Mapper接口对应，并实现其中的方法 -->
+<mapper namespace="com.tuanche.smc.persistence.write.admin.zixun.ZiXunWriteMapper">
+
+	<insert id="addZixun" parameterType="com.tuanche.smc.domain.zixun.ZiXun"
+		useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO t_zixun (
+		title,
+		keyword,
+		label_word,
+		description,
+		editor_id,
+		create_time,
+		city_id,
+		status,
+		click_count,
+		class_id,
+		class_code,
+		brand_id,
+		style_id,
+		publish_date,
+		list_pic
+		)
+		VALUES (
+		#{title},
+		#{keyword},
+		#{labelWord},
+		#{description},
+		#{editorId},
+		now(),
+		#{cityId},
+		#{status},
+		#{clickCount}, 
+		#{classId},
+		#{classCode},
+		#{brandId},
+		#{styleId},
+		#{publishDate},
+		#{listPic}
+		)
+		<selectKey resultType="int" keyProperty="id">
+			select
+			last_insert_id() as id from t_zixun limit 1
+		</selectKey>
+	</insert>
+	
+	<insert id="addZixunContent" parameterType="com.tuanche.smc.domain.zixun.ZiXun">
+		insert into t_zixun_text(
+			id,
+			content
+		)
+		values(
+			#{id},
+			#{content}
+		)
+	</insert>
+
+	<update id="delZixun">
+		UPDATE 
+		t_zixun SET status =-1 ,
+		update_date=(SELECT NOW())
+		WHERE id = #{id}
+	</update>
+
+	<update id="deployZixun">
+		UPDATE t_zixun SET 
+		status = #{status} 
+		<if test="status==1">
+			,publish_date = now()
+		</if>
+		WHERE
+		id = #{id}
+	</update>
+	<update id="batchUpdateZixunstatus">
+		UPDATE t_zixun SET status = #{status}
+		<if test="status==1">
+			, publish_date = now()
+		</if>
+		 WHERE
+		id in 
+		<foreach collection="ids" open="(" close=")" separator="," item="id">
+			#{id}
+		</foreach>
+	</update>
+
+	<update id="updateZixunProperties" parameterType="com.tuanche.smc.domain.zixun.ZiXun">
+		UPDATE t_zixun
+		SET city_id = #{cityId},
+		class_id = #{classId},
+		brand_id = #{brandId},
+		style_id= #{styleId},
+		title = #{title}, 
+		label_word = #{labelWord},
+		keyword =#{keyword}, 
+		description = #{description},
+		publish_date = #{publishDate},
+		list_pic  = #{listPic},
+		update_date = now(),
+		status =#{status}
+		  WHERE
+		id = #{id}
+	</update>
+	
+	<update id="updateZixunContent" parameterType="com.tuanche.smc.domain.zixun.ZiXun">
+		UPDATE t_zixun_text
+		SET content = #{content}
+		WHERE
+		id = #{id}
+	</update>
+	
+
+	<update id="updateZixunHouseInfo">
+		UPDATE t_zixun SET search_url = #{searchUrl} WHERE
+		id = #{id}
+	</update>
+	<update id="updateZixunListPic">
+		UPDATE t_zixun SET list_pic  = #{listPic} WHERE
+		id = #{id}
+	</update>
+
+	<update id="incrementClickCount">
+		UPDATE t_zixun SET click_count = click_count + 1
+		WHERE id = #{id}
+	</update>
+	<!-- =========================== -->
+	<update id="updateZixunPublishEditorId">
+		UPDATE t_zixun SET publish_editor_id =#{editorId} WHERE id = #{id}
+	</update>
+	<update id="updateZixunUpEditorId">
+		UPDATE t_zixun SET update_editor_id =#{editorId} WHERE id = #{id}
+	</update>
+	
+	
+		<update id="updateZixunUpEditorIds">
+		UPDATE t_zixun SET publish_editor_id = #{editorId}
+		 WHERE
+		id in 
+		<foreach collection="ids" open="(" close=")" separator="," item="id">
+			#{id}
+		</foreach>
+	</update>
+</mapper>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.mapper.admin.write.TopicReviewWritetMapper" >
+  <update id="updateByPrimaryKeySelective" parameterType="int" >
+    update t_question_topic_comment set sort=#{sort}
+    where id = #{id}
+  </update>
+  
+  <update id="operation" >
+  	  update t_question_topic_comment set 
+  	  audit_status=#{auditStatus}
+  	  where id=#{id}
+  </update>
+  
+   <update id="operationBatch" >
+  	  update t_question_topic_comment set 
+  	  audit_status=#{auditStatus}
+  	  where id in 
+  	  <foreach collection="ids" index="index" item="ids" separator="," open="(" close=")" >
+  	  	#{ids}
+  	  </foreach>
+  </update>
+  
+  <select id="updateTopicCommentSort" statementType="CALLABLE">   
+     {call proc_updateTopicCommentSort(#{id},#{topicid},#{sort_new},#{sort_old})}   
+    </select>  
+  
+  <insert id="batchInsert"  >
+   INSERT INTO t_question_topic_comment (topic_id,`comment`,audit_status,id_delete,user_id,user_name,add_time) VALUES
+    <foreach collection="list" index="index" separator="," item="list">
+    (#{list.topicId},#{list.comment},#{list.auditStatus},#{list.idDelete},#{list.userId},#{list.userName},#{list.addTime})
+    </foreach>
+  </insert>
+</mapper>

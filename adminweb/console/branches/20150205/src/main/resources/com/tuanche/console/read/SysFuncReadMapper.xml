@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.console.read.SysFuncReadMapper">
+	<sql id="fieldSql">
+	select id,
+		parent_id parentId,
+		func_name funcName,
+		func_desc funcDesc,
+		func_url funcUrl,
+		is_menu isMenu,
+		func_sort funcSort,
+		biz_code bizCode,
+		func_level funcLevel, 
+    	func_status funcStatus from sys_func where 1=1
+	</sql>
+	<sql id="whereSql">
+		<if test="parentId != null" >
+        and parent_id = #{parentId}
+      </if>
+      <if test="funcName != null" >
+        and func_name = #{funcName}
+      </if>
+      <if test="funcname != null" >
+        and func_name like CONCAT('%','${funcname}','%' ) 
+      </if>
+      <if test="funcDesc != null" >
+       and func_desc = #{funcDesc}
+      </if>
+      <if test="funcUrl != null" >
+       and func_url = #{funcUrl}
+      </if>
+      <if test="isMenu != null" >
+        and is_menu = #{isMenu}
+      </if>
+      <if test="funcSort != null" >
+        and func_sort = #{funcSort}
+      </if>
+      <if test="bizCode != null" >
+       and biz_code = #{bizCode}
+      </if>
+      <if test="funcLevel != null" >
+        and func_level = #{funcLevel}
+      </if>
+      <if test="funcStatus != null" >
+       and func_status = #{funcStatus}
+      </if>
+	</sql>
+	<select id="selectSysFuncList" resultType="SysFunc"
+		parameterType="java.util.Map">
+		<include refid="fieldSql"/>
+		<include refid="whereSql"/>
+		<choose>
+			<when test="orderStr == null">
+				order by id ASC
+			</when>
+			<otherwise>
+				order by ${orderStr} ASC
+			</otherwise>
+		</choose>
+		limit #{cpage},#{pageSize}
+	</select>
+	<select id="selectAuthByRoleId" resultType="SysFunc" parameterType="java.lang.Integer" >
+	select f.id,f.parent_id,f.biz_code,f.func_url,f.func_name  
+	from sys_role_func r left join sys_func f on r.func_id=f.id where r.is_del=-1 and f.func_level>1 and r.role_id=#{roleId}
+  </select>
+</mapper>

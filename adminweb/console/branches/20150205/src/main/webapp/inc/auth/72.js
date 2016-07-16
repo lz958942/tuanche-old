@@ -1,0 +1,1 @@
+[{id:774,pId:773,name:'周刊列表',url:'/magazine/magazineList',target:'manFrame'},{id:775,pId:773,name:'文章列表',url:'/magazine/articleList',target:'manFrame'},{id:776,pId:773,name:'人员列表',url:'/magazine/employeList',target:'manFrame'},{id:773,pId:0,name:'周刊管理'},]

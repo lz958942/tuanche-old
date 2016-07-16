@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.mapper.admin.write.DecorateContentWriteMapper">
+	<resultMap type="com.tuanche.bean.admin.DecorateContent" id="BaseResultMap">
+		<id column="id" property="id" javaType="integer" jdbcType="INTEGER"></id>
+		<result column="base_id" property="baseId" javaType="integer" jdbcType="INTEGER"/>
+		<result column="temp_id" property="tempId" javaType="integer" jdbcType="INTEGER"/>
+		<result column="title" property="dctitle" javaType="string" jdbcType="VARCHAR"/>
+		<result column="sort" property="dcSort" javaType="string" jdbcType="VARCHAR"/>
+		<result column="content" property="content" javaType="string" jdbcType="VARCHAR"/>
+		<result column="pic_url" property="picUrl" javaType="string" jdbcType="VARCHAR"/>
+		<result column="isdel" property="isdel" javaType="string" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<insert id="addContent">
+		INSERT INTO t_decorate_content(base_id,temp_id,pic_url,title,sort,content,isdel)
+		values
+				(#{baseId},
+				#{tempId},
+				#{picUrl},
+				#{dctitle},
+				#{dcSort},
+				#{content},
+				#{isdel})
+	</insert>
+	
+	<update id="updateContent">
+                UPDATE t_decorate_content 
+                <set>
+	                base_id=#{baseId},
+					temp_id=#{tempId},
+					pic_url=#{picUrl},
+					title=#{dctitle},
+					sort=#{dcSort},
+					content=#{content},
+					isdel=#{isdel}
+                </set>
+                where id = #{id}
+	</update>
+	
+	<update id="deleteContent" parameterType="int">
+		UPDATE t_decorate_content SET isdel='-1' WHERE id=#{id}
+	</update>
+</mapper>

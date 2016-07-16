@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tuanche.cms.cheread.GroupBuyReadMapper">
+       <select id="getOnLineBuyBrand"  resultType="groupBuy">
+	       SELECT buy.city_id cityId,buy.brand_id  brandId,buy.groupbuy_date startTime
+			 FROM t_brand_groupbuy  buy
+	       	WHERE buy.city_id=#{cityId}
+	       	and buy.isdel=0
+	     <if test="limit>0">
+		   limit #{limit}
+		 </if>
+	  </select>
+	  
+	  
+	  
+	   <select id="getBrandManNum" resultType="groupBuy">
+	    	SELECT buy.city_id cityId,SUM(buy.man_num) manNum,buy.brand_id  brandId,sum(buy.pass_num) passNum,
+	             sum(styleInfo.save_money) saveMoney
+	        FROM t_carstyle_groupbuy   buy
+	         left join tc_carstyle  styleInfo
+			   on buy.carstyle_id=styleInfo.id
+		   WHERE city_id=#{cityId}  
+			 AND buy.isdel=0 
+			 and styleInfo.id is not null
+	    GROUP BY  buy.brand_id
+	      order by pass_num  desc
+	         <if test="limit>0">
+			   limit #{limit}
+			 </if>
+	  </select>
+	  
+	  <select id="getOnLineBuyStyle"  resultType="groupBuy">
+	      SELECT buy.carstyle_id styleId,buy.city_id cityId,style.style styleName,style.bos carLevel,
+	             buy.brand_id brandId,brand.name brandName,brand.pinyin brandPinYin,buy.groupbuy_date startTime
+			FROM t_carstyle_groupbuy  buy
+			LEFT JOIN  tc_carstyle  style
+			ON style.id=buy.carstyle_id
+			LEFT JOIN  tc_brand brand
+			ON  brand.id=style.pid
+		   WHERE  buy.city_id=#{cityId} 
+			 AND buy.isdel=0 
+			 and style.id is not null
+		     and style.pid>0
+	    ORDER BY cityId DESC,brand.id ASC ,pass_num desc
+	  </select>
+	   <select id="getHotStyle"  resultType="groupBuy">
+	      SELECT carstyle_id styleId,city_id cityId
+			FROM t_carstyle_groupbuy  
+		   WHERE city_id=#{cityId} 
+			 AND isdel=0 
+	    ORDER BY groupbuy_state desc,pass_num desc
+	     <if test="limit>0">
+		   limit #{limit}
+		 </if>
+	  </select>
+	  
+	  <select id="getOnLineBuyByCarLevel"  resultType="groupBuy">
+	     	 SELECT buy.title,style.bos carLevel,buy.carstyle_id styleId,buy.groupbuy_state groupbuyState,
+	     	 buy.city_id cityId,buy.pass_num passNum,buy.man_num manNum,
+	     	 style.spic,style.bpic,groupbuy_date  startTime,brand.level brandLevel,style.save_money styleSaveMoney
+	     	   FROM t_carstyle_groupbuy  buy
+		  LEFT JOIN tc_carstyle  style
+		         ON buy.carstyle_id=style.id
+           LEFT JOIN tc_brand brand
+  	          ON brand.id=style.pid
+		      WHERE city_id=#{cityId}
+		        AND style.bos=#{carLevel}
+		        AND isdel=0 
+		        AND style.spic IS NOT NULL 
+		   ORDER BY buy.groupbuy_state desc,buy.pass_num DESC 
+		      LIMIT #{limit}
+	  </select>
+	  
+	  
+	  <select id="getGroupBuyByStyleIds"   resultType="groupBuy">
+	     	 SELECT  buy.city_id cityId,buy.saler_id userId,buy.carstyle_id styleId,buy.groupbuy_state groupbuyState,man_num  manNum,pass_num  passNum,buy.title,
+	     	         buy.groupbuy_date startTime,style.spic spic,style.bpic bpic,style.save_money styleSaveMoney,brand.level brandLevel
+	     	   FROM t_carstyle_groupbuy  buy
+		        LEFT JOIN tc_carstyle style
+     	          ON buy.carstyle_id=style.id
+     	   LEFT JOIN tc_brand brand
+     	          ON brand.id=style.pid
+		      WHERE buy.carstyle_id  in (${styleIds})
+		        AND buy.city_id=#{cityId}
+		        AND buy.isdel=0
+	  </select>
+	  <select id="getGroupBuyByIds"   resultType="groupBuy">
+	     	 SELECT  buy.city_id cityId,buy.carstyle_id styleId,buy.man_num  manNum,buy.pass_num  passNum,buy.groupbuy_state groupbuyState,
+	     	        style.spic spic,style.bpic bpic,buy.title,style.save_money styleSaveMoney,brand.level brandLevel,groupbuy_date  startTime
+	     	   FROM t_carstyle_groupbuy  buy
+     	   LEFT JOIN tc_carstyle style
+     	          ON buy.carstyle_id=style.id
+     	   LEFT JOIN tc_brand brand
+     	          ON brand.id=style.pid
+		      WHERE buy.id in (${ids})
+		        AND buy.city_id=#{cityId}
+		        AND buy.isdel=0
+		      order by buy.groupbuy_state desc
+	  </select>
+</mapper>

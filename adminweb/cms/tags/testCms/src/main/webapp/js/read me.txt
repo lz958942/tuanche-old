@@ -1,0 +1,244 @@
+
+====================================================
+
+                 团车网ERP JS库
+
+                   2013-12-10
+
+====================================================
+
+JS功能基于jQuery库(jquery.js v1.8.3)
+
+----------------------------------------------------------------------
+
+表单验证
+
+jquery.validate.js(v1.7)
+
+
+----------------------------------------------------------------------
+
+辅助表单验证插件
+
+jquery.metadata.js
+
+
+----------------------------------------------------------------------
+
+树形菜单
+
+ztree.js
+
+此插件包含核心代码、excheck(v3.5.15)、exedit(v3.5.15)
+
+tree.js为树形菜单公共方法文件
+
+----------------------------------------------------------------------
+
+表单提交插件
+
+jquery.form.js
+
+
+----------------------------------------------------------------------
+
+input自动完成插件
+
+jquery.autocoomplete.min.js
+
+----------------------------------------------------------------------
+
+日期控件
+
+WdatePicker
+
+----------------------------------------------------------------------
+
+bootstrap 
+
+bootstrap.js
+
+
+----------------------------------------------------------------------
+
+jQueryUI库里面的js控件，配合bootstrap.js库使用
+
+jquery-ui.js
+bootstrap.js
+
+----------------------------------------------------------------------
+
+
+
+====================================================
+
+                    公共方法 
+
+              demo css/demo/ui.html
+
+====================================================
+
+公共方法是在bootstrap的样式及JS基础上配合jQueryUI
+
+进行修改完成了
+
+在使用方法之前需要在页面中引入css及JS文件有
+
+<link type="text/css" rel="stylesheet" href="http://localhost/ERP/css/bootstrap.min.css" />
+<link type="text/css" rel="stylesheet" href="http://localhost/ERP/css/jquery.ui.custom.css" />
+<link type="text/css" rel="stylesheet" href="http://localhost/ERP/css/font-awesome.min.css" />
+<!--[if IE 7]>
+<link rel="stylesheet" href="http://localhost/ERP/css/font-awesome-ie7.min.css">
+<![endif]-->
+<!--[if lt IE 9]>
+<link rel="stylesheet" type="text/css" href="http://localhost/ERP/css/jquery.ui.ie.css"/>
+<![endif]-->
+<script src="http://localhost/ERP/js/jquery.js"></script>
+<script src="http://localhost/ERP/js/bootstrap.js"></script>
+<script src="http://localhost/ERP/js/jquery-ui.js"></script>
+<script src="http://localhost/ERP/js/erp_public.js"></script>
+
+
+1）弹出框：bAlert(message)
+   
+   方法：<a href="javascript:;" class="btn" onclick="bAlert('错误提示信息！')">bAlert</a>
+
+   参数：message为提示内容 
+
+----------------------------------------------------------------------
+
+2）确认弹出框：bConfirm(message,callbacks)
+   
+   方法：<a href="javascript:;" class="btn" onclick="bConfirm('你确认关闭吗？',callbacks)">bConfirm</a>
+
+   参数：message   为提示内容   
+         callbacks 为点击确认按钮后执行的事件，必须自行编写callbacks 其实中按钮名称可自定义
+  
+   	var callbacks  ={
+			 "确定":function(){
+			 bAlert("123");
+			 $(this).dialog("close");
+			},
+			 "取消":function(){
+			 bAlert("3");
+			 $(this).dialog("close");
+			}}
+
+
+----------------------------------------------------------------------
+2.1）确认弹出框带参数：bConfirmPar(message,callbacks,param)
+   
+   方法：<a href="javascript:;" class="btn" onclick="bConfirm('你确认关闭吗？',callbacks,'2')">bConfirm</a>
+
+   参数：message   为提示内容   
+	 callbacks 为点击确认按钮后执行的事件，必须自行编写callbacks 其实中按钮名称可自定义
+	 param	   参数
+  
+   	var callbacks  ={
+			 "确定":function(){
+			 param = $("#bConfirmPar").attr('data-param');
+
+			 $(this).dialog("close");
+			},
+			 "取消":function(){
+			 bAlert("3");
+			 $(this).dialog("close");
+			}}
+
+----------------------------------------------------------------------
+
+3）弹出层：bPopup(title,url)
+   
+   方法：<a href="javascript:;" class="btn" onclick="bPopup('标题','load.html')">bPopup</a>
+
+   参数：title为弹出层标题
+         url  为外部引入文件路径
+
+----------------------------------------------------------------------
+
+4）弹出层Iframe：bPopupIframe(title,url,wid,hei)
+   
+   方法：<a href="javascript:;" class="btn" onclick="bPopupIframe('标题2','load2.html','530','150')">bPopupIframe</a>
+
+   参数：title为弹出层标题
+         url  为外部引入文件路径
+         wid  设置内部iframe的宽
+         hei  设置内部iframe的高
+
+----------------------------------------------------------------------
+
+5) 弹出层内容在本页面： bPopupLocal(id，callbacks)
+
+   方法：<a href="javascript:;" class="btn" onclick="bPopupLocal('bPopupLocal')">bPopupLocal</a>
+
+   参数：id 为弹出层id
+         callbacks 为点击确认按钮后执行的事件，必须自行编写callbacks 其实中按钮名称可自定义
+  
+   	var callbacks  ={
+			 "确定":function(){
+			 bAlert("123");
+			 $(this).dialog("close");
+			},
+			 "取消":function(){
+			 bAlert("3");
+			 $(this).dialog("close");
+			}}
+
+    <div id="bPopupLocal" title="title" class="hide">
+	<p>弹出层内容在页面</p>
+    </div>
+
+
+----------------------------------------------------------------------
+
+6）全选方法：selectAll(obj,self)
+
+   方法：<input type="checkbox" onclick="selectAll('sl',this)" />全选</label>
+
+   参数：obj  为本组checkbox的class
+         self 参数为this
+
+----------------------------------------------------------------------
+
+7) 反选方法：selectReverse(obj)
+
+   方法：<input type="checkbox" onclick="selectReverse('sl')" />反选</label>
+
+   参数：obj  为本组checkbox的class
+
+----------------------------------------------------------------------
+
+8）弹出层：bPopupBtn(title,url,fn,wid)
+   
+   方法：<a href="javascript:;" class="btn" onclick="bPopup('标题','load.html',callbacks)">bPopup</a>
+
+   参数：title     为弹出层标题
+         url       为外部引入文件路径
+         callbacks 为点击确认按钮后执行的事件，必须自行编写callbacks 其实中按钮名称可自定义
+         wid       弹出层的宽度，不填写时默认值为500px
+
+
+
+
+====================================
+2014-02-21
+
+bPopupBtn()方法添加一个参数控制弹出层的宽度
+
+
+2014-03-13
+
+bConfirmPar（）新增一个可以传参数的确认弹出框
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.mapper.tongji.read.UserCenterMapper">
+	<sql id="Base_Column_List">
+		id,DAY,login_total_num,pc_reg_num,pc_actreg_num,android_reg_num,ios_reg_num,wap_reg_num
+	</sql>
+		<sql id="whereSql">
+			where 1=1
+			<if test="starttime!=null">
+				and day >= #{starttime}
+			</if>
+			<if test="endtime!=null">
+				and #{endtime} >= day
+			</if>
+		</sql>
+	 <select id="selectUcData" parameterType="com.tuanche.bean.tongji.UcenterStatisticsDto" resultType="com.tuanche.bean.tongji.UcenterStatistics"  >
+		select
+		<include refid="Base_Column_List" />
+		FROM  tongji.tongji_uc_day 
+		<include refid="whereSql" /> ORDER BY DAY ASC
+	</select>
+
+</mapper>

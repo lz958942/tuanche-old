@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.mapper.che.write.ReviewWriteMapper"  >
+  <update id="pass"  parameterType="int" >
+    UPDATE tc_evaluate
+    SET
+      state = 1,
+      modify_time=(SELECT NOW()),
+      edit_id=#{editId},
+      is_cream=0,
+      is_reply=0
+    WHERE id = #{id}
+  </update>
+  <update id="passNo">
+  	 UPDATE tc_evaluate
+    SET
+      state = 2,
+      modify_time=(SELECT NOW()),
+      edit_id=#{editId},
+      is_cream=0
+    WHERE id = #{id}
+  </update>
+	<update id="cream">
+	UPDATE tc_evaluate
+    SET
+      state = 1,
+      modify_time=(SELECT NOW()),
+      edit_id=#{editId},
+      is_cream=1,
+      is_reply=0
+    WHERE id = #{id}
+	</update>
+	<update id="creamRemove">
+		UPDATE tc_evaluate
+    SET
+      modify_time=(SELECT NOW()),
+      edit_id=#{editId},
+      is_cream=0
+    WHERE id = #{id}
+	</update>
+	<!-- 
+		评论回复。自动通过
+	 -->
+<update id="reply">
+		UPDATE tc_evaluate
+    SET
+      modify_time=(SELECT NOW()),
+      edit_id=#{editId},
+      state = 1,
+      is_cream=0,
+      is_reply=1
+    WHERE id = #{id}
+</update>
+<delete id="deleteReview">
+	DELETE FROM tc_evaluate WHERE id=#{id}
+</delete>
+<insert id="insertReview" useGeneratedKeys="true" keyProperty="id">
+	INSERT INTO tc_evaluate 
+	(mem_id,city_id,brand_id,carstyle_id,carstyle_model_id,`comment`,ishavepic,state,source,is_cream,create_time,is_reply,eva_name,comment_total,comment_price,comment_service,comment_shop)
+			VALUES
+	(0,#{cityId},#{brandId},#{carstyleId},#{carstyleModelId},#{comment},#{ishavepic},0,1,#{isCream},#{createtime},0,#{evaName},#{commentTotal},#{commentPrice},#{commentService},#{commentShop})
+</insert>
+<update id="updateReview">
+   UPDATE tc_evaluate
+   SET
+        city_id = #{cityId},
+        brand_id = #{brandId},
+        carstyle_id = #{carstyleId},
+        carstyle_model_id = #{carstyleModelId},
+        comment_total = #{commentTotal},
+        comment_price = #{commentPrice},
+        comment_service = #{commentService},
+        comment_shop = #{commentShop},
+        `comment` = #{comment},
+        ishavepic = #{ishavepic},
+        is_cream = #{isCream},
+        create_time = #{createtime},
+        eva_name = #{evaName},
+        is_reply = #{isReply}
+    WHERE 
+    	id = #{id}
+  </update>
+</mapper>

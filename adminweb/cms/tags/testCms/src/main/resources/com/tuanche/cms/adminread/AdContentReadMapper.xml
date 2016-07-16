@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.cms.adminread.AdContentReadMapper">
+	<sql id="fieldSql" >
+		SELECT
+		id,
+  		t.channel channel,
+  		ad_type adType,
+  		t.name locationName,
+  		t.describe,
+  		location_code locationCode,
+  		t.width,
+ 		t.height,
+  		t.status,
+  		group_name groupName
+		FROM adv_position_content t WHERE flag=1
+	</sql>
+	 <sql id="search">
+		<if test="channel>-1">
+		   AND  channel=#{channel}
+		</if>
+		<if test="adType>-1">
+		   AND  ad_type=#{adType}
+		</if>
+		<if test="locationName!=null">
+		   AND  name like "%"#{locationName}"%"
+		</if>
+		
+	  </sql>
+     <select id="queryAdContentById" parameterType="java.lang.Integer" resultType="com.tuanche.cms.bean.AdContent">
+	 		<include refid="fieldSql"/> 
+	 		AND id=#{id}
+	 </select>
+	
+	  <select id="getGroupName" resultType="String">
+	   SELECT DISTINCT group_name FROM adv_position_content where group_name is NOT NULL AND flag=1
+	 </select>
+ 	 <select id="queryAdContent" parameterType="com.tuanche.cms.bean.AdContent" resultType="com.tuanche.cms.bean.AdContent">
+ 		<include refid="fieldSql"/> 
+ 		<include refid="search"/>
+ 		ORDER BY id DESC
+		<if test="start>=0 and limit>0">
+		    LIMIT #{start}, #{limit}
+		</if>
+	 </select>
+ 	 <select id="count" parameterType="com.tuanche.cms.bean.AdContent" resultType="java.lang.Integer">
+        SELECT count(1)
+		FROM adv_position_content 
+		WHERE flag=1
+		 <include refid="search"/>
+   </select>
+    <select id="queryAdContentAll" parameterType="com.tuanche.cms.bean.AdContent" resultType="com.tuanche.cms.bean.AdContent">
+ 		<include refid="fieldSql"/>
+	 </select>
+
+</mapper>

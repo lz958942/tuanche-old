@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tuanche.mapper.che.read.SubjectKindReadMapper">
+	<resultMap type="com.tuanche.bean.che.SubjectKind" id="BaseResultMap">
+		<id column="id" javaType="integer" property="id" jdbcType="INTEGER"></id>
+		<result column="name" javaType="string" jdbcType="VARCHAR" property="name"/>
+	</resultMap>
+	<select id="styleList" resultMap="BaseResultMap">
+		SELECT id,NAME FROM tc_subject_kind
+	</select>
+</mapper>

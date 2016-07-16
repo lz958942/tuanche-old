@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.mapper.admin.read.GmsContentReadMapper" >
+  <resultMap id="BaseResultMap" type="com.tuanche.bean.admin.GmsContent" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="gcm_id" property="gcmId" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="image" property="image" jdbcType="VARCHAR" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="sort" property="sort" jdbcType="INTEGER" />
+    <result column="dian_id" property="dianId" jdbcType="INTEGER" />
+    <result column="is_delete" property="isDelete" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, gcm_id, type, title, image, url, sort, dian_id, is_delete
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_tch_content
+    where id = #{id}  and is_delete = 1
+  </select>
+  <select id="selectByGcmId" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_tch_content
+    where  is_delete = 1
+    <if test="gcmId !=null">
+    	and gcm_id = #{gcmId}
+    </if>
+    <if test="type !=null">
+    	and type = #{type}
+    </if>
+    order by sort
+  </select>
+  
+</mapper>

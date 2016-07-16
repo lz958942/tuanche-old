@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.mapper.che.read.CarstylekReadMapper">
+  <resultMap id="BaseResultMap" type="com.tuanche.bean.che.CarstyleDomain">
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="style" property="style" jdbcType="VARCHAR" />
+    <result column="enname" property="enname" />
+    <result column="pid" property="pid" jdbcType="INTEGER" />
+    <result column="ppid" property="ppid" jdbcType="INTEGER" />
+    <result column="factory_price" property="factoryPrice" jdbcType="VARCHAR" />
+    <result column="market_price" property="marketPrice" jdbcType="VARCHAR" />
+    <result column="level" property="level" jdbcType="VARCHAR" />
+    <result column="speed_box" property="speedBox" jdbcType="VARCHAR" />
+    <result column="detail_url" property="detailUrl" jdbcType="VARCHAR" />
+    <result column="texts" property="texts" jdbcType="VARCHAR" />
+    <result column="sort" property="sort" jdbcType="INTEGER"/>
+    <result column="bos" property="bos" jdbcType="INTEGER" />
+    <result column="addtime" property="addtime" jdbcType="INTEGER" />
+    <result column="initial" property="initial" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="show" property="show" jdbcType="INTEGER" />
+    <result column="colors" property="colors" jdbcType="VARCHAR" />
+    <result column="color_no" property="colorNo" jdbcType="VARCHAR" />
+    <result column="save_money" property="saveMoney" jdbcType="INTEGER" />
+    <result column="spic" property="spic" />
+    <result column="bpic" property="bpic" />
+    <result column="create_time" property="createTime"/>
+    <result column="create_time_userID" property="createTimeUserID"/>
+    <result column="update_time" property="updateTime"/>
+    <result column="update_time_userID" property="updateTimeUserID"/>
+    <result column="tid" property="tid"/>
+    <result column="public_mark" property="publicMark"/>
+  </resultMap>
+  <!-- 车型 --><!-- t.sort, -->
+  <sql id="Base_Column_List_t" >
+  select 
+    t.id, t.style, t.enname, t.pid, t.ppid, t.factory_price, t.market_price, t.level, t.speed_box, t.detail_url, 
+    t.texts, t.bos, t.addtime, t.initial, t.type, t.show, t.colors, t.color_no, t.save_money,t.spic,t.bpic,
+    t.create_time,t.create_time_userID,t.update_time,t.update_time_userID,t.public_mark,t.show
+  	from tc_carstyle  t
+  </sql>
+    <!-- 车型 -->
+  <sql id="Base_Column_List_t_update" >
+  select 
+    t.id, t.style, t.enname, t.pid, t.ppid, t.factory_price, t.market_price, t.level, t.speed_box, t.detail_url, 
+    t.texts,t.bos, t.initial, t.type, t.`show`, t.colors, t.color_no, t.save_money,t.spic,t.bpic,t.public_mark
+  	from tc_carstyle  t
+  </sql>
+  <!-- 品牌找出对应车型 -->
+   <select id="carStyleHomepidByPage" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    <include refid="Base_Column_List_t" />
+    where t.pid = #{pid} AND t.ppid=0 AND t.show=0 order by t.id desc
+  </select>
+   <!-- 所有车型 -->
+   <select id="carStyleHome" resultMap="BaseResultMap">
+    <include refid="Base_Column_List_t" /> where t.`show`=0 AND t.ppid=0
+  </select>
+  <!-- 编辑查询 -->
+  <select id="carStyleUpdateBefore" resultMap="BaseResultMap">
+    <include refid="Base_Column_List_t_update" />where t.id=#{id}
+  </select>
+  <!-- 查询所有车系 -->
+  <select id="queryCarStyleByPage" resultMap="BaseResultMap">
+  <include refid="Base_Column_List_t" />where  t.ppid=0 ORDER BY t.id desc
+  </select>
+  
+  <!-- 分页 -->
+  <select id="carStylesearchByPage" resultMap="BaseResultMap">
+		<include refid="Base_Column_List_t"/>
+			<if test="conditions!=null">
+				where 1=1 and
+					<foreach collection="conditions" item="condition" separator="AND">
+						${condition}
+					</foreach>
+					order by t.id desc
+			</if>
+	</select>
+	
+	<!-- 查询车型的名字和id -->
+	<select id="selectStyleName" resultMap="BaseResultMap">
+		SELECT style,id,pid FROM tc_carstyle  WHERE `show`=0 AND ppid=0
+	</select>
+	<!-- 
+	车款
+	 -->
+	 <select id="selectStyleByIdByPage" resultMap="BaseResultMap">
+	 	 <include refid="Base_Column_List_t"/>
+	 	 where t.`show`=0 AND t.ppid=#{ppid} order by t.id desc
+	 </select>
+	 <!-- 全部车款 -->
+	 <select id="selectStyleByPage" resultMap="BaseResultMap">
+	 <include refid="Base_Column_List_t"/>
+	 <![CDATA[
+  		where t.`show`=0  AND t.ppid>0 order by t.id desc
+    ]]>
+	 	
+	 </select>
+	 <select id="getCarstyleByName" resultMap="BaseResultMap" >
+	 SELECT t.style FROM tc_carstyle t
+	 <![CDATA[
+  		where t.`show`=0  AND t.pid>0 AND t.style=#{name}
+    ]]>
+	 	
+	 </select>
+	<!-- 品牌删除查询车系 -->
+	<select id="selectCarSeries" resultMap="BaseResultMap">
+	 SELECT t.id ,t.spic FROM tc_carstyle t
+		 <![CDATA[
+  		where t.`show`=0  AND t.ppid=0 AND t.pid=#{id}
+    ]]>
+	</select>
+	
+		<!-- 品牌删除查询车系查询车款 -->
+	<select id="selectCarSeriesStyle" resultMap="BaseResultMap">
+	  SELECT t.id,t.style FROM tc_carstyle t
+		 <![CDATA[
+  		where t.`show`=0 AND t.ppid>0 AND t.ppid=#{id}
+    ]]>
+	</select>
+	<!-- 删除前确认 -->
+	<select id="selectCarStyleByid" resultMap="BaseResultMap">
+	 <include refid="Base_Column_List_t"/> 
+		 <![CDATA[
+  		where t.`show`=0 AND t.id=#{id}
+    	]]>
+   </select>
+   
+   
+   <!-- 判断车型下名字 -->
+   <select id="styleFindname" resultMap="BaseResultMap">
+    SELECT t.id FROM tc_carstyle t
+    	where t.`show`=0  AND t.ppid=#{ppid} AND t.style=#{name}
+   </select>
+   
+   <select id="selectStyleByIdName" resultType="com.tuanche.bean.che.CarstyleDomain">
+   	    SELECT t.id,t.style FROM tc_carstyle t
+    	WHERE t.show=0  AND t.`type`=0 AND pid=#{pid}
+   
+   </select>
+   
+    <select id="selectOkStyleByIdName" resultType="com.tuanche.bean.che.CarstyleDomain">
+   	    SELECT t.id,t.style FROM tc_carstyle t
+    	where t.type=0 and t.`show`=0  AND t.pid=#{pid} 
+   
+   </select>
+   
+   <select id="getCarName" resultMap="BaseResultMap">
+   SELECT id,style FROM tc_carstyle WHERE id=#{ppid}
+   </select>
+   <select id="getBrandBystyleId" resultMap="BaseResultMap">
+   	SELECT pid FROM  tc_carstyle  WHERE id=#{id}
+   </select>
+   <select id="getCarNameById" resultMap="BaseResultMap">
+   	SELECT style FROM tc_carstyle WHERE id=#{id}
+   </select>
+   <select id="getCarNamesByPpid" resultMap="BaseResultMap">
+   	SELECT 
+   	id,style
+   	 FROM tc_carstyle
+   	 WHERE ppid=#{ppid} AND `show`=0 AND `type`=0
+   </select>
+   <!-- 全部车款 -->
+   <select id="getCarStyles" resultMap="BaseResultMap">
+   SELECT id,style FROM tc_carstyle WHERE ppid>0 AND `show`=0 AND `type`=0
+   </select>
+   <!-- 全部车型 -->
+   <select id="getCarShapes" resultMap="BaseResultMap">
+   	SELECT id,style FROM tc_carstyle WHERE ppid=0 AND `show`=0 AND `type`=0
+   </select>
+</mapper>

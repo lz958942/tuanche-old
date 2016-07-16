@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.mapper.admin.write.GmsAddressWriteMapper" >
+  <insert id="insert" parameterType="com.tuanche.bean.admin.GmsAddress" >
+    insert into t_gms_address (gcm_id, address_number, address_desc)
+   			 values ( #{gcmId}, #{addressNumber}, #{addressDesc})
+  </insert>
+ 
+  <update id="updateByPrimaryKeySelective" parameterType="com.tuanche.bean.admin.GmsAddress" >
+    update t_gms_address
+    <set >
+      <if test="addressNumber != null" >
+        address_number = #{addressNumber},
+      </if>
+      <if test="addressDesc != null" >
+        address_desc = #{addressDesc},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+  
+</mapper>

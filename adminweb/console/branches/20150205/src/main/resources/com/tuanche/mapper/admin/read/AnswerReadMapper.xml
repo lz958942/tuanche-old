@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.mapper.admin.read.AnswerReadMapper">
+	<resultMap type="com.tuanche.bean.admin.Answer" id="BaseResult">
+		<id column="id" property="id"  jdbcType="INTEGER"/>
+		<result column="content" property="content"/>		
+		<result column="question_id" property="questionId"/>
+		<result column="answer_status" property="answerStatus" />
+		<result column="build_emp" property="buildEmp" jdbcType="INTEGER"/>		
+		<result column="build_time" property="buildTime"  />		
+		<result column="update_emp" property="updateEmp" jdbcType="INTEGER"/>		
+		<result column="update_time" property="updateTime" javaType="String"/>
+		<result column="answer_adopt" property="answerAdopt" />
+		<result column="show_emp" property="showEmp"  jdbcType="VARCHAR"/>
+	    <result column="questionAnswer" property="questionAnswer" javaType="string" jdbcType="VARCHAR"/>
+		</resultMap>
+		<!-- 公用sql -->
+	<sql id="baseSql">
+		SELECT id,content,question_id,answer_status,build_emp,build_time,update_emp,update_time,answer_adopt,show_emp FROM t_question_answer
+	</sql>
+	<!-- 根据Id查询 -->
+	<select id="selectAnswer" resultMap="BaseResult" parameterType="int">
+		<include refid="baseSql"/> where question_id=#{questionId} AND answer_adopt = 1
+	</select>
+	<!-- 分页查询 -->
+	<select id="queryByPage" resultMap="BaseResult">
+		<include refid="baseSql"/> where question_id=#{questionId} ORDER BY answer_adopt DESC
+	</select>
+	<!-- 查询问题的回复数 -->
+	<select id="selectCount" resultType="int" parameterType="int">
+		SELECT COUNT(1) FROM t_question_answer where question_id=#{questionId} and answer_status=4
+	</select>
+	
+	<!--根据问题id获取答案  -->
+	<select id="getAnswersByQuestionByPage" resultMap="BaseResult">
+		<include refid="baseSql"/> where question_id=#{qid} AND answer_status > 0
+	</select>
+	<!-- 条件查询@kvin -->
+	<select id="answerListByPage" resultMap="BaseResult" >
+		SELECT q.`title` AS questionAnswer,a.id,a.content,
+			   a.question_id,a.answer_status,a.build_emp,
+		       a.build_time,a.update_emp,a.update_time,a.answer_adopt,a.show_emp  
+			FROM t_question_answer a
+			LEFT JOIN `t_question` q
+			ON a.`question_id`=q.`id`
+			WHERE 1=1 and
+			<foreach collection="search" item="condition" separator="AND">
+				${condition}
+			</foreach>
+			order by a.id desc
+	</select>
+	<select id="getPidByid" resultType="int">
+		SELECT question_id FROM `t_question_answer` WHERE id=#{id}
+	</select>
+</mapper>

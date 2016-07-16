@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.cms.adminwrite.AdPositionTimeWriteMapper">
+<insert id="adAdPositionTime"  parameterType="com.tuanche.cms.bean.AdPositionTime">  
+		INSERT INTO adv_position_time (
+		      start_date, 
+			  end_date, 
+			  channel,
+			  location_name,
+			  location_code, 
+			  content_position_id,
+			  city_id,
+			  ad_type,
+			  ad_content_id, 
+			  adv_position_time.height,
+			  adv_position_time.width,
+			  pic_name,
+			  adv_position_time.describe,
+			  ad_link,
+			  title,
+			  template_id,
+			  template_name,
+			  brand_id,
+			  style_id,
+			  status,
+			  flag,
+			  is_default,
+			  extend_code
+			  )
+			  
+             VALUES
+            (#{startDate},
+             #{endDate},
+             #{channel},
+             #{locationName},
+             #{locationCode},
+             #{contentPositionId},
+             #{cityId},
+             #{adType},
+             #{adContentId},
+             #{height},
+             #{width},
+             #{picName},
+             #{describe},
+             #{adLink},
+             #{adTitle},
+             #{templateId},
+             #{templateName},
+             #{brandId},
+             #{styleId},
+             0,
+             1,
+              #{isDefault},
+              #{extendCode}
+            )
+</insert>
+
+<update id="updateAdPositionTime" parameterType="com.tuanche.cms.bean.AdPositionTime">
+ 	 update adv_position_time
+           set 
+              start_date=#{startDate},
+			  end_date=#{endDate},  
+			  adv_position_time.channel= #{channel},
+			  location_name=#{locationName},
+			  location_code=#{locationCode},
+			  content_position_id=#{contentPositionId},
+			  city_id=#{cityId},
+			  ad_type=#{adType},
+			  ad_content_id=#{adContentId}, 
+			  adv_position_time.height= #{height},
+			  adv_position_time.width=#{width},
+			  adv_position_time.pic_name=#{picName},
+			  adv_position_time.describe=#{describe},
+			  ad_link=#{adLink},
+			  adv_position_time.title=#{adTitle},
+              template_id=#{templateId},
+			  template_name=#{templateName},
+			  brand_id=#{brandId},
+			  style_id=#{styleId},
+			  is_default=#{isDefault},
+			  extend_code=#{extendCode}
+           	  where id=#{id}
+</update>
+<update id="openAdPositionTime">
+ 	 update adv_position_time t
+           set t.status= #{status}
+           		where id=#{id}
+</update>
+<select id="deleteById" parameterType="java.lang.Integer">
+       update adv_position_time t set t.flag=-1  where id=#{id}
+   		</select>
+</mapper>
+
+ 	

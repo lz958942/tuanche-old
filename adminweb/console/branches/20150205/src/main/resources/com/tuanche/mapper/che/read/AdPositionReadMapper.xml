@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.mapper.che.read.AdPositionReadMapper">
+	<sql id="fieldSql" >
+		SELECT
+		id,
+		position_content_id adContentId,
+		city_id cityId,
+	 	t.status,
+		t.flag
+		FROM rec_position_local t WHERE flag=1
+	</sql>
+	
+    <select id="queryAdPositionAll"  resultType="com.tuanche.bean.che.AdPosition">
+ 		<include refid="fieldSql"/>
+	 </select>
+	 <select id="findCityById" resultType="com.tuanche.bean.che.AdPosition" parameterType="java.lang.Integer">
+		SELECT
+		id,
+		position_content_id adContentId,
+		city_id cityId,
+	 	t.status,
+		t.flag
+		FROM rec_position_local t WHERE t.flag=1 AND t.position_content_id=#{adContentId}
+	</select>
+
+</mapper>

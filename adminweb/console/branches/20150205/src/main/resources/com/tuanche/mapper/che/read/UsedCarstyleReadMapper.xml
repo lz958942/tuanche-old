@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.mapper.che.read.UsedCarstyleReadMapper" >
+  <resultMap id="BaseResultMap" type="com.tuanche.bean.che.UsedCarstyle" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="cname" property="cname" jdbcType="VARCHAR" />
+    <result column="bid" property="bid" jdbcType="INTEGER" />
+    <result column="rid" property="rid" jdbcType="INTEGER" />
+    <result column="pid" property="pid" jdbcType="INTEGER" />
+    <result column="is_delete" property="isDelete" jdbcType="INTEGER" />
+    <result column="create_user_id" property="createUserId" jdbcType="INTEGER" />
+    <result column="create_user_name" property="createUserName" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user_id" property="updateUserId" jdbcType="INTEGER" />
+    <result column="update_user_name" property="updateUserName" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="cpname" property="cpname" jdbcType="VARCHAR"/>
+    <result column="srname" property="srname" jdbcType="VARCHAR"/>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, cname, bid, rid, pid, is_delete, create_user_id, create_user_name, create_time, 
+    update_user_id, update_user_name, update_time
+  </sql>
+  <sql id="Base_Column_List_2" >
+    t1.id, t1.cname, t1.bid, t1.rid, t1.pid, t1.is_delete, t1.create_user_id, t1.create_user_name, t1.create_time, 
+    t1.update_user_id, t1.update_user_name, t1.update_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tc_used_carstyle
+    where id = #{id}
+  </select>
+  
+  <select id="getByPage" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List_2" />
+    ,t2.cname cpname,tc.style srname
+    from tc_used_carstyle t1
+    LEFT JOIN tc_used_carstyle t2
+    ON t1.pid = t2.id
+    INNER JOIN  tc_carstyle tc
+	ON tc.id = t1.rid
+    where t1.is_delete = 1
+    <if test="model == 1" >
+    	AND t1.pid = 0
+    </if>
+    <if test="model == 2" >
+    	AND t1.pid != 0
+    </if>
+    <if test="cname != null" >
+    	AND t1.cname LIKE CONCAT('%',#{cname},'%')
+    </if>
+    <if test="bid != null" >
+    	AND t1.bid = #{bid}
+    </if>
+  </select>
+  <select id="getByWhere" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from tc_used_carstyle
+    where is_delete = 1
+    <if test="model == 1" >
+    	AND pid = 0
+    </if>
+    <if test="model == 2" >
+    	AND pid != 0
+    </if>
+    <if test="pid >0" >
+    	AND pid = #{pid}
+    </if>
+    <if test="bid != null" >
+    	AND bid = #{bid}
+    </if>
+    <if test="rid != null" >
+    	AND rid = #{rid}
+    </if>
+  </select>
+ 
+</mapper>

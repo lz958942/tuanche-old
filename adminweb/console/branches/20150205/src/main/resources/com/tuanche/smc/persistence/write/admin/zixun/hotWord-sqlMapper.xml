@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace和定义的Mapper接口对应，并实现其中的方法 -->
+<mapper namespace="com.tuanche.smc.persistence.write.admin.zixun.HotWordWriteMapper">
+
+	<insert id="addHotWord" parameterType="com.tuanche.smc.domain.zixun.HotWord" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO t_zixun_hotword (zixun_id, hot_word, url, order_index) 
+		VALUES (#{ziXunId}, #{keyword}, #{url}, #{orderIndex})
+		<selectKey resultType="int" keyProperty="id">
+			select last_insert_id() as id from t_zixun_hotword limit 1
+		</selectKey>
+	</insert>
+	
+	<delete id="delHotWordByZixunId">
+		DELETE FROM t_zixun_hotword WHERE zixun_id = #{zixunId}
+	</delete>
+</mapper>

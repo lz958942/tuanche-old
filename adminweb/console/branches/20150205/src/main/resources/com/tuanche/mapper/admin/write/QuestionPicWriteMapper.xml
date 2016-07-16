@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.mapper.admin.write.QuestionPicWriteMapper">
+	<insert id="addQuestionPic"  parameterType="com.tuanche.mapper.admin.write.QuestionPicWriteMapper">  
+		  	 INSERT INTO t_question_pic(
+				sort,
+				title,
+				pic_url,
+				build_emp,
+				build_time,
+				update_emp,
+				update_time,
+				href_url,
+				pic_status
+				)
+             VALUES
+        
+            (
+             #{sort},
+             #{title},
+             #{picUrl},
+             #{buildEmp},
+             now(),
+             #{updateEmp}, 
+             now(),
+             #{hrefUrl},
+             #{picStatus}
+            )	
+		</insert>
+		<update id="updatePicAll" parameterType="com.tuanche.bean.admin.QuestionPic" > 
+		  UPDATE t_question_pic SET  title= #{title},pic_url=#{picUrl},href_url=#{hrefUrl},sort=#{sort},update_emp=#{updateEmp},update_time=now() WHERE id =#{id}
+		</update>
+		
+		<update id="updatePic" parameterType="com.tuanche.bean.admin.QuestionPic" > 
+		  UPDATE t_question_pic SET  title= #{tile},pic_url=#{picUrl},update_emp=#{updateEmp},update_time=now() WHERE id =#{id}
+		</update>
+		<update id="updateSort" parameterType="com.tuanche.bean.admin.QuestionPic" > 
+		  UPDATE t_question_pic SET  sort= #{sort},update_emp=#{updateEmp},update_time=now() WHERE id =#{id}
+		</update>
+		<update id="updatePicStatus" parameterType="com.tuanche.bean.admin.QuestionPic" > 
+		   UPDATE t_question_pic SET  pic_status= #{picStatus},update_emp=#{updateEmp},update_time=now() WHERE id =#{id}
+		</update>    
+</mapper>

@@ -1,0 +1,115 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>test</title>
+<link type="text/css" rel="stylesheet" href="../bootstrap.min.css" />
+<link type="text/css" rel="stylesheet" href="../jquery.ui.custom.css" />
+<link type="text/css" rel="stylesheet" href="../font-awesome.min.css" />
+<!--[if IE 7]>
+<link rel="stylesheet" href="../font-awesome-ie7.min.css">
+<![endif]-->
+<!--[if lt IE 9]>
+<link rel="stylesheet" type="text/css" href="../jquery.ui.ie.css"/>
+<![endif]-->
+<script src="../../js/jquery.js"></script>
+<script src="../../js/bootstrap.js"></script>
+<script src="../../js/jquery-ui.js"></script>
+<script src="../../js/jquery.validate.js"></script>
+<script src="../../js/jquery.metadata.js"></script>
+<script src="../../js/erp_public.js"></script>
+<script>
+	var callbacks  ={
+					"确定":function(){
+						bAlert($("#bConfirm").attr('data-param'));
+						$(this).dialog("close");
+						//$("#forms").submit();
+					},
+					"取消":function(){
+						//bAlert("3");
+						$(this).dialog("close");
+					}}
+</script>
+</head>
+
+<body>
+<div class="container">
+
+	<br /><br />
+
+    <a href="javascript:;" class="btn" onclick="bAlert('错误提示信息！')">bAlert</a>
+    
+    <a href="javascript:;" class="btn" onclick="bConfirm('你确认关闭吗？',callbacks,'5')">bConfirm</a>
+    
+    <a href="javascript:;" class="btn" onclick="bPopup('标题','load.html')">bPopup</a>
+
+	<a href="javascript:;" class="btn" onclick="bPopupBtn('标题','load.html',callbacks)">bPopupBtn</a>
+    
+    <a href="javascript:;" class="btn" onclick="bPopupIframe('标题2','load2.html','530','150')">bPopupIframe</a>
+    
+    <a href="javascript:;" class="btn" onclick="bPopupLocal('bPopupLocal',callbacks)">bPopupLocal</a>
+    
+    <a href="javascript:;" class="btn" onclick="bTip('你好吗？')">bTip</a>
+    
+    <div id="bPopupLocal" title="title" class="hide">
+        <p>弹出层内容在页面</p>
+    </div>
+
+	<br /><br />
+
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>
+                	<label class="checkbox"><input type="checkbox" onclick="selectAll('sl',this)" />全选</label>
+                   	<label class="checkbox"><input type="checkbox" onclick="selectReverse('sl')" />反选</label>
+                </th>
+                <th>城市</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><label class="checkbox"><input type="checkbox" name="sl" /></label></td>
+                <td>北京</td>
+            </tr>
+            <tr>
+                <td><label class="checkbox"><input type="checkbox" name="sl" /></label></td>
+                <td>上海</td>
+            </tr>
+            <tr>
+                <td><label class="checkbox"><input type="checkbox" name="sl" /></label></td>
+                <td>天津</td>
+            </tr>
+        </tbody>
+    </table>
+
+
+
+	<br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+	<br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+
+    <a href="javascript:;" class="btn" onclick="bAlert('错误提示信息！')">bAlert</a>
+    
+    <a href="javascript:;" class="btn" onclick="bConfirm('你确认关闭吗？',callbacks)">bConfirm</a>
+    
+    <a href="javascript:;" class="btn" onclick="bPopup('标题','load.html')">bPopup</a>
+
+	<a href="javascript:;" class="btn" onclick="bPopupBtn('标题','load.html',callbacks)">bPopupBtn</a>
+    
+    <a href="javascript:;" class="btn" onclick="bPopupIframe('标题2','load2.html','530','150')">bPopupIframe</a>
+    
+    <a href="javascript:;" class="btn" onclick="bPopupLocal('bPopupLocal',callbacks)">bPopupLocal</a>
+    
+    <a href="javascript:;" class="btn" onclick="bTip('你好吗？')">bTip</a>
+    
+    <div id="bPopupLocal" title="title" class="hide">
+        <p>弹出层内容在页面</p>
+    </div>
+
+	<br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+
+</div>
+
+</body>
+</html>

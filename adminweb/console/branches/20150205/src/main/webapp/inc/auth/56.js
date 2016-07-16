@@ -1,0 +1,1 @@
+[{id:554,pId:553,name:'配置首页',url:'/sysConfig/home',target:'manFrame'},{id:553,pId:0,name:'配置管理'},]

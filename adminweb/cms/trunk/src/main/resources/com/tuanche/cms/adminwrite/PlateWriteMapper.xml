@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.cms.adminwrite.PlateWriteMapper" >
+  <insert id="insert" parameterType="com.tuanche.cms.bean.Plate" >
+    insert into t_cm_plate (id, city_id, city_name, tid, tname, type,ptype, data_type, plate_name, 
+      label, title, descriction, memo, image_width, image_hight, create_user_id, 
+      create_user_name, create_time, update_user_id, update_user_name, update_time,  expand,image_url,hyperlink,data_fill_mode,con_count,data_type_class)
+    values (#{id}, #{cityId}, #{cityName}, #{tid}, #{tname}, #{type},#{ptype}, #{dataType}, #{plateName}, 
+      #{label}, #{title}, #{descriction}, #{memo}, #{imageWidth}, #{imageHight}, #{createUserId}, 
+      #{createUserName}, now(), #{updateUserId}, #{updateUserName}, #{updateTime},  #{expand},#{imageUrl},#{hyperlink},#{dataFillMode},#{conCount},#{dataTypeClass})
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tuanche.cms.bean.Plate" >
+    update t_cm_plate
+    <set >
+      <if test="cityId != null" >
+        city_id = #{cityId},
+      </if>
+      <if test="cityName != null" >
+        city_name = #{cityName},
+      </if>
+      <if test="tid != null" >
+        tid = #{tid},
+      </if>
+      <if test="tname != null" >
+        tname = #{tname},
+      </if>
+      <if test="type != null" >
+        type = #{type},
+      </if>
+       <if test="ptype != null" >
+        ptype = #{ptype},
+      </if>
+      <if test="dataType != null" >
+        data_type = #{dataType},
+      </if>
+      <if test="plateName != null" >
+        plate_name = #{plateName},
+      </if>
+      <if test="label != null" >
+        label = #{label},
+      </if>
+      <if test="title != null" >
+        title = #{title},
+      </if>
+      <if test="descriction != null" >
+        descriction = #{descriction},
+      </if>
+      <if test="memo != null" >
+        memo = #{memo},
+      </if>
+      <if test="imageWidth != null" >
+        image_width = #{imageWidth},
+      </if>
+      <if test="imageHight != null" >
+        image_hight = #{imageHight},
+      </if>
+      <if test="createUserId != null" >
+        create_user_id = #{createUserId},
+      </if>
+      <if test="createUserName != null" >
+        create_user_name = #{createUserName},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime},
+      </if>
+      <if test="updateUserId != null" >
+        update_user_id = #{updateUserId},
+      </if>
+      <if test="updateUserName != null" >
+        update_user_name = #{updateUserName},
+      </if>
+        update_time = now(),
+      <if test="deleteFlay != null" >
+        delete_flay = #{deleteFlay},
+      </if>
+      <if test="expand != null" >
+        expand = #{expand},
+      </if>
+      
+      <if test="hyperlink != null" >
+        hyperlink = #{hyperlink},
+      </if>
+      <if test="imageUrl != null" >
+        image_url = #{imageUrl},
+      </if>
+       <if test="conCount != null" >
+        con_count  = #{conCount},
+      </if>
+       <if test="conCount != null" >
+        data_fill_mode  = #{dataFillMode},
+      </if>
+       <if test="dataTypeClass != null" >
+        data_type_class  = #{dataTypeClass},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+</mapper>

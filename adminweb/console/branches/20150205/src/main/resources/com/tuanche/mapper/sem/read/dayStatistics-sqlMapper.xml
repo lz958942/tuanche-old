@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	<mapper namespace="com.tuanche.mapper.sem.read.DayStatisticsReadMapper">
+		<sql id="fieldSql">
+			select 
+				id,accountId,district_id districtId,brand_id brandId,carstyle_id carstyleId,apply_num applyNum,account_code accountCode,
+				company_code companyCode,biz_code bizCode,city_code cityCode,url,datetime,cost_money costMoney 
+			from t_day_statistics
+		</sql>
+		<sql id="whereSql">
+			where 1=1
+			AND TRIM(url) = ''
+			<if test="brandId>0">
+				and brand_id=#{brandId}
+			</if>
+			<if test="cityCode!=null and cityCode!=''">
+				and city_code=#{cityCode}
+			</if>
+			<if test="companyCode !=null and companyCode!=''">
+				and company_code=#{companyCode}
+			</if>
+			<if test="accountCode!=null and accountCode!=''">
+				and  account_code=#{accountCode}
+			</if>
+			<if test="accountCodes!=null">
+				and account_code in
+			<foreach collection="accountCodes" item="code"  open="(" separator="," close=")">
+				#{code}
+			</foreach>
+			</if>
+			<if test="starttime!=null">
+				and datetime>=#{starttime}
+			</if>
+			<if test="endtime!=null">
+				and #{endtime}>datetime
+			</if>
+		</sql>
+		<sql id="otherSql">
+			<if test="orderStr!=null">
+				order by ${orderStr}
+			</if>
+			<if test="pageSize>0">
+				limit #{start},#{pageSize}
+			</if>
+		</sql>
+		<select id="select" resultType="com.tuanche.bean.sem.DayStatistics">
+		<include refid="fieldSql"/>
+		<include refid="whereSql"/>
+		AND brand_id != -1
+		<include refid="otherSql"/>
+		</select>
+		
+		<select id="count" resultType="int">
+			select count(id) from t_day_statistics 
+			<include refid="whereSql"/>
+			AND brand_id != -1
+		</select>
+		
+		
+		<select id="selectwhere" resultType="com.tuanche.bean.sem.DayStatistics">
+		select id,accountId,district_id districtId,brand_id brandId,carstyle_id carstyleId,SUM(apply_num) applyNum,account_code accountCode,
+			company_code companyCode,biz_code bizCode,city_code cityCode,url,datetime,SUM(cost_money) costMoney 
+		from t_day_statistics
+		<include refid="whereSql"/>
+		<if test="brandId == -1">
+			and brand_id=#{brandId}
+		</if>
+		</select>
+		<select id="selectListGroupCity" resultType="com.tuanche.bean.sem.DayStatistics">
+			SELECT id,district_id districtId,<if test="districtId > 0">brand_id brandId,</if>city_code cityCode,datetime,SUM(cost_money) costMoney ,SUM(apply_num) applyNum,
+			accountId,account_code accountCode
+			FROM t_day_statistics 
+			WHERE TRIM(url) = ''
+			<if test="starttime!=null">
+				and datetime >= #{starttime}
+			</if>
+			<if test="endtime!=null">
+				and #{endtime} > datetime
+			</if>
+			<if test="districtId > 0">
+				and district_id = #{districtId}
+			</if>
+			<if test="brandId > 0">
+				and brand_id = #{brandId}
+			</if>
+			<if test="accountCode != null  and accountCode!=''">
+				and account_code = #{accountCode}
+			</if>
+			GROUP BY <if test="districtId > 0">district_id,brand_id,account_code</if><if test="districtId == 0"> account_code</if>
+		</select>
+		
+		<select id="selectListGroupCityAndBrand" resultType="com.tuanche.bean.sem.DayStatistics">
+			SELECT id,district_id districtId,brand_id brandId,city_code cityCode,datetime,SUM(cost_money) costMoney ,SUM(apply_num) applyNum,
+			accountId,account_code accountCode
+			FROM t_day_statistics 
+			WHERE  TRIM(url) = ''
+			<if test="starttime!=null">
+				and datetime >= #{starttime}
+			</if>
+			<if test="endtime!=null">
+				and #{endtime} > datetime
+			</if>
+			<if test="districtId > 0">
+				and district_id = #{districtId}
+			</if>
+			<if test="brandId > 0">
+				and brand_id = #{brandId}
+			</if>
+			<if test="accountCode != null  and accountCode!=''">
+				and account_code = #{accountCode}
+			</if>
+			GROUP BY district_id,brand_id,account_code
+		</select>
+	</mapper>

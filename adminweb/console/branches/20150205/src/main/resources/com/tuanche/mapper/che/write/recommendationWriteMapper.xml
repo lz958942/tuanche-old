@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.mapper.che.write.RecommendationWriteMapper" >
+<insert id="saveR12n" parameterType="com.tuanche.bean.che.Recommendation" >
+    insert into t_recommendation (id, city_id, brand_id, carStyle_id, type, r_brand_id, r_style_id, 
+      create_time, create_uid, update_time, update_uid, status)
+    values
+    
+     <foreach collection="list" item="list" index="index" separator="," >  
+     (#{list.id}, #{list.cityId}, #{list.brandId}, #{list.carstyleId}, #{list.type}, #{list.rBrandId}, #{list.rStyleId}, 
+      #{list.createTime}, #{list.createUid}, #{list.updateTime}, #{list.updateUid}, #{list.status})
+      </foreach>
+  </insert>
+
+ <update id="updateR12n" parameterType="com.tuanche.bean.che.Recommendation" >
+    update t_recommendation
+    <set >
+      <if test="cityId != null" >
+        city_id = #{cityId},
+      </if>
+      <if test="brandId != null" >
+        brand_id = #{brandId},
+      </if>
+      <if test="carstyleId != null" >
+        carStyle_id = #{carstyleId},
+      </if>
+      <if test="type != null" >
+        type = #{type},
+      </if>
+      <if test="rBrandId != null" >
+        r_brand_id = #{rBrandId},
+      </if>
+      <if test="rStyleId != null" >
+        r_style_id = #{rStyleId},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime},
+      </if>
+      <if test="createUid != null" >
+        create_uid = #{createUid},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime},
+      </if>
+      <if test="updateUid != null" >
+        update_uid = #{updateUid},
+      </if>
+      <if test="status != null" >
+        status = #{status},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+
+<update id="updateStatusBatch">
+	update t_recommendation set status=#{type} ,update_time=NOW(),update_uid=#{uid}
+ 		 	where id in 
+ 		 	<foreach item="ids" index="index" collection="ids" open="(" separator="," close=")">
+				${ids}
+			</foreach>
+</update>
+
+<update id="updateStatus">
+	 update t_recommendation set status=#{type} ,update_time=NOW(),update_uid=#{uid}
+ 		 	where id=#{id}
+	
+</update>
+</mapper>

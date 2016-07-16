@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.mapper.admin.read.ArticleReadMapper">
+	<resultMap type="com.tuanche.bean.admin.Article" id="BaseResult">
+		<id column="id" property="id"  jdbcType="INTEGER"/>
+		<result column="magazine_id" property="magazineId"/>
+		<result column="title" property="title"/>	
+		<result column="content" property="content"/>	
+		<result column="picture" property="picture"/>
+		<result column="url" property="url"/>
+		<result column="build_emp" property="buildEmp" jdbcType="INTEGER"/>		
+		<result column="build_time" property="buildTime"  />		
+		<result column="update_emp" property="updateEmp" jdbcType="INTEGER"/>		
+		<result column="update_time" property="updateTime" javaType="String"/>
+		<result column="article_status" property="articleStatus" />
+		<result column="sort" property="sort"/>
+		</resultMap>
+		<!-- 公用sql -->
+	<sql id="baseSql">
+		SELECT id,magazine_id,title,content,sort,picture,url,build_emp,build_time,update_emp,update_time,article_status FROM t_magazine_article
+	</sql>
+	<!-- 根据Id查询 -->
+	<select id="selectArticleById" resultMap="BaseResult" parameterType="int">
+		<include refid="baseSql"/> where id=#{id}
+	</select>
+	<!-- 分页查询 -->
+	<select id="articleByPage" resultMap="BaseResult" parameterType="com.tuanche.bean.admin.Article">
+		<include refid="baseSql"/> where article_status<![CDATA[>]]>-1
+		<if test="magazineId!=null">
+		and magazine_id=#{magazineId}
+		</if>
+		<if test="title!=null">
+		and title  like  '%${title}%'
+		</if>
+		<if test="articleStatus!=null">
+		and article_status=#{articleStatus}
+		</if>
+		ORDER BY id DESC
+	</select>
+		<select id="selectArtCountById" resultType="int">
+		SELECT count(1) from t_magazine_article where sort=#{sort} and magazine_id=#{magazineId} and article_status<![CDATA[>]]>-1
+		<if test="id!=null">
+		and id!=#{id}
+		</if>
+	</select>
+</mapper>

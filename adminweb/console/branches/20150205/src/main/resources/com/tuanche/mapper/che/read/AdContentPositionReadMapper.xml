@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.mapper.che.read.AdContentPositionReadMapper">
+	<sql id="positionFieldSql" >
+		SELECT
+		t2.id contentPositionId,
+		t1.id adContentId,
+  		t1.channel,
+  		t1.ad_type adType,
+  		t1.name locationName,
+  		t1.describe,
+  		t1.location_code locationCode,
+  		t1.width,
+ 		t1.height,
+  		t1.status,
+  		t1.group_name groupName,
+  		t2.city_id cityId,
+  		t2.status  contentPositiontatus,
+  		t2.url,
+  		t2.target_url targetUrl,
+  		t2.pic_title picTitle,
+  		t2.pic_desc picDesc
+		FROM rec_position_content t1,rec_position_local t2
+		 WHERE t1.id=t2.position_content_id
+		  AND t2.flag=1  
+	</sql>
+	 <sql id="positionsearch">
+        
+		<if test="channel>-1">
+		   AND  t1.channel=#{channel}
+		</if>
+		<if test="cityId>-1">
+		   AND  t2.city_id=#{cityId}
+		</if>
+		<if test="adType>-1">
+		   AND  t1.ad_type=#{adType}
+		</if>
+		<if test="locationName!=null">
+		   AND  t1.name like '%' #{locationName} '%'
+		</if>
+		<if test="types!=null">
+		 AND t1.channel in 
+		 <foreach item="types" index="index" collection="types" open="(" separator="," close=")">
+				${types}
+			</foreach>
+		</if>
+		
+	  </sql>
+	  <select id="queryAdContentPositionByPage" parameterType="com.tuanche.bean.che.AdContentPosition" resultType="com.tuanche.bean.che.AdContentPosition">
+ 		<include refid="positionFieldSql"/> 
+ 		<include refid="positionsearch"/>
+ 		ORDER BY t2.id DESC
+	 </select>
+	 <select id="count" parameterType="com.tuanche.bean.che.AdContentPosition" resultType="java.lang.Integer">
+	        SELECT count(1)
+			FROM rec_position_content t1,rec_position_local t2 WHERE t1.id=t2.position_content_id AND t2.flag=1
+			<include refid="positionsearch"/>
+	   </select>
+	    <select id="queryAdContentPositionAll" parameterType="com.tuanche.bean.che.AdContentPosition" resultType="com.tuanche.bean.che.AdContentPosition">
+ 		<include refid="positionFieldSql"/> 
+ 		ORDER BY t2.id DESC
+	 </select>
+	  <select id="queryAdContentPositionById" parameterType="java.lang.Integer" resultType="com.tuanche.bean.che.AdContentPosition">
+ 		<include refid="positionFieldSql"/> 
+ 		AND t2.id=#{id}
+	 </select>
+	 
+	  <select id="getPositionByCityId" parameterType="java.lang.Integer" resultType="com.tuanche.bean.che.AdContentPosition">
+ 		<include refid="positionFieldSql"/> 
+ 		  AND ( t2.city_id=#{cityId} OR  t2.city_id=0)
+	 </select>
+</mapper>

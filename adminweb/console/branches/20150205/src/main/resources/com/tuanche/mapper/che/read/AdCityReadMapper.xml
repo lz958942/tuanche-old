@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tuanche.mapper.che.read.AdCityReadMapper">
+      <select id="getCity"  resultType="com.tuanche.bean.che.Brand">
+          SELECT  id,dname ,citycode  ,py,concat(upper(left(domain,1)),' ',dname) as orderName ,isopen_zixun isOpenZixun
+          FROM  tc_district  
+          WHERE  level=3 AND open_status in (1,2,3)
+          order by py asc
+     </select>
+     
+     <select id="getCityById"  resultType="com.tuanche.bean.che.Brand" parameterType="java.lang.Integer">
+          SELECT  id,dname,static_url ,code,citycode,py
+          FROM  tc_district  
+          WHERE id = #{id}
+     </select>
+     <select id="getCityByName"  resultType="com.tuanche.bean.che.City">
+          SELECT  id,dname,static_url ,code,citycode,py
+          FROM  tc_district  
+          <if test="dname!= null">
+            WHERE dname= #{dname}
+          </if>
+     </select>
+</mapper>

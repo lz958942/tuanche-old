@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.cms.adminread.ZiXunClassReadMapper" >
+  <resultMap id="BaseResultMap" type="com.tuanche.cms.bean.ZiXunClass" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="pid" property="pid" jdbcType="INTEGER" />
+    <result column="level" property="level" jdbcType="TINYINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="city_attr" property="cityAttr" jdbcType="TINYINT" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="keyword" property="keyword" jdbcType="VARCHAR" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, pid, level, name, code, url, city_attr, status, keyword, title
+  </sql>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_zixun_class
+  </select>
+  <select id="getZixunClassById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    SELECT c.city_attr ,c.id,c.name,CONCAT(IFNULL(c1.url,""),'-',c.url) url 
+    FROM t_zixun_class c  LEFT JOIN t_zixun_class c1 ON c.pid = c1.id 
+    where c.id = #{id}
+  </select>
+</mapper>

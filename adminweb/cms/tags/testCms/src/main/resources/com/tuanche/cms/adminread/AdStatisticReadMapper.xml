@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.cms.adminread.AdStatistcsReadMapper">
+	<sql id="fieldSql" >
+		SELECT
+		id,
+  		t.date,
+  		city_id cityId,
+  		t.channel,
+  		postion_id postionId,
+  		position_name positionName,
+  		t.views views,
+ 		t.clicks clicks,
+  		t.uniq_clicks uniqClicks,
+  		ad_id adId,
+  		ad_type adType
+		FROM adv_statistic t WHERE 1=1
+	</sql>
+	 <sql id="search">
+		<if test="channel>-1">
+		   AND  channel=#{channel}
+		</if>
+		<if test="adType>-1">
+		   AND  ad_type=#{adType}
+		</if>
+		<if test="cityId>-1">
+		   AND  city_id=#{cityId}
+		</if>
+		<if test="date!=null">
+		   AND  date=#{date}
+		</if>
+	  </sql>
+ 	 <select id="queryAdStatistic" parameterType="com.tuanche.cms.bean.AdStatistic" resultType="com.tuanche.cms.bean.AdStatistic">
+ 		<include refid="fieldSql"/> 
+ 		<include refid="search"/>
+ 		ORDER BY id DESC
+		<if test="start>=0 and limit>0">
+	    LIMIT #{start}, #{limit}
+		</if>
+	 </select>
+	 	 <select id="count" parameterType="com.tuanche.cms.bean.AdStatistic" resultType="java.lang.Integer">
+	        SELECT count(1)
+			FROM adv_statistic
+			WHERE 1=1
+			 <include refid="search"/>
+	   </select>
+</mapper>

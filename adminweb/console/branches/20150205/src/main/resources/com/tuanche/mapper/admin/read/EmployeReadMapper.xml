@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.mapper.admin.read.EmployeReadMapper">
+	<resultMap type="com.tuanche.bean.admin.Employe" id="BaseResult">
+		<id column="id" property="id"  jdbcType="INTEGER"/>
+		<result column="position" property="position"/>
+		<result column="name" property="name" />
+		<result column="employee_pic" property="employePic" />
+		<result column="build_emp" property="buildEmp" jdbcType="INTEGER"/>		
+		<result column="build_time" property="buildTime"  />		
+		<result column="update_emp" property="updateEmp" jdbcType="INTEGER"/>		
+		<result column="update_time" property="updateTime" javaType="String"/>
+		<result column="employee_status" property="employeStatus" />
+		</resultMap>
+		<!-- 公用sql -->
+	<sql id="baseSql">
+		SELECT id,position,name,employee_pic,build_emp,build_time,update_emp,update_time,employee_status FROM t_magazine_employee
+	</sql>
+	<!-- 根据Id查询 -->
+	<select id="selectEmployeById" resultMap="BaseResult" parameterType="int">
+		<include refid="baseSql"/> where id=#{id}
+	</select>
+	<select id="selectEmpByPage" resultMap="BaseResult">
+		<include refid="baseSql"/> where employee_status<![CDATA[>]]>-1 ORDER BY  id 
+	</select>
+	
+</mapper>

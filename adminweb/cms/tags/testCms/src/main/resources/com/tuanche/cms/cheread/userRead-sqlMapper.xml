@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tuanche.cms.cheread.UserReadMapper">
+	    <select id="getUserById"  resultType="user" parameterType="int">
+	         SELECT user.id,user.name,info.manifesto,info.get_group getGroup,
+	         		info.pic,info.sell_num sellNum,info.uinfo,info.activity_num activityNum
+	           FROM tc_user   user
+	      LEFT JOIN tc_user_info   info 
+	             ON info.uid=user.id
+	          WHERE id=#{id}
+	    </select> 
+	     <select id="getUserByIds"  resultType="user" parameterType="int">
+	         SELECT user.id,user.name,info.manifesto,info.get_group getGroup,
+	         		info.pic,info.sell_num sellNum,info.uinfo,info.activity_num activityNum
+	           FROM tc_user   user
+	      LEFT JOIN tc_user_info   info 
+	             ON info.uid=user.id
+	          WHERE id  in (${ids})
+	    </select> 
+	    
+	     <select id="getBrandsByUid"  resultType="brand" parameterType="int">
+	         SELECT b.name,b.logo,b.id,a.uid FROM tc_large_groupbuy  a
+				LEFT JOIN tc_brand   b
+				ON a.bid=b.`id`
+				WHERE  uid =#{uid}
+	    </select>
+</mapper>

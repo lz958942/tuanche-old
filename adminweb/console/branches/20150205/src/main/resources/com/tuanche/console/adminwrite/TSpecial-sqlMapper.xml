@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.smc.persistence.write.admin.zixun.TSpecialMapper" >
+	
+	<insert id="excleBatchImport"  parameterType="java.util.List">  
+    
+    <selectKey resultType="long" keyProperty="id" order="AFTER">  
+        SELECT  
+        LAST_INSERT_ID()  
+    </selectKey>  
+    insert into t_special (sp_name,content ,abstract ,zixun_ids,pic_title,sp_status,online,keyword,sp_desc,city_id,brand_id,
+    							carStyle_id,operate_user_id,operate_user_name,pub_date,online_date,template_id)   
+    values  
+    <foreach collection="tSpecial" item="item" index="index" separator="," >  
+        (#{item.addTime},#{item.empId},#{item.activityId},#{item.flag})  
+    </foreach>  
+</insert>  
+  
+</mapper>

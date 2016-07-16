@@ -1,0 +1,1 @@
+[{id:242,pId:228,name:'资讯分类管理',url:'/zixunclass/home',target:'manFrame'},{id:244,pId:228,name:'资讯文章管理',url:'/zixun/home',target:'manFrame'},{id:228,pId:0,name:'资讯管理',url:'/zixun/home',target:'manFrame'},]

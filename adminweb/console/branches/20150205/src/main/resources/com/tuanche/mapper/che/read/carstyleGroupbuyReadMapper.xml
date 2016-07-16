@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	<mapper namespace="com.tuanche.mapper.che.read.CarstyleGroupbuyReadMapper">
+		<resultMap type="com.tuanche.bean.che.CarstyleGroupbuy" id="myMap">
+			 <result column="city_id" property="cityId"  />
+			 <result column="brand_id" property="brandId"  />
+			 <result column="isDel" property="isdel" />
+		</resultMap>
+	
+	<sql id="fieldSql">
+		select
+			id,
+			city_id cityId,
+			city_code cityCode,
+			saler_id salerId,
+			brand_id brandId,
+			carstyle_id carstyleId,
+			title,
+			groupbuy_light groupbuyLight,
+			man_num manNum,
+			man_base_num manBaseNum,
+			sell_num sellNum,
+			sell_base_num sellBaseNum,
+			pass_num passNum,
+			save_money saveMoney,
+			pass_base_num passBaseNum,
+			groupbuy_date groupbuyDate,
+			groupbuy_state groupbuyState,
+			isdel,
+			sort baseSeq,
+			carstlye_other_name carNice
+		from t_carstyle_groupbuy where 1=1
+	</sql>
+	<sql id="whereSql">
+		<if test="cityId>0">
+			and city_id=#{cityId}
+		</if>
+		<if test="brandId>0">
+			and brand_id=#{brandId}
+		</if>
+		<if test="carstyleId>0">
+			and carstyle_id=#{carstyleId}
+		</if>
+		<if test="stateName != null">
+			and groupbuy_state=#{stateName}
+		</if>
+		and isdel > -1
+	</sql>
+	<select id="check" resultType="int" >
+		select count(id) from t_carstyle_groupbuy where city_id=#{cityId} and carstyle_id=#{carstyleId} and isdel > -1
+	</select>
+	<select id="select" resultType="com.tuanche.bean.che.CarstyleGroupbuy">
+			<include refid="fieldSql"/>
+			<include refid="whereSql"/>
+	</select>
+	<select id="find" resultType="com.tuanche.bean.che.CarstyleGroupbuy">
+		<include refid="fieldSql"/>
+		 and id=#{id}
+	</select>
+	<select id="count" resultType="int">
+		select count(id) from t_carstyle_groupbuy where 1=1 
+		<include refid="whereSql"/>
+	</select>
+	<select id="">
+		SELECT id FROM `t_brand_groupbuy` WHERE brand_id=#{bid} AND groupbuy_state=#{stateName} AND isdel=0
+	</select>
+	<select id="findByBrandId" resultType="com.tuanche.bean.che.CarstyleGroupbuy">
+		SELECT id FROM `t_carstyle_groupbuy` WHERE  brand_id=#{bid} AND groupbuy_state=#{stateName} AND  isdel=0
+	</select>
+	<select id="findByBrand" resultType="com.tuanche.bean.che.CarstyleGroupbuy">
+		select id from t_carstyle_groupbuy where  brand_id=#{pid}  AND  city_id=#{cid} AND  isdel=0
+	</select>
+	<select id="findCountIsDelBrand" resultMap="myMap">
+		SELECT city_id,brand_id,COUNT(1) AS isDel FROM  `t_carstyle_groupbuy`   
+			WHERE  brand_id=#{bid}  <if test="status != 0"> AND isdel=#{status}</if>  
+			GROUP BY  city_id,brand_id 
+		
+	</select>
+	
+	<select id="maxSort" resultType="int">
+		select max(sort)+1 from t_carstyle_groupbuy where city_id=#{cityId} and  brand_id=#{brandId} and isdel=0 
+		
+	</select>
+	
+	</mapper>

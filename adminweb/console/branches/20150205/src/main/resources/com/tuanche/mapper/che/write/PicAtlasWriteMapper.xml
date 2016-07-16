@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.mapper.che.write.PicAtlasWriteMapper">
+	<insert id="insert" useGeneratedKeys ="true" keyProperty= "id">
+		INSERT INTO tc_pic_collection (name,atlas_title,atlas_desc,create_uid,create_time) 
+							VALUES(
+							#{name},#{atlasTitle},#{atlasDesc},
+									#{createUid},#{createTime}
+									)
+	</insert>
+	<update id="updateCollection">
+		UPDATE  tc_pic_collection SET  atlas_title=#{atlasTitle},atlas_desc=#{atlasDesc} 
+		WHERE id=#{id}
+	</update>
+</mapper>

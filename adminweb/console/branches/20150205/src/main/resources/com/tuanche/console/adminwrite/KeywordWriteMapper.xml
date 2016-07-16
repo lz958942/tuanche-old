@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.console.adminwrite.KeywordWriteMapper">
+<insert id="addKeyword"  parameterType="com.tuanche.console.bean.Keyword">  
+		  	 INSERT INTO seo_keyword (
+				keyword,
+				level,
+				pid,
+				baidu_index,
+				online,
+				included,
+				rank,
+				seo_keyword.describe,
+				uv,
+				city_id ,
+				type,
+				add_userid,
+				kd_id,
+				brand_id,
+				carStyle_id,
+				add_time)
+             VALUES
+         <foreach collection="keywordList" separator=","  item="keyword" index="index" >
+            (
+             #{keyword.word},
+             #{keyword.level},
+             #{keyword.pid},
+             #{keyword.baiduIndex},
+             #{keyword.online},
+             #{keyword.included},
+             #{keyword.rank},
+             #{keyword.describe},
+             #{keyword.uv},
+             #{keyword.cityId},
+             #{keyword.type},
+             #{keyword.addUserId},
+             #{keyword.kdId},
+             #{keyword.brandId},
+             #{keyword.carStyleId},
+             now()
+            )
+		</foreach>	
+</insert>
+<insert id="addkw"  parameterType="com.tuanche.console.bean.Keyword">  
+		  	 INSERT INTO seo_keyword (
+				keyword,
+				level,
+				pid,
+				baidu_index,
+				online,
+				included,
+				rank,
+				seo_keyword.describe,
+				uv,
+				city_id ,
+				type,
+				add_userid,
+				kd_id,
+				brand_id,
+				carStyle_id,
+				add_time)
+             VALUES
+            (
+             #{word},
+             #{level},
+             #{pid},
+             #{baiduIndex},
+             #{online},
+             #{included},
+             #{rank},
+             #{describe},
+             #{uv},
+             #{cityId},
+             #{type},
+             #{addUserId},
+             #{kdId},
+             #{brandId},
+             #{carStyleId},
+             now()
+            )
+	 <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id" >  
+          SELECT LAST_INSERT_ID()  id
+        </selectKey>	
+</insert>
+<update id="includedItems" parameterType="java.lang.String">
+ 	 update seo_keyword
+           set included=1,update_time=now()
+           where id in (${Ids})
+</update>
+<update id="onlineItems" parameterType="java.lang.String">
+ 	 update seo_keyword
+           set online=1,update_time=now()
+           where id in (${Ids})
+</update>
+<delete id="delByIds" parameterType="java.lang.String">  
+       delete from seo_keyword where id in (${Ids}) 
+</delete>  
+<update id="updateSave" parameterType="com.tuanche.console.bean.Keyword">
+ 	 update seo_keyword
+           set keyword=#{word},
+				level=#{level},
+				pid=#{pid},
+				baidu_index=#{baiduIndex},
+				online=#{online},
+				included=#{included},
+				rank=#{rank},
+				seo_keyword.describe=#{describe},
+				uv= #{uv},
+				city_id= #{cityId},
+				type= #{type},
+				kd_id= #{kdId},
+				brand_id=#{brandId},
+				carStyle_id=#{carStyleId},
+				update_time=now()
+           		where id=#{id}
+</update>
+
+<update id="saveItems" parameterType="com.tuanche.console.bean.Keyword">     
+    update seo_keyword set baidu_index=#{baiduIndex},rank=#{rank},update_time=now() where id=#{id}
+</update>
+ 
+</mapper>

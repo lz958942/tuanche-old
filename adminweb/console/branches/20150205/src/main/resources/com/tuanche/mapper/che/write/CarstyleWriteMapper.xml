@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tuanche.mapper.che.write.CarstyleWriteMapper" >
+
+  <!-- 车型 -->
+  <insert id="carStyleSave" parameterType="com.tuanche.bean.che.CarstyleDomain" useGeneratedKeys="true" keyProperty="id" >
+    insert into tc_carstyle
+   
+        (style,enname,pid,ppid,factory_price, market_price,`level`,speed_box,detail_url,
+      
+        texts,`sort`,`bos`,`addtime`,initial,`type`,`show`,colors,color_no,save_money,
+     
+        spic,bpic,create_time,create_time_userID,update_time,update_time_userID,public_mark)
+         values(
+      
+        #{style},#{enname},#{pid},#{ppid},
+      
+        #{factoryPrice},#{marketPrice},#{level},
+      
+        #{speedBox},#{detailUrl},#{texts},
+        #{sort},#{bos},#{addtime},
+      
+        #{initial},#{type},#{show},
+      
+        #{colors}, #{colorNo},#{saveMoney},
+     
+        #{spic},#{bpic},#{createTime},
+      
+         #{createTimeUserID},#{updateTime},
+     
+         #{updateTimeUserID}, #{publicMark})
+        
+  </insert>
+  <update id="carStyleUpdate" parameterType="com.tuanche.bean.che.CarstyleDomain" >
+    update tc_carstyle
+   set
+        style = #{carstyleDomain.style},
+        enname = #{carstyleDomain.enname},
+        <!-- 车系pid>0,车款为0 -->
+        pid = #{carstyleDomain.pid},
+        <!-- 车系pid=0,车款>0 -->
+        ppid = #{carstyleDomain.ppid},
+        factory_price = #{carstyleDomain.factoryPrice},
+        `level` = #{carstyleDomain.level},
+        speed_box = #{carstyleDomain.speedBox},
+        texts = #{carstyleDomain.texts},
+        `bos` = #{carstyleDomain.bos},
+        `initial` = #{carstyleDomain.initial},
+        `colors` = #{carstyleDomain.colors},
+        spic=#{carstyleDomain.spic},
+        bpic=#{carstyleDomain.bpic},
+        update_time=#{carstyleDomain.updateTime},
+        update_time_userID=#{carstyleDomain.updateTimeUserID},
+        public_mark=#{carstyleDomain.publicMark},
+        initial=#{carstyleDomain.initial}
+    where id = #{carstyleDomain.id}
+  </update>
+  <update id="carStyleDel" >
+    update tc_carstyle
+    set `show` =1 ,
+    update_time=(SELECT NOW()),
+    update_time_userID=#{updateid}
+    where id=#{id} 
+  </update>
+  <update id="slodOut" parameterType="int">
+   update tc_carstyle
+    set `type` =1 where id=#{id}
+  </update>
+   <update id="putaway" parameterType="int">
+   update tc_carstyle
+    set `type` =0 where id=#{id}
+  </update>
+  <update id="delStyle">
+  	update tc_carstyle
+    SET `show`=1, 
+    	update_time=(SELECT NOW()),
+    	update_time_userID=#{updateid}
+    where ppid=#{id}
+  </update>
+  <update id="delCarStyle">
+  		update tc_carstyle
+    set `show`=1 ,
+    	update_time=(SELECT NOW()),
+    	update_time_userID=#{updateid}
+    where pid=#{id}
+  </update>
+  
+  <update id="styleDel">
+  	update tc_carstyle
+    set `show`=1,
+    update_time=(SELECT NOW()),
+    update_time_userID=#{updateid}
+     where ppid=#{id}
+  </update>
+  <!-- 修改车型停售 -->
+  <update id="carSaleStop">
+  	update tc_carstyle
+    	set `type`=1
+    	where id=#{id}
+  </update>
+    <update id="carSaleState">
+  	update tc_carstyle set
+  	<if test="type==2">
+  		 `show`=0
+  	</if>
+  	<if test="type==0">
+  		 `type`=0
+  	</if>
+    	where id=#{id}
+  </update>
+  
+</mapper>

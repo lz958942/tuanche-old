@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.cms.adminwrite.AdTemplateWriteMapper">
+<insert id="addAdTemplate"  parameterType="com.tuanche.cms.bean.AdTemplate">  
+		INSERT INTO adv_template(
+			name,
+			code,
+			content,
+			city_id,
+			status,flag)
+             VALUES
+            (
+             #{name},
+             #{code},
+             #{content},
+             #{cityId},
+             #{status},
+             #{flag}
+            )
+</insert>
+
+<update id="updateAdTemplate">
+ 	 update adv_template  t
+           set  t.name=#{name},
+			    t.code=#{code}, 
+			    t.content=#{content}
+           		where id=#{id}
+</update>
+<update id="deleteAdTemplateById">
+ 	 update adv_template
+           set flag=0
+           		where id=#{id}
+</update>
+</mapper>
+
+ 	

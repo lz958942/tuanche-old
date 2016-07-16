@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	<mapper namespace="com.tuanche.mapper.sem.read.KeywordCostReadMapper">
+		<sql id="fieldSql">
+			select k.datetime,k.title,k.apply_num applyNum,k.cost_money costMoney,k.accountId,k.brand_id brandId,k.city_code cityCode,k.click from t_day_keyword_cost k
+		</sql>
+		<sql id="whereSql">
+		where 1=1
+			<if test="accountId>0">
+				and k.accountId=#{accountId}
+			</if>
+			<if test="brandId>0">
+				and k.brand_id=#{brandId}
+			</if>
+			<if test="carstyleId>0">
+				and k.carstyle_id=#{carstyleId}
+			</if>
+			<if test="districtId>0">
+				and k.district_id=#{districtId}
+			</if>
+			<if test="cityCode!=null and cityCode!=''">
+				and k.city_code=#{cityCode}
+			</if>
+			<if test="time!=null and time!=''">
+				and date(k.datetime)=${time}
+			</if>
+			<if test="starttime!=null">
+				and k.datetime>=#{starttime}
+			</if>
+			<if test="endtime!=null">
+				and #{endtime}>k.datetime
+			</if>
+		</sql>
+		<sql id="otherSql">
+			<if test="orderStr!=null">
+				order by ${orderStr}
+			</if>
+			<if test="pageSize>0">
+				limit #{start},#{pageSize}
+			</if>
+		</sql>
+		<select id="selectKeyword" resultType="com.tuanche.bean.sem.Keyword">
+			<include refid="fieldSql"/> where 1=1
+			<if test="accountId>0">
+				and accountId=#{accountId}
+			</if>
+			<if test="brandId>0">
+				and brand_id=#{brandId}
+			</if>
+			<if test="carstyleId>0">
+				and carstyle_id=#{carstyleId}
+			</if>
+			<if test="districtId>0">
+				and district_id=#{districtId}
+			</if>
+			<if test="time!=null and time!=''">
+				and date(datetime)=${time}
+			</if>
+		</select>
+		<select id="select" resultType="com.tuanche.bean.sem.Keyword">
+		select k.datetime,k.title,k.apply_num applyNum,k.cost_money costMoney,
+			k.accountId,a.account_name accountName,k.brand_id brandId,k.city_code cityCode,k.district_id districtId,k.click 
+			from t_day_keyword_cost k  left join t_account a on k.accountId=a.id
+		<include refid="whereSql"/>
+		<include refid="otherSql"/>
+		</select>
+		
+		<select id="count" resultType="int">
+			select count(k.id) from t_day_keyword_cost k
+			<include refid="whereSql"/>
+		</select>
+		
+	</mapper>

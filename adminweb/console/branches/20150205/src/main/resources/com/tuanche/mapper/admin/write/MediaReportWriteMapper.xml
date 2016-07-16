@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.mapper.admin.write.MediaReportWriteMapper" >
+  <insert id="save" parameterType="com.tuanche.bean.admin.MediaReport" >
+    insert into t_media_report
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="url != null" >
+        url,
+      </if>
+      <if test="reportSource != null" >
+        report_source,
+      </if>
+      <if test="reportTime != null" >
+        report_time,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="createUid != null" >
+        create_uid,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateUid != null" >
+        update_uid,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+         <if test="publishUid != null" >
+        publish_uid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="title != null" >
+        #{title},
+      </if>
+      <if test="url != null" >
+        #{url},
+      </if>
+      <if test="reportSource != null" >
+        #{reportSource},
+      </if>
+      <if test="reportTime != null" >
+        #{reportTime},
+      </if>
+      <if test="status != null" >
+        #{status},
+      </if>
+      <if test="createUid != null" >
+        #{createUid},
+      </if>
+      <if test="createTime != null" >
+        #{createTime},
+      </if>
+      <if test="updateUid != null" >
+        #{updateUid},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime},
+      </if>
+        <if test="publishUid != null" >
+         #{publishUid},
+      </if>
+    </trim>
+  </insert>
+  <update id="update" parameterType="com.tuanche.bean.admin.MediaReport" >
+    update t_media_report
+    <set >
+      <if test="title != null" >
+        title = #{title},
+      </if>
+      <if test="url != null" >
+        url = #{url},
+      </if>
+      <if test="reportSource != null" >
+        report_source = #{reportSource},
+      </if>
+      <if test="reportTime != null" >
+        report_time = #{reportTime},
+      </if>
+      <if test="status != null" >
+        status = #{status},
+      </if>
+      <if test="updateUid != null" >
+        update_uid = #{updateUid},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime},
+      </if>
+      <if test="publishUid != null" >
+        publish_uid = #{publishUid},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+  <update id="updateStatus">
+  	UPDATE t_media_report SET 
+  						<if test="type==1">
+  							publish_uid=#{eid},
+  						</if>
+  						status=#{type},
+  						update_uid=#{eid},
+  						update_time=(SELECT NOW())
+  						WHERE id=#{id}
+  						
+  </update>
+  <update id="updateStatusBatch">
+  	UPDATE t_media_report SET 
+  						<if test="type==1">
+  							publish_uid=#{eid},
+  						</if>
+  						status=#{type},
+  						update_uid=#{eid},
+  						update_time=(SELECT NOW())
+  						WHERE id IN 
+  						<foreach item="list" index="index" collection="list" open="(" separator="," close=")">
+							#{list}
+						</foreach>
+  </update>
+</mapper>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+	<settings>
+		<setting name="cacheEnabled" value="false" />
+		<setting name="useGeneratedKeys" value="true" />
+		<setting name="defaultExecutorType" value="REUSE" />
+	</settings>
+	<typeAliases >
+		<typeAlias type="com.tuanche.console.bean.Employee" alias="Employee"/>
+		<typeAlias type="com.tuanche.console.bean.MapBean" alias="MapBean"/>
+		<typeAlias type="com.tuanche.console.bean.SysFunc" alias="SysFunc"/>
+		<typeAlias type="com.tuanche.console.bean.SysRole" alias="SysRole"/>
+		<typeAlias type="com.tuanche.console.bean.SysRoleFunc" alias="SysRoleFunc"/>
+		<typeAlias type="com.tuanche.console.bean.SysAuthEmp" alias="SysAuthEmp"/>
+
+		<typeAlias type="com.tuanche.console.bean.TSpecial" alias="TSpecial"/>
+
+		<typeAlias type="com.tuanche.smc.domain.specialSubject.SpecialContent" alias="specialTitles"/>
+		<typeAlias type="com.tuanche.smc.domain.specialSubject.SpecialSubject" alias="specialSubject"/>
+		<typeAlias type="com.tuanche.smc.domain.specialSubject.Template" alias="template"/>
+		 <typeAlias type="com.tuanche.bean.che.Apply" alias="Apply"/>
+		<typeAlias type="com.tuanche.bean.sem.ApplyNum" alias="ApplyNum"/> 
+		 <typeAlias type="com.tuanche.console.bean.Dimension" alias="dimension"/> 
+		<!-- <typeAlias type="com.tuanche.sites.domain.BrandDomain" alias="brandDomain"/>
+		<typeAlias type="com.tuanche.sites.domain.CarstyleDomain" alias="carstyleDomain"/> -->
+		<typeAlias type="com.tuanche.bean.admin.DecorateTemp" alias="decorateTemp"/>
+		<typeAlias type="com.tuanche.bean.admin.DecorateContent" alias="decorateContent"/>
+		<typeAlias type="com.tuanche.bean.tongji.RecordStat" alias="recordStat"/>
+		<typeAlias type="com.tuanche.bean.tongji.FlowStat" alias="flowStat"/>
+		
+	</typeAliases>
+	<plugins>
+	<!-- 分页插件 -->
+		<plugin interceptor="com.tuanche.smc.common.page.plugin.PagePlugin">
+			<property name="dialect" value="mysql"/>
+			<property name="pageSqlId" value="(ByPage)|(ForPage)"/>
+		</plugin>
+	</plugins>
+</configuration>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.cms.read.SysRoleFuncReadMapper">
+	<sql id="fieldSql">
+		select id,
+			role_id roleId,
+			func_id funcId,
+			is_del isDel from sys_role_func where 1=1
+	</sql>
+	<select id="selectSysRoleFuncURL" resultType="java.lang.String"  parameterType="java.lang.Integer" >
+	select f.func_url
+	from sys_role_func  a  left join sys_func f on f.id =a.func_id where is_del=-1 and a.role_id=#{roleId}
+  </select>
+</mapper>

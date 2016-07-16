@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	<mapper namespace="com.tuanche.tj.sem.read.DayStatisticsReadMapper">
+		<sql id="fieldSql">
+			select 
+				id,district_id districtId,brand_id brandId,carstyle_id carstyleId,apply_num applyNum,account_code accountCode,
+				company_code companyCode,biz_code bizCode,city_code cityCode,url,datetime,cost_money costMoney 
+			from t_day_statistics
+		</sql>
+		<sql id="whereSql">
+			where 1=1
+			<if test="brandId>0">
+				and brand_id=#{brandId}
+			</if>
+			<if test="cityCode!=null and cityCode!=''">
+				and city_code=#{cityCode}
+			</if>
+			<if test="companyCode !=null and companyCode!=''">
+				and company_code=#{companyCode}
+			</if>
+			<if test="accountCode!=null and accountCode!=''">
+				and  account_code=#{accountCode}
+			</if>
+			<if test="accountCodes!=null">
+				and account_code in
+			<foreach collection="accountCodes" item="code"  open="(" separator="," close=")">
+				#{code}
+			</foreach>
+			</if>
+			<if test="starttime!=null">
+				and datetime>=#{starttime}
+			</if>
+			<if test="endtime!=null">
+				and #{endtime}>datetime
+			</if>
+		</sql>
+		<sql id="otherSql">
+			<if test="orderStr!=null">
+				order by ${orderStr}
+			</if>
+			<if test="pageSize>0">
+				limit #{start},#{pageSize}
+			</if>
+		</sql>
+		<select id="select" resultType="com.tuanche.tj.bean.DayStatistics">
+		<include refid="fieldSql"/>
+		<include refid="whereSql"/>
+		<include refid="otherSql"/>
+		</select>
+		
+		<select id="count" resultType="int">
+			select count(id) from t_day_statistics 
+			<include refid="whereSql"/>
+		</select>
+	</mapper>

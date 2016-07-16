@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tuanche.mapper.che.read.SubjectReadMapper">
+	<resultMap type="com.tuanche.bean.che.Subject" id="BaseResultMap">
+		<id column="id" jdbcType="INTEGER" javaType="integer" property="id"></id>
+		<id column="name" jdbcType="VARCHAR" javaType="string" property="name"></id>
+		<id column="kindid" jdbcType="INTEGER" javaType="integer" property="kindId"></id>
+	</resultMap>
+	
+	<select id="ztList" resultMap="BaseResultMap">
+		SELECT id,NAME,kindid FROM tc_subject where 1=1 
+		<if test="kindId!=null">
+			and kindid=#{kindId}
+		</if>
+	</select>
+</mapper>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.cms.adminread.TlcityReadMapper" >
+ <resultMap id="BaseResultMap" type="com.tuanche.cms.bean.Tlcity" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="city_id" property="cityId" jdbcType="INTEGER" />
+    <result column="city_name" property="cityName" jdbcType="VARCHAR" />
+    <result column="tid" property="tid" jdbcType="INTEGER" />
+    <result column="tname" property="tname" jdbcType="VARCHAR" />
+    <result column="pic" property="pic" jdbcType="VARCHAR" />
+    <result column="locked" property="locked" jdbcType="TINYINT" />
+    <result column="create_user_id" property="createUserId" jdbcType="INTEGER" />
+    <result column="create_user_name" property="createUserName" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user_id" property="updateUserId" jdbcType="INTEGER" />
+    <result column="update_user_name" property="updateUserName" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="delete_flay" property="deleteFlay" jdbcType="INTEGER" />
+
+
+    <result column="tlcitytype" property="tlcitytype" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, city_id, city_name, tid, tname, pic, locked, create_user_id, create_user_name, 
+    create_time, update_user_id, update_user_name, update_time, delete_flay,tlcitytype
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_cm_tlcity
+    where id = #{id}  and delete_flay = 1
+  </select>
+  
+  <select id="getTlcityByPage" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_cm_tlcity
+    where delete_flay = 1 
+   	<if test="cityId != null">
+   		and city_id = #{cityId}
+   	</if>
+   	<if test="cityName != null">
+   		and city_name = #{cityName}
+   	</if>
+   	order by create_time desc
+  </select>
+  <select id="getAllTlcity" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_cm_tlcity
+    where delete_flay = 1 
+  </select>
+   
+</mapper>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	<mapper namespace="com.tuanche.mapper.tongji.read.RecordStatReadMapper">
+		<resultMap id="recordStatResult" type="recordStat">
+	  		<result property="id" column="id" />
+	  		<result property="indexNumber" column="index_number" />
+	  		<result property="date" column="date" />
+	  		<result property="siteRecord" column="site_record" />
+	  		<result property="queryEngine" column="query_engine" />
+	 	</resultMap>
+	 	<select id="queryRecordStatListByPage" resultMap="recordStatResult" parameterType="recordStat">
+	 		select * from tongji_record_stat
+        	<where>
+        	<if test="startDate != null and startDate != ''">
+        		<![CDATA[
+        			date >= str_to_date(#{startDate}, '%Y-%m-%d')
+        		]]>
+        	</if>
+        	<if test="endDate != null and endDate != ''">
+        		<![CDATA[
+        			and date <= str_to_date(#{endDate}, '%Y-%m-%d')
+        		]]>
+        	</if>
+        	</where>
+        	order by id desc
+	 	</select>
+	 	<select id="queryRecordStatList" resultMap="recordStatResult" parameterType="recordStat">
+	 		select id, date, SUM(index_number) as index_number, SUM(site_record) as site_record, query_engine from tongji_record_stat
+        	<where>
+        	<if test="startDate != null and startDate != ''">
+        		<![CDATA[
+        			date >= str_to_date(#{startDate}, '%Y-%m-%d')
+        		]]>
+        	</if>
+        	<if test="endDate != null and endDate != ''">
+        		<![CDATA[
+        			and date <= str_to_date(#{endDate}, '%Y-%m-%d')
+        		]]>
+        	</if>
+        	</where>
+        	GROUP BY date ORDER BY DATE ASC;
+	 	</select>
+		<select id="isExist" parameterType="recordStat" resultType="java.lang.Integer">
+		   	select count(*) from tongji_record_stat
+			<where>
+				<if test="id != null">
+					id != #{id}
+				</if>
+	        	<if test="date != null and date != ''">
+	        		<![CDATA[
+	        			and date = str_to_date(#{date}, '%Y-%m-%d')
+	        		]]>
+	        	</if>
+				<if test="queryEngine != null and queryEngine != ''">
+					and query_engine = #{queryEngine}
+				</if>
+			</where>
+		</select>
+	 	<select id="queryRecordStatById" resultMap="recordStatResult" parameterType="java.lang.Integer">
+	 		select * from tongji_record_stat where id = #{id}
+	 	</select>
+	</mapper>

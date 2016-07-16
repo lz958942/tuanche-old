@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.mapper.admin.write.QuestionKindWriteMapper">
+	<resultMap type="com.tuanche.bean.admin.QuestionKind" id="BaseResult">
+	<id column="id" property="id" javaType="integer" jdbcType="INTEGER"/>
+	<result column="name" property="name" javaType="string" jdbcType="VARCHAR"/>		
+	<result column="parent_id" property="parentId" javaType="integer" jdbcType="INTEGER"/>		
+	<result column="build_emp" property="buildEmp" javaType="integer" jdbcType="INTEGER"/>		
+	<result column="build_time" property="buildTime" javaType="String" jdbcType="DATE"/>		
+	<result column="update_emp" property="updateEmp" javaType="integer" jdbcType="INTEGER"/>		
+	<result column="update_time" property="updateTime" javaType="String" jdbcType="DATE"/>
+	<result column="lable" property="lable" javaType="string" jdbcType="VARCHAR"/>
+	<result column="kind_status" property="kindStatus" javaType="Byte" jdbcType="TINYINT"/>
+	<result column="keyword" property="keyword" javaType="string" jdbcType="VARCHAR"/>
+	<result column="kd_id" property="kdId" javaType="string" jdbcType="VARCHAR"/>
+	<result column="dimension" property="dimension" javaType="string" jdbcType="VARCHAR"/>
+	<result column="quest_count" property="questCount" javaType="integer" jdbcType="INTEGER"/>
+	<result column="page_keyword" property="pageKeyword" javaType="string" jdbcType="VARCHAR"/>
+	<result column="page_title" property="pageTitle" javaType="string" jdbcType="VARCHAR"/>
+	<result column="page_desc" property="pageDesc" javaType="string" jdbcType="VARCHAR"/>
+	<result column="sort" property="sort" javaType="integer" jdbcType="INTEGER"/>
+	</resultMap> 
+	<insert id="addKind" useGeneratedKeys="true" keyProperty="id" parameterType="com.tuanche.bean.admin.QuestionKind">
+	 INSERT INTO t_question_kind(
+				name,
+				parent_id,
+				build_emp,
+				build_time,
+				update_emp,
+				update_time,
+				lable,
+				kind_status,
+				keyword,
+				kd_id,
+				dimension,
+				page_keyword,
+				page_title,
+				page_desc,
+				quest_count,
+				sort
+				)
+             VALUES
+             (
+             #{name},
+             #{parentId},
+             #{buildEmp},
+             now(),
+             #{updateEmp},
+			 now(),
+             #{lable},
+             #{kindStatus},
+             #{keyword},
+             #{kdId},
+             #{dimension},
+             #{pageKeyword},
+             #{pageTitle},
+             #{pageDesc},
+             0,
+             #{sort}
+            )
+	</insert>
+	<insert id="addKinds"  parameterType="list">  
+	 INSERT INTO t_question_kind(
+				name,
+				parent_id,
+				build_emp,
+				build_time,
+				update_emp,
+				update_time,
+				lable,
+				kind_status,
+				keyword,
+				kd_id,
+				dimension,
+				page_keyword,
+				page_title,
+				page_desc,
+				quest_count,
+				sort
+				)
+             VALUES
+         <foreach collection="list" separator=","  item="kind" index="index" >
+            (
+             #{kind.name},
+             #{kind.parentId},
+             #{kind.buildEmp},
+             now(),
+             #{kind.updateEmp},
+			 now(),
+             #{kind.lable},
+             #{kind.kindStatus},
+             #{kind.keyword}
+             #{kind.kdId},
+             #{kind.dimension},
+             #{kind.pageKeyword},
+             #{kind.pageTitle},
+             #{kind.pageDesc},
+             0,
+             #{sort}
+            )
+		</foreach>	
+	</insert>
+	<update id="updateKind" parameterType="com.tuanche.bean.admin.QuestionKind">
+	UPDATE t_question_kind 
+	<set>
+			<if test="name!=null">
+				name=#{name},
+			</if>
+			<if test="parentId!=null">
+				parent_id=#{parentId},
+			</if>
+			<if test="buildEmp!=null">
+				build_emp=#{buildEmp},
+			</if>
+			<if test="buildTime!=null">
+				build_time=#{buildTime},
+			</if>
+			<if test="updateEmp!=null">
+				update_emp=#{updateEmp},
+			</if>
+			<if test="updateTime!=null">
+				update_time=#{updateTime},
+			</if>
+			<if test="lable!=null">
+				lable=#{lable},
+			</if>
+			<if test="kindStatus!=null">
+				kind_status=#{kindStatus},
+			</if>
+			<if test="keyword!=null">
+				keyword=#{keyword},
+			</if>
+			<if test="updateEmp!=null">
+				update_emp=#{updateEmp},
+				update_time=now(),
+			</if>
+			<if test="kdId!=null">
+				kd_id=#{kdId},
+			</if>
+			<if test="dimension!=null">
+				dimension=#{dimension},
+			</if>
+			<if test="pageKeyword!=null">
+				page_keyword=#{pageKeyword},
+			</if>
+			<if test="pageTitle!=null">
+				page_title=#{pageTitle},
+			</if>
+			<if test="pageDesc!=null">
+				page_desc=#{pageDesc},
+			</if>
+			<if test="questCount!=null">
+				quest_count=#{questCount},
+			</if>
+			<if test="sort!=null">
+				sort=#{sort},
+			</if>
+	</set>
+	WHERE id=#{id}
+	</update>
+	<delete id="deleteKind" parameterType="int">
+		delete from t_question_kind where id=#{id}
+	</delete>
+	<update id="deleteOneKind" > 
+	UPDATE t_question_kind SET  kind_status= #{kindStatus},update_emp=#{buildEmp},build_time=now() WHERE id =#{id}
+	</update>
+	<update id="updateQuestCount" > 
+	UPDATE t_question_kind SET  quest_count= #{questCount} WHERE id =#{id}
+	</update>
+	<update id="updateQuestCounts" > 
+	UPDATE t_question_kind SET quest_count = 
+		CASE  id
+		<foreach collection="list" index="index" item="id">
+		WHEN #{id} THEN (SELECT COUNT(1) FROM t_question WHERE  secondkind_id=#{id} AND question_status=4)
+   		</foreach>
+   		END
+		WHERE id IN
+		<foreach collection="list" index="index" item="id" open=" (" separator="," close=")">
+             #{id}
+         </foreach>
+	</update>
+	
+</mapper>

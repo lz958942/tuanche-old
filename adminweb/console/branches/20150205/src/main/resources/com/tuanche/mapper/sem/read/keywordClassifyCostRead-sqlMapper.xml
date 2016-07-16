@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	<mapper namespace="com.tuanche.mapper.sem.read.KeywordClassifyCostMapper">
+	  <sql id="clunmsql">
+	  	 id, city_id cityId, city_name cityName, brand_id brandId, campaignId campaignid, campaignName campaignname,
+	     groupId groupid, groupName groupname, ues_keywordId uesKeywordid, 
+	    keywordId keywordid, title, day_cost dayCost, apply_num applyNum, display, click, accountId accountid,
+	     DATETIME datetime, device
+	  </sql>
+	  <sql id="wheresql">
+	   where 1=1
+	    <if test="cityId > 0">
+	    	and city_id = #{cityId}
+	    </if>
+	    <if test="accountid > 0">
+	    	and accountId = #{accountid}
+	    </if>
+	    <if test="device > 0">
+	    	and device = #{device}
+	    </if>
+	    <if test="brandId > 0">
+	    	and brand_id = #{brandId}
+	    </if>
+	    <if test="startTime != null">
+	    	and DATETIME >=UNIX_TIMESTAMP(#{startTime})
+	    </if>
+	    <if test="endTime != null">
+	    	and UNIX_TIMESTAMP(#{endTime}) >DATETIME
+	    </if>
+	  </sql>	
+	  <select id="selectKeyWordCostByPage" parameterType="com.tuanche.bean.sem.KeywordClassifyCost" resultType="com.tuanche.bean.sem.KeywordClassifyCost">
+	    select 
+	   	<include refid="clunmsql"/>
+	    from t_day_keyword_classify_cost
+	    <include refid="wheresql"/>
+	  </select>
+	  <select id="selectAll" parameterType="com.tuanche.bean.sem.KeywordClassifyCost" resultType="com.tuanche.bean.sem.KeywordClassifyCost">
+	    select 
+	   	<include refid="clunmsql"/>
+	    from t_day_keyword_classify_cost
+	    <include refid="wheresql"/>
+	  </select>
+		
+	</mapper>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.mapper.admin.read.DecorateBaseReadMapper">
+	<resultMap type="com.tuanche.bean.admin.DecorateBase" id="BaseResultMap">
+		<id column="id" property="id" javaType="integer" jdbcType="INTEGER"></id>
+		<result column="kind_id" property="kindId" javaType="integer" jdbcType="INTEGER"/>
+		<result column="title" property="title" javaType="string" jdbcType="VARCHAR"/>
+		<result column="keywords" property="keywords" javaType="string" jdbcType="VARCHAR"/>
+		<result column="top_picUrl" property="topPicUrl" javaType="string" jdbcType="VARCHAR"/>
+		<result column="city_id" property="cityId" javaType="integer" jdbcType="INTEGER"/>
+		<result column="dec_desc" property="decDesc" javaType="string" jdbcType="VARCHAR"/>
+		<result column="pre_price" property="prePrice" javaType="string" jdbcType="VARCHAR"/>
+		<result column="mar_price" property="marPrice" javaType="string" jdbcType="VARCHAR"/>
+		<result column="pic_url" property="picUrl" javaType="string" jdbcType="VARCHAR"/>
+		<result column="add_userId" property="addUserId" javaType="integer" jdbcType="INTEGER"/>
+		<result column="add_user" property="addUserName" javaType="string" jdbcType="VARCHAR"/>
+		<result column="add_time" property="addTime" javaType="string" jdbcType="TIMESTAMP"/>
+		<result column="status" property="status" javaType="string" jdbcType="VARCHAR"/>
+		<result column="isdel" property="isDel" javaType="string" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<select id="selectByPage" resultMap="BaseResultMap">
+		SELECT d.id,d.kind_id,d.title,d.top_picUrl,
+			   d.city_id,d.dec_desc,d.pre_price,d.mar_price,
+			   d.pic_url,d.status,d.isdel,d.add_userId,
+			   d.add_user,d.add_time,d.keywords
+		FROM t_decorate_base d 
+		where 1=1 AND
+		<foreach collection="list" item="condition" separator="AND">
+			${condition}
+		</foreach>
+		order by d.id desc
+	</select>
+	
+	<select id="selectById" parameterType="int" resultMap="BaseResultMap">
+		SELECT d.id,d.kind_id,d.title,d.top_picUrl,
+			   d.city_id,d.dec_desc,d.pre_price,d.mar_price,
+			   d.pic_url,d.status,d.isdel,d.add_userId,
+			   d.add_user,d.add_time,d.keywords
+		FROM t_decorate_base d 
+		where id=#{id}
+	</select>
+</mapper>

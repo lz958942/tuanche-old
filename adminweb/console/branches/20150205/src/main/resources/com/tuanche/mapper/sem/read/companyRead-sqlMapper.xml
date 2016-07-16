@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	<mapper namespace="com.tuanche.mapper.sem.read.CompanyReadMapper">
+		<sql id="fieldSql">
+			select id,parent_code parentCode,company_name companyName,company_domain companyDomain,code,state,remark from t_company
+		</sql>
+		<sql id="whereSql">
+			where 1=1
+			<if test="parentCode!=null">
+				and parent_code=#{parentCode}
+			</if>
+		</sql>
+		<sql id="orderSql">
+			<if test="orderStr!=null">
+				order by ${orderStr}
+			</if>
+		</sql>
+		
+		<select id="select" resultType="com.tuanche.bean.sem.Company">
+			<include refid="fieldSql"/>
+			<include refid="whereSql"/>
+			<include refid="orderSql"/>
+		</select>
+		<select id="find" resultType="com.tuanche.bean.sem.Company">
+			<include refid="fieldSql"/>
+			where id=#{id}
+		</select>
+	</mapper>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.mapper.che.read.RecommendationReadMapper" >
+  <resultMap id="BaseResultMap" type="com.tuanche.bean.che.Recommendation" >
+    <id column="id" property="id"  />
+    <result column="city_id" property="cityId" jdbcType="INTEGER" />
+    <result column="brand_id" property="brandId" jdbcType="INTEGER" />
+    <result column="carStyle_id" property="carstyleId" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="r_brand_id" property="rBrandId" jdbcType="INTEGER" />
+    <result column="r_style_id" property="rStyleId" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime"  />
+    <result column="create_uid" property="createUid" jdbcType="INTEGER" />
+    <result column="update_time" property="updateTime"  />
+    <result column="update_uid" property="updateUid" jdbcType="INTEGER" />
+    <result column="status" property="status" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, city_id, brand_id, carStyle_id, type, r_brand_id, r_style_id, create_time, create_uid, 
+    update_time, update_uid, status
+  </sql>
+  <select id="getR12NHomeByPage" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_recommendation
+    where 1=1
+    <if test="type!=null and type.length()>0">
+    	and type=#{type}
+    </if>
+    <if test="status==null ">
+    	and status > -1
+    </if>
+    <if test="status!=null">
+    	and status=#{status} and status > -1
+    </if>
+    <if test="cityId!=null">
+    	and city_id=#{cityId}
+    </if>
+    <!-- 查询品牌 -->
+     <if test="brandId!=null">
+    	and brand_id=#{brandId}
+    </if>
+    <!-- 查询车型 -->
+     <if test="carstyleId!=null">
+    	and carStyle_id=#{carstyleId}
+    </if>
+    <!-- 页面推荐品牌 -->
+    <if test="rBrandId!=null">
+    	and r_brand_id=#{rBrandId}
+    </if>
+    <!-- 页面推荐车型 -->
+     <if test="rStyleId!=null">
+    	and r_style_id=#{rStyleId}
+    </if>
+    <if test="id!=null">
+    	and id=#{id}
+    </if>
+  </select>
+  <select id="getR12NByid" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_recommendation
+    where id = #{id}
+  </select>
+</mapper>

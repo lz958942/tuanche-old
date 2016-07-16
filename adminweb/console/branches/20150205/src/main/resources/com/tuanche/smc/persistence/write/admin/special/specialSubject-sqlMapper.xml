@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tuanche.smc.persistence.write.admin.special.SpecialSubjectWriteMapper">
+	
+	<insert id="addSpecialSubject" useGeneratedKeys="true" keyProperty="id">
+		<selectKey resultType="int" keyProperty="id">
+			select last_insert_id() as id from t_special limit 1
+		</selectKey>
+		<!-- <![CDATA[ -->
+			 insert into t_special(
+				sp_name,
+				content,
+				abstract,
+				zixun_ids,
+				template_id,
+				keyword,
+				sp_desc,
+				<!-- city_id, -->
+				brand_id,
+				carStyle_id,
+				operate_user_id,
+				operate_user_name,
+				pub_date,
+				online_date,
+				zt_type
+			)values(
+				#{spName},
+				#{content},
+				#{spAbstract},
+				#{zixunIds},
+				#{templateId},
+				#{keywords},
+				#{spDesc},
+				<!-- #{cityId}, -->
+				#{brandId},
+				#{carStyleId},
+				#{operateUserId},
+				#{operateUserName},
+				#{pubDate},
+				ifnull(#{onlineDate},now()),
+				#{ztType} 
+			)
+		<!-- ]]>  -->
+	</insert>
+	
+	<update id="updateSpecialStatus" parameterType="specialSubject">
+		update t_special t 
+		<set>
+			<if test="spOnline!=null">
+				t.online=#{spOnline},
+			</if>
+			<if test="spStatus!=null">
+				t.sp_status=#{spStatus},
+			</if>
+		</set>
+		where t.id=#{id}
+	</update>
+	
+	<update id="deleteSelect">
+		update t_special t set t.sp_status=-1 where id in
+		<foreach collection="array" item="id" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
+	
+	<update id="upOrDownSelect">
+		UPDATE t_special t SET t.online = #{spOnline}
+		<if test="spOnline==1">
+			, pub_date = now()
+		</if>
+		 WHERE
+		id in 
+		<foreach collection="ids" open="(" close=")" separator="," item="id">
+			#{id}
+		</foreach>
+	</update>
+	
+	<update id="updateSpecialSubject" parameterType="specialSubject">
+		update t_special t 
+		<set>
+			<if test="spName!=null">
+				t.sp_name=#{spName},
+			</if>
+			<if test="content!=null">
+				t.content=#{content},
+			</if>
+			<if test="spAbstract!=null">
+				t.abstract=#{spAbstract},
+			</if>
+			<if test="zixunIds!=null">
+				t.zixun_ids=#{zixunIds},
+			</if>
+			<if test="templateId!=null">
+				t.template_id=#{templateId},
+			</if>
+			<if test="keywords!=null">
+				t.keyword=#{keywords},
+			</if>
+			<if test="spDesc!=null">
+				t.sp_desc=#{spDesc},
+			</if>
+			<!-- <if test="cityId!=null">
+				t.city_id=#{cityId},
+			</if> -->
+			<if test="brandId!=null">
+				t.brand_id=#{brandId},
+			</if>
+			<if test="carStyleId!=null">
+				t.carStyle_id=#{carStyleId},
+			</if>
+			<if test="onlineDate!=null">
+				t.online_date=#{onlineDate},
+			</if>
+			<if test="ztType!=null">
+				t.zt_type=#{ztType},
+			</if>
+			t.pub_date=now(), 
+			
+		</set>
+		where t.id=#{id}
+	</update>
+	
+	
+</mapper>

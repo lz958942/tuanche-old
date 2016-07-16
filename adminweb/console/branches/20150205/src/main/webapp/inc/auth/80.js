@@ -1,0 +1,1 @@
+[{id:836,pId:758,name:'团购推荐',url:'/r12n/home',target:'manFrame'},{id:759,pId:758,name:'知道推荐',url:'/advertisingPosition/adContentPosition/2/',target:'manFrame'},{id:760,pId:758,name:'图库推荐',url:'/advertisingPosition/adContentPosition/1/',target:'manFrame'},{id:761,pId:758,name:'位置管理',url:'/advertising/contentList',target:'manFrame'},{id:758,pId:0,name:'推荐管理'},]

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context-4.0.xsd
+	http://www.springframework.org/schema/util
+	http://www.springframework.org/schema/util/spring-util-4.0.xsd
+	http://www.springframework.org/schema/mvc
+	http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
+	<!-- 注解探测器 -->
+
+
+	<context:component-scan base-package="com.tuanche.smc,com.tuanche.console.web,com.tuanche.console.dao,com.tuanche.console.service,com.tuanche.sites.web,com.tuanche.web" />
+
+	<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<property name="basenames">
+			<list>
+				<value>classpath:/messages</value>
+			</list>
+		</property>
+	</bean>
+		
+	<!-- 支持文件上传  start -->	
+	 <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"> 
+        <property name="maxUploadSize" value="31457280"/> 
+    </bean> 	
+	<!-- 支持文件上传  end -->
+		
+	<bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping"/>
+    <!-- ajax 获取json数据  start -->
+    <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+    	<property name="messageConverters">
+    		<util:list id="beanList">
+    			<ref bean="mappingJacksonHttpMessageConverter" />
+    		</util:list>
+    	</property>
+    </bean>
+    <bean id="mappingJacksonHttpMessageConverter" class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter"> 
+    	<property name="supportedMediaTypes"> 
+        	<list> 
+            	<value>text/html;charset=UTF-8</value> 
+        	</list> 
+    	</property> 
+	</bean>  
+	
+    <bean class="com.tuanche.console.dao.InitDao" init-method="init"></bean>
+    
+    <bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+    	<property name="ignoreAcceptHeader" value="true"/>
+		<property name="defaultContentType" value="text/html"/>
+		<property name="mediaTypes">
+			<map>
+				<entry key="json" value="application/json" />
+			</map>
+		</property>
+		<property name="favorParameter" value="true"/>
+		<property name="viewResolvers">
+			<list>
+				<bean class="org.springframework.web.servlet.view.BeanNameViewResolver" />
+			    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+			        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+			        <property name="prefix" value="/WEB-INF/jsp/"/>
+			        <property name="suffix" value=".jsp"></property>
+			    </bean>
+			</list>
+		</property> 
+		<property name="defaultViews">
+			<list>
+				<bean  class="org.springframework.web.servlet.view.json.MappingJacksonJsonView" />
+			</list>
+		</property>
+    </bean>
+    
+    
+    <!-- 多视图解析器配置 -->
+	<!-- map 中的key 为视图解析器的名称，如：jsp, tiles; defaultViewResolverName 的值必须为map中的一个存在的key值
+	<bean id="viewResolver" class="com.tuanche.smc.web.viewresolver.MultipleViewResolver">
+		<property name="defaultViewResolverName" value="jsp" />
+		<property name="resolvers">
+			<map>
+				<entry key="jsp">
+					<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+						<property name="prefix">
+							<value>/WEB-INF/jsp/</value>
+						</property>
+						<property name="suffix">
+							<value>.jsp</value>
+						</property>
+					</bean>
+				</entry>
+			</map>
+		</property>
+	</bean>
+	 -->
+</beans>

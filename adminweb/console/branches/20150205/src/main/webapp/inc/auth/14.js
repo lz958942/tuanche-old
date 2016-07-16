@@ -1,0 +1,1 @@
+[{id:240,pId:238,name:'关键词添加',url:'/keyword/add',target:'manFrame'},{id:241,pId:238,name:'关键词列表',url:'/keyword/list',target:'manFrame'},{id:238,pId:0,name:'关键词管理'},]

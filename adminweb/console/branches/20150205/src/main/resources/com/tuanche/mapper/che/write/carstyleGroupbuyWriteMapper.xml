@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	<mapper namespace="com.tuanche.mapper.che.write.CarstyleGroupbuyWriteMapper">
+		<insert id="insertList">
+		insert into t_carstyle_groupbuy
+			(
+				city_id,
+				city_code,
+				saler_id,
+				brand_id,
+				carstyle_id,
+				title,
+				groupbuy_light,
+				web_url,
+				man_num,
+				man_base_num,
+				sell_num,
+				sell_base_num,
+				pass_num,
+				pass_base_num,
+				groupbuy_date,
+				groupbuy_state,
+				save_money,
+				add_user_id,
+				add_date,
+				sort,
+				carstlye_other_name
+			)
+			values
+			<foreach collection="list"   separator=","  item="groupbuy" index="index" >
+			(
+				#{groupbuy.cityId},
+				#{groupbuy.cityCode},
+				#{groupbuy.salerId},
+				#{groupbuy.brandId},
+				#{groupbuy.carstyleId},
+				#{groupbuy.title},
+				#{groupbuy.groupbuyLight},
+				#{groupbuy.webUrl},
+				#{groupbuy.manNum},
+				#{groupbuy.manBaseNum},
+				#{groupbuy.sellNum},
+				#{groupbuy.sellBaseNum},
+				#{groupbuy.passNum},
+				#{groupbuy.passBaseNum},
+				#{groupbuy.groupbuyDate},
+				#{groupbuy.groupbuyState},
+				#{groupbuy.saveMoney},
+				#{groupbuy.addUserId},
+				now(),
+				#{groupbuy.baseSeq},
+				#{groupbuy.carNice}
+			)
+			</foreach>
+		</insert>
+		<insert id="insert">
+		insert into t_carstyle_groupbuy
+			(
+				city_id,
+				city_code,
+				saler_id,
+				brand_id,
+				carstyle_id,
+				title,
+				groupbuy_light,
+				web_url,
+				man_num,
+				man_base_num,
+				sell_num,
+				sell_base_num,
+				pass_num,
+				pass_base_num,
+				groupbuy_date,
+				groupbuy_state,
+				save_money,
+				add_user_id,
+				add_date,
+				sort,
+				carstlye_other_name
+			)
+			values
+			(
+				#{cityId},
+				#{cityCode},
+				#{salerId},
+				#{brandId},
+				#{carstyleId},
+				#{title},
+				#{groupbuyLight},
+				#{webUrl},
+				#{manNum},
+				#{manBaseNum},
+				#{sellNum},
+				#{sellBaseNum},
+				#{passNum},
+				#{passBaseNum},
+				#{groupbuyDate},
+				#{groupbuyState},
+				#{saveMoney},
+				#{addUserId},
+				now(),
+				#{baseSeq},
+				#{carNice}
+			)
+		</insert>
+				
+		<update id="update">
+			update t_carstyle_groupbuy 
+				set
+					city_id=#{cityId},
+					city_code=#{cityCode},
+					saler_id=#{salerId},
+					brand_id=#{brandId},
+					carstyle_id=#{carstyleId},
+					title=#{title},
+					groupbuy_light=#{groupbuyLight},
+					man_num=#{manNum},
+					man_base_num=#{manBaseNum},
+					sell_num=#{sellNum},
+					sell_base_num=#{sellBaseNum},
+					pass_num=#{passNum},
+					pass_base_num=#{passBaseNum},
+					groupbuy_date=#{groupbuyDate},
+					groupbuy_state=#{groupbuyState},
+					save_money=#{saveMoney},
+					last_user_id=#{lastUserId},
+					last_up_date=now(),
+				    carstlye_other_name=#{carNice}
+			where id=#{id} 
+		</update>
+	<update id="updateState">
+		update t_carstyle_groupbuy set isdel=#{state} where 
+		<if test="id>0">
+			id=#{id}
+		</if>
+		<if test="cityId>0">
+			city_id=#{cityId} and brand_id=#{brandId}
+		</if>
+	</update>
+	<update id="updateTime">
+		update t_carstyle_groupbuy 
+			set groupbuy_state=#{groupbuyState},
+				groupbuy_date=#{groupbuyDate},
+				groupbuy_light=#{groupbuyLight},
+				saler_id=#{salerId}
+		 where city_id=#{cityId} and brand_id=#{brandId}
+	</update>
+	<update id="batchUpdate">
+		UPDATE t_carstyle_groupbuy 
+			SET groupbuy_light=#{content},
+			    last_user_id=#{uid},
+			    last_up_date=NOW()
+		 WHERE  groupbuy_state=#{stateName} AND city_id=#{cityId}
+	</update>
+	<update id="del">
+		UPDATE t_carstyle_groupbuy 
+			SET isdel=#{type} WHERE carstyle_id=#{id}
+	</update>
+	
+	<select id="updateCarStyleSort" statementType="CALLABLE">   
+     {call proc_updateCarStyleSort(#{id},#{cityId},#{brandId},#{baseSeq},#{sort_old})}   
+    </select>  
+	
+	
+	
+	
+	</mapper>

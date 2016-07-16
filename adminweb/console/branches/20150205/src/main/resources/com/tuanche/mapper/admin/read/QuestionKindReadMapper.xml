@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.mapper.admin.read.QuestionKindReadMapper">
+	<resultMap type="com.tuanche.bean.admin.QuestionKind" id="BaseResult">
+		<id column="id" property="id" javaType="integer" jdbcType="INTEGER"/>
+		<result column="name" property="name" javaType="string" jdbcType="VARCHAR"/>		
+		<result column="parent_id" property="parentId" javaType="integer" jdbcType="INTEGER"/>		
+		<result column="build_emp" property="buildEmp" javaType="integer" jdbcType="INTEGER"/>		
+		<result column="build_time" property="buildTime" />		
+		<result column="update_emp" property="updateEmp" javaType="integer" jdbcType="INTEGER"/>		
+		<result column="update_time" property="updateTime" javaType="String" />
+		<result column="lable" property="lable" javaType="string" jdbcType="VARCHAR"/>
+		<result column="kind_status" property="kindStatus" />
+		<result column="keyword" property="keyword" javaType="string" jdbcType="VARCHAR"/>
+		<result column="kd_id" property="kdId" javaType="string" jdbcType="VARCHAR"/>
+		<result column="dimension" property="dimension" javaType="string" jdbcType="VARCHAR"/>
+		<result column="quest_count" property="questCount" javaType="integer" jdbcType="INTEGER"/>
+		<result column="page_keyword" property="pageKeyword" javaType="string" jdbcType="VARCHAR"/>
+		<result column="page_desc" property="pageDesc" javaType="string" jdbcType="VARCHAR"/>
+		<result column="page_title" property="pageTitle" javaType="string" jdbcType="VARCHAR"/>
+		<result column="sort" property="sort" javaType="integer" jdbcType="INTEGER"/>
+		</resultMap> 
+		<!-- 公用sql -->
+	<sql id="baseSql">
+		SELECT id,NAME,parent_id,build_emp,build_time,update_emp,update_time,page_keyword,page_desc,page_title,lable,kind_status,keyword,kd_id,dimension,quest_count,sort FROM t_question_kind
+	</sql>
+	<!-- 查询所有一级分类 -->
+	<select id="selectOneKind" resultMap="BaseResult">
+		<include refid="baseSql"/> WHERE parent_id =0 AND kind_status=2
+	</select>
+	
+	<!-- 根据父Id查询 -->
+	<select id="selectTwoKind" resultMap="BaseResult" parameterType="int">
+		<include refid="baseSql"/> where parent_id=#{id} AND  kind_status=2
+	</select>
+	 <!-- 查询所有分类 -->
+	<select id="selectAlls" resultMap="BaseResult">
+		<include refid="baseSql"/> WHERE 1=1
+	</select>
+	<!-- 根据id查询分类 -->
+	<select id="selectOne" resultMap="BaseResult" parameterType="int">
+		<include refid="baseSql"/> where id=#{id}
+	</select>
+</mapper>

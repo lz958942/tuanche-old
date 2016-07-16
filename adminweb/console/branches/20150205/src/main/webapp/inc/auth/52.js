@@ -1,0 +1,1 @@
+[{id:627,pId:501,name:'装饰添加',url:'/decorate/toBase',target:'manFrame'},{id:628,pId:501,name:'装饰查询',url:'/decorate/toBaselist',target:'manFrame'},{id:502,pId:501,name:'报名查询',url:'/regist/toHome',target:'manFrame'},{id:501,pId:0,name:'汽车装饰管理'},]

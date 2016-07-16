@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tuanche.mapper.sem.write.DayStatisticsWriteMapper">
+	 <insert id="insertList"  parameterType="com.tuanche.bean.sem.DayStatistics">  
+	 	 INSERT INTO  t_day_statistics
+	 	  (accountId,account_code,district_id,brand_id,apply_num,cost_money,DATETIME,city_code,company_code) values
+         <foreach collection="dsList" separator=","  item="ds" index="index" >
+            (#{ds.accountId},#{ds.accountCode},#{ds.districtId},#{ds.brandId},#{ds.applyNum},
+            #{ds.costMoney},#{ds.datetime},#{ds.cityCode},#{ds.companyCode})
+		</foreach>	
+	 </insert>
+	 <delete id="delete" parameterType="com.tuanche.bean.che.Search">
+	 	DELETE FROM `t_day_statistics`
+	 	WHERE 
+	 	1=1
+ 	 	<if test="starttime != null">
+ 	 		AND DATETIME >= #{starttime}
+ 	 	</if>
+ 	 	<if test="endtime != null">
+ 	 		AND #{endtime} > DATETIME
+ 	 	</if>
+	 	<if test="accountCode != null">
+	 		AND account_code = #{accountCode} 
+	 	</if> 
+	 </delete>
+</mapper>

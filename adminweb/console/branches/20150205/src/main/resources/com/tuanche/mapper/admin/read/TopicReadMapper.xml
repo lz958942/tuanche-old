@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.mapper.admin.read.TopicReadMapper">
+	<resultMap type="com.tuanche.bean.admin.Topic" id="BaseResult">
+		<id column="id" property="id"  jdbcType="INTEGER"/>
+		<result column="title" property="title"/>	
+		<result column="content" property="content"/>	
+		<result column="picture" property="picture"/>
+		<result column="brand_id" property="brandId"/>
+		<result column="carstyle_id" property="carstyleId"/>
+		<result column="review" property="review"/>
+		<result column="is_recom" property="isRecom"/>
+		<result column="build_emp" property="buildEmp" jdbcType="INTEGER"/>		
+		<result column="build_time" property="buildTime"  />		
+		<result column="update_emp" property="updateEmp" jdbcType="INTEGER"/>		
+		<result column="update_time" property="updateTime" javaType="String"/>
+		<result column="topic_status" property="topicStatus" />
+		<result column="current" property="current" />
+		</resultMap>
+		<!-- 公用sql -->
+	<sql id="baseSql">
+		SELECT id,title,content,picture,brand_id,carstyle_id,review,is_recom,build_emp,build_time,update_emp,update_time,topic_status,current FROM t_question_topic
+	</sql>
+	<!-- 根据Id查询 -->
+	<select id="selectTopicById" resultMap="BaseResult" parameterType="int">
+		<include refid="baseSql"/> where id=#{id}
+	</select>
+	<!-- 分页查询 -->
+	<select id="topicByPage" resultMap="BaseResult" parameterType="com.tuanche.bean.admin.Topic">
+		<include refid="baseSql"/> where topic_status<![CDATA[>]]>-1
+		<if test="brandId!=null">
+		and brand_id=#{brandId}
+		</if>
+		<if test="carstyleId!=null">
+		and carstyle_id=#{carstyleId}
+		</if>
+		<if test="title!=null">
+		and title  like  '%${title}%'
+		</if>
+		<if test="isRecom!=null">
+		and is_recom=#{isRecom}
+		</if>
+		<if test="topicStatus!=null">
+		and topic_status=#{topicStatus}
+		</if>	
+		ORDER BY id DESC
+	</select>
+	
+	<select id="topicList" resultMap="BaseResult">
+	SELECT id,title FROM t_question_topic  where topic_status<![CDATA[>]]>-1
+	
+	</select>
+	
+	<select id="selectArtCountById" resultType="int">
+		SELECT count(1) from t_magazine_article where sort=#{sort} and magazine_id!=#{magazineId}
+		<if test="id!=null">
+		and id!=#{id}
+		</if>
+	</select>
+</mapper>

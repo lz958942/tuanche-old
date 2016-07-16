@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	<mapper namespace="com.tuanche.mapper.tongji.read.RateMapper">
+	<resultMap id="RateDomain" type="com.tuanche.bean.tongji.RateDomain">
+  		<result property="id" column="id" />
+  		<result property="date" column="date" />
+  		<result property="cityId" column="city_id" />
+  		<result property="brandId" column="brand_id" />
+  		<result property="styleId" column="style_id" />
+  		<result property="pageType" column="page_type" />
+  		<result property="pv" column="pv" />
+  		<result property="uv" column="uv" />
+  		<result property="rate" column="rate" />
+  		<result property="applyNumber" column="apply_number"/>
+ 	</resultMap>
+		<select id="queryByPage" resultMap="RateDomain" parameterType="com.tuanche.bean.tongji.RateDomain">
+			<!-- <![CDATA[ ]]> -->
+			SELECT city_id,pv,uv,rate,date,brand_id,page_type,style_id,apply_number FROM tongji_buypage_day 
+			WHERE 1=1 
+			<if test="cityId!=null">
+			AND city_id=#{cityId} 
+			</if> 
+			<if test="brandId!=null">
+			AND brand_id=#{brandId} 
+			</if> 
+			<if test="styleId!=null">
+			AND	style_id= #{styleId}
+			</if>
+			<if test="pageType!=null">
+			AND page_type=#{pageType}
+			</if>
+			<if test="startTime!=null">
+			<![CDATA[ AND DATE>=#{startTime}]]>
+			</if>
+			<if test="endTime!=null">
+			<![CDATA[ AND DATE<=#{endTime}]]>
+			</if>
+		</select>
+				<select id="selectRate" resultMap="RateDomain" parameterType="com.tuanche.bean.tongji.RateDomain">
+			<!-- <![CDATA[ ]]> -->
+			SELECT city_id,pv,uv,rate,date,brand_id,page_type,style_id,apply_number FROM tongji_buypage_day 
+			WHERE 1=1 
+			<if test="cityId!=null">
+			AND city_id=#{cityId} 
+			</if> 
+			<if test="brandId!=null">
+			AND brand_id=#{brandId} 
+			</if> 
+			<if test="styleId!=null">
+			AND	style_id= #{styleId}
+			</if>
+			<if test="pageType!=null">
+			AND page_type=#{pageType}
+			</if>
+			<if test="startTime!=null">
+			<![CDATA[ AND DATE>=#{startTime}]]>
+			</if>
+			<if test="endTime!=null">
+			<![CDATA[ AND DATE<=#{endTime}]]>
+			</if>
+		</select>
+		<select id="selectRatesByPage" resultMap="RateDomain" parameterType="com.tuanche.bean.tongji.RateDomain">
+			SELECT DATE,city_id,SUM(pv) as pv,SUM(uv) as uv,SUM(apply_number)/SUM(pv)*100 AS rate,SUM(apply_number) as apply_number   FROM tongji_buypage_day 
+			GROUP BY city_id,DATE
+		    HAVING 1=1
+			<if test="cityId!=null">
+			AND city_id=#{cityId} 
+			</if> 
+			<if test="startTime!=null">
+			<![CDATA[ AND DATE>=#{startTime}]]>
+			</if>
+			<if test="endTime!=null">
+			<![CDATA[ AND DATE<=#{endTime}]]>
+			</if>
+		</select>
+		<select id="selectRates" resultMap="RateDomain" parameterType="com.tuanche.bean.tongji.RateDomain">
+			SELECT DATE,city_id,SUM(pv) as pv,SUM(uv) as uv,SUM(apply_number)/SUM(pv)*100 AS rate,SUM(apply_number) as apply_number   FROM tongji_buypage_day 
+			GROUP BY city_id,DATE
+		    HAVING 1=1
+			<if test="cityId!=null">
+			AND city_id=#{cityId} 
+			</if> 
+			<if test="startTime!=null">
+			<![CDATA[ AND DATE>=#{startTime}]]>
+			</if>
+			<if test="endTime!=null">
+			<![CDATA[ AND DATE<=#{endTime}]]>
+			</if>
+		</select>
+		
+	</mapper>

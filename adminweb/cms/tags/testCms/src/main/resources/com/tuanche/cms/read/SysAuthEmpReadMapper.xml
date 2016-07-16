@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.cms.read.SysAuthEmpReadMapper">
+	<sql id="fieldSql">
+		select id, 
+			emp_id empId,
+			biz_code bizCode,
+			district_ids districtIds,
+			brand_ids brandIds,
+			download_brand_ids downloadBrandIds,
+			brand_id_desc brandIdDesc,
+			auth_status authStatus,
+			add_date addDate,
+			add_user addUser,
+			last_user lastUser,
+			last_date lastDate
+		from sys_auth_emp where 1=1
+	</sql>
+	<select id="selectSysAuthEmpByEmpId" resultType="SysAuthEmp"
+		parameterType="java.lang.Integer">
+		<include refid="fieldSql"/>
+		and auth_status=1
+		and emp_id = #{empId}
+	</select>
+</mapper>

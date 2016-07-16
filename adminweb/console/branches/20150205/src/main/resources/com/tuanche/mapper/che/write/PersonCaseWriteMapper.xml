@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.mapper.che.write.PersonCaseWriteMapper" >
+	<insert id="savePE">
+		  insert into t_person_case ( city_id, brand_id, 
+      style_id, price_evaluate, user_name, 
+      picture, create_uid, crate_time,status,content)
+    values (#{cityId}, #{brandId}, 
+      #{styleId}, #{priceEvaluate}, #{userName}, 
+      #{picture}, #{createUid}, (NOW()),#{status},#{content})
+	</insert>
+	<update id="updateStatus">
+		UPDATE t_person_case SET 
+		<if test="type==2">
+			status=-1,
+		</if>
+		<if test="type==3">
+			status=1,
+		</if>
+		<if test="type==4">
+			status=0,
+		</if>
+		update_time= NOW()
+		WHERE id=#{id} 
+	</update>
+	
+	<update id="update">
+		update t_person_case
+    <set >
+      <if test="cityId != null" >
+        city_id = #{cityId},
+      </if>
+      <if test="brandId != null" >
+        brand_id = #{brandId},
+      </if>
+      <if test="styleId != null" >
+        style_id = #{styleId},
+      </if>
+      <if test="priceEvaluate != null" >
+        price_evaluate = #{priceEvaluate},
+      </if>
+      <if test="userName != null" >
+        user_name = #{userName},
+      </if>
+      <if test="picture != null" >
+        picture = #{picture},
+      </if>
+      <if test="updateUid != null" >
+        update_uid = #{updateUid},
+      </if>
+      <if test="updateTime != null" >
+        update_time =(NOW()),
+      </if>
+      <if test="status != null" >
+        status = #{status},
+      </if>
+      <if test="content != null" >
+        content = #{content},
+      </if>
+    </set>
+    where id = #{id}
+	</update>
+	<update id="beanchStatus">
+		UPDATE t_person_case SET status= #{type},update_time= NOW() WHERE id IN
+		<foreach item="list" index="index" collection="list" open="(" separator="," close=")">
+		#{list}
+		</foreach>
+	</update>
+</mapper>

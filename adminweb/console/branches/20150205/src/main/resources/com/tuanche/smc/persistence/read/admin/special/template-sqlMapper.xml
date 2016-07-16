@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tuanche.smc.persistence.read.admin.special.TemplateReadMapper">
+	<resultMap type="template" id="BaseResultMap">
+		<id column="id" jdbcType="INTEGER" property="id"/>
+		<result column="tp_name" jdbcType="VARCHAR" property="tpName"/>
+		<result column="tp_desc" jdbcType="VARCHAR" property="tpDesc"/>
+		<result column="tp_content" jdbcType="VARCHAR" property="tpContent"/>
+		<result column="create_user_id" jdbcType="INTEGER" property="createUserId"/>
+		<result column="create_user_name" jdbcType="VARCHAR" property="createUserName"/>
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime"/> 
+		<result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/> 
+		<result column="delete_flay" jdbcType="INTEGER" property="deleteFlay" /> 
+	</resultMap>
+	
+	<sql id="tempComonSql">
+		select t.id,t.tp_name,t.tp_desc,t.tp_Content,t.create_user_id,
+			   t.create_user_name,t.create_time,t.delete_flay,t.update_time 
+		from t_special_template t
+	</sql>
+	<select id="queryTempByPage" resultMap="BaseResultMap">
+		<include refid="tempComonSql"/>
+		<if test="conditions!=null">
+				where
+					<foreach collection="conditions" item="condition" separator="AND">
+						${condition}
+					</foreach>
+			order by t.id desc
+		</if>
+	</select>
+	
+	<select id="preUpdateTemp" parameterType="int" resultMap="BaseResultMap">
+		<include refid="tempComonSql"/>
+		where t.id=#{id}
+	</select>
+	
+	<select id="selectTemp" resultMap="BaseResultMap">
+		select t.id,t.tp_name 
+		from t_special_template t 
+		where t.delete_flay=1
+	</select>
+	
+	<select id="selectUser" resultMap="BaseResultMap">
+		SELECT DISTINCT create_user_name ,create_user_id 
+		FROM t_special_template 
+		WHERE delete_flay=1 
+	</select>
+</mapper>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.cms.adminread.TemplateReadMapper" >
+  <resultMap id="Base_template" type="com.tuanche.cms.bean.Template" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="memo" property="memo" jdbcType="VARCHAR" />
+    <result column="template_path" property="templatePath" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="TINYINT" />
+    <result column="pic" property="pic" jdbcType="VARCHAR" />
+    <result column="create_user_id" property="createUserId" jdbcType="INTEGER" />
+    <result column="create_user_name" property="createUserName" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user_id" property="updateUserId" jdbcType="INTEGER" />
+    <result column="update_user_name" property="updateUserName" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="delete_flay" property="deleteFlay" jdbcType="TINYINT" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id, name, memo, type, pic, create_user_id, create_user_name, create_time, update_user_id, 
+    update_user_name, update_time, delete_flay,content,template_path
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="Base_template" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_cm_template
+    where id = #{id} AND delete_flay = 1
+  </select>
+  <select id="getTemplateByPage" resultMap="Base_template" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_cm_template
+    where delete_flay = 1
+    order by create_time desc
+  </select>
+  
+  <select id="getAllTemplate" resultMap="Base_template">
+  	 select 
+  	 <include refid="Base_Column_List"/>
+    from t_cm_template
+    where delete_flay = 1
+  </select>
+  
+</mapper>

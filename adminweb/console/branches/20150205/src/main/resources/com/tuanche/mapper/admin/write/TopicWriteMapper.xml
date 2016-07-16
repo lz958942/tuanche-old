@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.mapper.admin.write.TopicWriteMapper">
+<insert id="addTopic"  parameterType="com.tuanche.bean.admin.Topic">  
+		  	 INSERT INTO t_question_topic(
+				title,
+				content,
+				picture,
+				brand_id,
+				carstyle_id,
+				review,
+				is_recom,
+				build_emp,
+				build_time,
+				update_emp,
+				update_time,
+				topic_status,
+				current
+				)
+             VALUES
+            (
+             #{title},
+             #{content},
+             #{picture},
+             #{brandId},
+             #{carstyleId},
+             #{review},
+             #{isRecom},
+             #{buildEmp},
+             now(),
+             #{updateEmp}, 
+             now(),
+             #{topicStatus},
+             0
+            )
+		</insert>
+		<update id="updateTopic" > 
+		  UPDATE t_question_topic SET   title=#{title}, content=#{content},picture=#{picture},update_emp=#{updateEmp},update_time=now(),brand_id=#{brandId},carstyle_id=#{carstyleId}	  
+		  WHERE id =#{id}
+		</update>
+		<update id="updateTopStatus" > 
+		  UPDATE t_question_topic SET    topic_status=#{topicStatus}, update_emp=#{updateEmp},update_time=now() 		  
+		  WHERE id =#{id}
+		</update> 
+		<update id="recom" > 
+		  UPDATE t_question_topic SET    is_recom=#{isRecom}, update_emp=#{updateEmp},update_time=now() 		  
+		  WHERE id =#{id}
+		</update> 
+		<update id="current" > 
+		  UPDATE t_question_topic SET    current=#{current}, update_emp=#{updateEmp},update_time=now() 		  
+		  WHERE id =#{id}
+		</update>
+</mapper>

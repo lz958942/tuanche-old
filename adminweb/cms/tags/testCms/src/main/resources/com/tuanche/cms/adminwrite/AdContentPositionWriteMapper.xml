@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.cms.adminwrite.AdContentPositionWriteMapper">
+<update id="openContentLocation">
+ 	 update adv_position_local
+           set status= #{contentPositiontatus}
+           		where id=#{contentPositionId}
+</update>
+
+<update id="deleteContentPositionById">
+ 	 update adv_position_local
+           set flag=0
+           		where id=#{contentPositionId}
+</update>
+</mapper>

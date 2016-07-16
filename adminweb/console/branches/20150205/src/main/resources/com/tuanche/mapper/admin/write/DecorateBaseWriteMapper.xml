@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.mapper.admin.write.DecorateBaseWriteMapper">
+	<resultMap type="com.tuanche.bean.admin.DecorateBase" id="BaseResultMap">
+		<id column="id" property="id" javaType="integer" jdbcType="INTEGER"></id>
+		<result column="kind_id" property="kindId" javaType="integer" jdbcType="INTEGER"/>
+		<result column="title" property="title" javaType="string" jdbcType="VARCHAR"/>
+		<result column="keywords" property="keywords" javaType="string" jdbcType="VARCHAR"/>
+		<result column="top_picUrl" property="topPicUrl" javaType="string" jdbcType="VARCHAR"/>
+		<result column="city_id" property="cityId" javaType="integer" jdbcType="INTEGER"/>
+		<result column="dec_desc" property="decDesc" javaType="string" jdbcType="VARCHAR"/>
+		<result column="pre_price" property="prePrice" javaType="string" jdbcType="VARCHAR"/>
+		<result column="mar_price" property="marPrice" javaType="string" jdbcType="VARCHAR"/>
+		<result column="pic_url" property="picUrl" javaType="string" jdbcType="VARCHAR"/>
+		<result column="add_userId" property="addUserId" javaType="integer" jdbcType="INTEGER"/>
+		<result column="add_user" property="addUserName" javaType="string" jdbcType="VARCHAR"/>
+		<result column="add_time" property="addTime" javaType="string" jdbcType="TIMESTAMP"/>
+		<result column="status" property="status" javaType="string" jdbcType="VARCHAR"/>
+		<result column="isdel" property="isDel" javaType="string" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<insert id="addDecorateBase">
+		INSERT INTO t_decorate_base(
+			kind_id,title,keywords,top_picUrl,city_id,dec_desc,
+			pre_price,mar_price,pic_url,add_userId,add_user
+		)
+		VALUES(
+			#{kindId},
+			#{title},
+			#{keywords},
+			#{topPicUrl},
+			#{cityId},
+			#{decDesc},
+			#{prePrice},
+			#{marPrice},
+			#{picUrl},
+			#{addUserId},
+			#{addUserName}
+		)
+	</insert>
+	
+	<update id="updateBase">
+		UPDATE t_decorate_base d 
+		<set>
+			<if test="kindId!=null">
+				d.kind_id=#{kindId},
+			</if>
+			<if test="title!=null">
+				d.title=#{title},
+			</if>
+			<if test="keywords!=null">
+				d.keywords=#{keywords},
+			</if>
+			<if test="topPicUrl!=null">
+				d.top_picUrl=#{topPicUrl},
+			</if>
+			<if test="cityId!=null">
+				d.city_id=#{cityId},
+			</if>
+			<if test="decDesc!=null">
+				d.dec_desc=#{decDesc},
+			</if>
+			<if test="prePrice!=null">
+				d.pre_price=#{prePrice},
+			</if>
+			<if test="marPrice!=null">
+				d.mar_price=#{marPrice},
+			</if>
+			<if test="picUrl!=null">
+				d.pic_url=#{picUrl},
+			</if>
+			<if test="addUserId!=null">
+				d.add_userId=#{addUserId},
+			</if>
+			<if test="addUserName!=null">
+				d.add_user=#{addUserName}
+			</if>
+			where d.id=#{id}
+		</set> 
+	</update>
+	
+	<update id="changeOnline" parameterType="map">
+		update t_decorate_base 
+		set status=#{status} 
+		where id=#{id}
+	</update>
+	
+	<update id="deleteDecorate" parameterType="int">
+		UPDATE (t_decorate_base b LEFT JOIN t_decorate_temp t ON b.id=t.base_id) 
+				LEFT JOIN t_decorate_content c ON b.id=c.base_id 
+		SET b.isdel='-1',t.isdel='-1',c.`isdel`='-1' 
+		WHERE b.id=#{id}
+	</update>
+</mapper>

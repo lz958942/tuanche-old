@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.mapper.che.read.EvaluatePicMapper" >
+  <resultMap id="BaseResultMap" type="com.tuanche.bean.che.EvaluatePic" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <id column="evaluate_id" property="evaluateId" jdbcType="INTEGER" />
+    <result column="pic" property="pic" jdbcType="VARCHAR" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="aprroval_time" property="aprrovalTime"/>
+    <result column="aprroval_user" property="aprrovalUser" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, evaluate_id, pic, state
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.tuanche.bean.che.EvaluatePic" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM tc_evaluate_pic
+    WHERE id = #{id}
+  </select>
+  <select id="getEvaluatePic" resultMap="BaseResultMap" parameterType="int" >
+    SELECT 
+   	id,pic,state
+    FROM tc_evaluate_pic
+    WHERE evaluate_id = #{id} AND state=0
+  </select>
+  <select id="selectPassPic" resultMap="BaseResultMap">
+  	 SELECT 
+   	id,pic,state,aprroval_time,aprroval_user
+    FROM tc_evaluate_pic
+    WHERE evaluate_id = #{id}
+  </select>
+  <select id="getPicSrc" resultMap="BaseResultMap">
+  	 SELECT pic FROM  tc_evaluate_pic  WHERE evaluate_id=#{eid}
+  </select>
+</mapper>

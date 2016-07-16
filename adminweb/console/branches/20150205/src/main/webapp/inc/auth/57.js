@@ -1,0 +1,1 @@
+[{id:558,pId:557,name:'推广费用统计',url:'/promo/tolist',target:'manFrame'},{id:559,pId:557,name:'推广添加页面',url:'/promo/toadd',target:'manFrame'},{id:557,pId:0,name:'推广费用统计'},]

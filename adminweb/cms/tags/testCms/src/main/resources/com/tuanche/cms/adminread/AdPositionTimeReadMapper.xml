@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.cms.adminread.AdPositionTimeReadMapper">
+	<sql id="adPositionTimefieldSql" >
+		SELECT
+		  t.id id,
+ 		  t.start_date startDate, 
+		  t.end_date endDate, 
+		  t.channel,
+		  t.location_name locationName,
+		  t.location_code locationCode, 
+		  t.content_position_id contentPositionId,
+		  t.city_id cityId,
+		  t.ad_type adType, 
+		  t.ad_content_id adContentId, 
+		  t.status,
+		  t.height, 
+		  t.width, 
+		  t.flag,
+		  t.pic_name picName,
+		  t.describe,
+		  t.title adTitle,
+		  t.ad_link adLink,
+		  t.title adTitle,
+		  t.describe,
+		  t.brand_id brandId,
+		  t.style_id styleId,
+		  t.is_default isDefault,
+		  t.extend_code extendCode
+		FROM adv_position_time t
+		 WHERE
+		 flag=1
+	</sql>
+	 <sql id="adPositionTimesearch">
+		<if test="isDefault>0">
+			<if test="isDefault==1">
+		  	 AND  is_default=1
+		   </if>
+		   <if test="isDefault==2">
+		   	AND  is_default=0
+		   </if>
+		</if>
+		<if test="channel>-1">
+		   AND  channel=#{channel}
+		</if>
+		<if test="adType>-1">
+		   AND  ad_type=#{adType}
+		</if>
+		<if test="cityId>-1">
+		   AND  city_id=#{cityId}
+		</if>
+		<if test="startDate!=null and endDate!=null">
+		    AND  start_date = #{startDate}  AND end_date=#{endDate}
+		</if>
+		<if test="startDate!=null and endDate==null">
+		      <![CDATA[ AND  start_date= #{startDate}  ]]>   
+		</if>
+		<if test="startDate==null and endDate!=null">
+		    <![CDATA[ AND  end_date = #{endDate}]]>   
+		</if>
+	  </sql>
+     <select id="queryAdPositionTimeById" parameterType="java.lang.Integer" resultType="com.tuanche.cms.bean.AdPositionTime">
+	 		<include refid="adPositionTimefieldSql"/> 
+	 		AND id=#{id}
+	 </select>
+ 	 <select id="queryAdPositionTime" parameterType="com.tuanche.cms.bean.AdPositionTime" resultType="com.tuanche.cms.bean.AdPositionTime">
+ 		<include refid="adPositionTimefieldSql"/> 
+ 		<include refid="adPositionTimesearch"/>
+ 		ORDER BY id DESC
+ 		<if test="start>=0 and limit>0">
+		    LIMIT #{start}, #{limit}
+		</if>
+	 </select>
+	 <select id="count" parameterType="com.tuanche.cms.bean.AdPositionTime" resultType="java.lang.Integer">
+        SELECT count(1)
+		FROM adv_position_time 
+		WHERE flag=1
+		 <include refid="adPositionTimesearch"/>
+   		</select>
+   		
+   		<select id="adGet" parameterType="com.tuanche.cms.bean.AdGet" resultType="com.tuanche.cms.bean.AdGet">
+        SELECT 
+        	   t1.channel,
+	           t1.city_id cityId,
+	 		   t1.location_code locationCode,
+	 		   t1.content_position_id contentPositionId,
+	  		   t1.ad_type adType,
+	  		   t1.height,
+	  		   t1.width,
+	           t1.pic_name picName,
+	  		   t1.describe,
+	  		   t1.ad_link adLink,
+	 		   t1.title adTitle,
+	 		   t1.brand_id brandId,
+	  		   t1.style_id styleId,
+	  		   t1.template_id templateId,
+	  		   t2.content ,
+	  		   t1.is_default isDefault,
+	  		   t1.extend_code extendCode
+	  		   from adv_position_time t1,adv_template t2 WHERE t1.template_id=t2.id AND t1.status=1 AND t1.flag=1
+	  		    <!-- 默认的  不按时间 -->
+	  		   <if test="isDefault == 0">
+		  		   AND  DATE_FORMAT(NOW(),'%Y-%m-%d')>=t1.start_date 
+		  		   AND t1.end_date >= DATE_FORMAT(NOW(),'%Y-%m-%d')
+	  		   </if>
+	  		   <if test="channel>-1">
+		   		AND  t1.channel=#{channel}
+				</if>
+	  		   <if test="cityId>-1">
+		   		AND  t1.city_id=#{cityId}
+				</if>
+		   		<if test="brandId>-1">
+		   		AND  t1.brand_id=#{brandId}
+				</if>
+				<if test="styleId>-1">
+		   		AND  t1.style_id=#{styleId}
+				</if>
+				<if test="isDefault >0">
+		   		AND  t1.is_default=#{isDefault}
+				</if>
+   		</select>
+   		<select id="searchAdPositionTime" parameterType="com.tuanche.cms.bean.AdPositionTime" resultType="java.lang.Integer">
+        SELECT  count(1) from adv_position_time t1 where  t1.location_code=#{locationCode} AND t1.city_id=#{cityId}
+	  		   AND  ((t1.start_date>=DATE_FORMAT(#{startDate},'%Y-%m-%d') and DATE_FORMAT(#{endDate},'%Y-%m-%d')>=t1.start_date)
+	  		   or (t1.end_date >=DATE_FORMAT(#{startDate},'%Y-%m-%d') and DATE_FORMAT(#{endDate},'%Y-%m-%d')>=t1.end_date)
+	  		   or (DATE_FORMAT(#{startDate},'%Y-%m-%d')>=t1.start_date and t1.end_date>=DATE_FORMAT(#{endDate},'%Y-%m-%d'))
+	  		   or (t1.start_date>=DATE_FORMAT(#{startDate},'%Y-%m-%d') and DATE_FORMAT(#{endDate},'%Y-%m-%d')>=t1.start_date))
+	  		    AND flag=1 AND is_default=#{isDefault}
+	  		   <if test="id>-1">
+		   		AND  t1.id!=#{id}
+				</if>
+   		</select>
+   		
+</mapper>

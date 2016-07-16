@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context" xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:aop="http://www.springframework.org/schema/aop" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
+
+	<context:component-scan base-package="com.tuanche.baseapi" />
+
+	<mvc:annotation-driven conversion-service="conversion-service">
+		<mvc:message-converters register-defaults="true">
+			<bean class="org.springframework.http.converter.ResourceHttpMessageConverter" />
+			<bean class="org.springframework.http.converter.StringHttpMessageConverter">
+				<property name="supportedMediaTypes">
+					<list>
+						<value>text/html;charset=UTF-8</value>
+					</list>
+				</property>
+			</bean>
+			<bean class="org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter">
+				<property name="supportedMediaTypes">
+					<list>
+						<value>application/xml;charset=UTF-8</value>
+					</list>
+				</property>
+			</bean>
+			<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+				<property name="supportedMediaTypes">
+					<list>
+						<value>application/json;charset=UTF-8</value>
+					</list>
+				</property>
+				<property name="objectMapper">
+					<bean class="org.springframework.http.converter.json.Jackson2ObjectMapperFactoryBean">
+						<property name="objectMapper">
+							<bean class="com.fasterxml.jackson.databind.ObjectMapper">
+								<property name="serializationInclusion">
+									<value type="com.fasterxml.jackson.annotation.JsonInclude$Include">NON_NULL</value>
+								</property>
+							</bean>
+						</property>
+					</bean>
+				</property>
+			</bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+
+	<mvc:default-servlet-handler />
+
+	<aop:aspectj-autoproxy proxy-target-class="true" />
+
+	<bean id="conversion-service" class="org.springframework.format.support.FormattingConversionServiceFactoryBean" />
+
+	<!-- 对pdf、json、xml、excel之类的视图解析器 -->
+	<bean id="beanNameViewResolver" class="org.springframework.web.servlet.view.BeanNameViewResolver" p:order="0" />
+	<!-- 配置JSP视图 -->
+	<bean id="internalResourceViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
+		<property name="prefix" value="/jsp/" />
+		<property name="suffix" value=".jsp" />
+		<property name="contentType" value="text/html;charset=UTF-8" />
+		<property name="order" value="1" />
+	</bean>
+
+	<!-- restFul风格的视图解析器 -->
+	<bean id="restFulViewResolver" class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver" p:order="1">
+		<property name="contentNegotiationManager">
+			<bean class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
+				<!-- 扩展名至mimeType的映射,即 /user.json => application/json -->
+				<property name="favorPathExtension" value="true" />
+				<!-- 用于开启 /userinfo/123?format=json 的支持 -->
+				<property name="favorParameter" value="true" />
+				<property name="parameterName" value="format" />
+				<!-- 是否忽略Accept Header -->
+				<property name="ignoreAcceptHeader" value="true" />
+				<property name="defaultContentType" value="application/json" />
+				<!--扩展名到MIME的映射；favorPathExtension, favorParameter是true时起作用 -->
+				<property name="mediaTypes">
+					<map>
+						<entry key="json" value="application/json" />
+						<entry key="xml" value="application/xml" />
+						<entry key="jpg" value="image/jpeg" />
+					</map>
+				</property>
+			</bean>
+		</property>
+		<property name="viewResolvers">
+			<list>
+				<ref local="beanNameViewResolver" />
+			</list>
+		</property>
+		<property name="defaultViews">
+			<list>
+				<bean class="org.springframework.web.servlet.view.json.MappingJackson2JsonView">
+					<property name="extractValueFromSingleKeyModel" value="true" />
+					<property name="objectMapper">
+						<bean class="org.springframework.http.converter.json.Jackson2ObjectMapperFactoryBean">
+							<property name="objectMapper">
+								<bean class="com.fasterxml.jackson.databind.ObjectMapper">
+									<property name="serializationInclusion">
+										<value type="com.fasterxml.jackson.annotation.JsonInclude$Include">NON_NULL</value>
+									</property>
+								</bean>
+							</property>
+						</bean>
+					</property>
+				</bean>
+			</list>
+		</property>
+	</bean>
+	<mvc:view-controller path="/" view-name="redirect:/index.jsp" />
+
+	<import resource="baseapi-application-dubbo.xml" />
+</beans>

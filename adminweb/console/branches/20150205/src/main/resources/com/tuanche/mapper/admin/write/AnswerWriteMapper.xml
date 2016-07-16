@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.mapper.admin.write.AnswerWriteMapper">
+	<insert id="addAnswers"  parameterType="com.tuanche.bean.admin.Answer">  
+		  	 INSERT INTO t_question_answer(
+				content,
+				question_id,
+				answer_status,
+				build_emp,
+				build_time,
+				update_emp,
+				update_time,
+				answer_adopt,
+				show_emp
+				)
+             VALUES
+         <foreach collection="list" separator=","  item="answer" index="index" >
+            (
+             #{answer.content},
+             #{answer.questionId},
+             #{answer.answerStatus},
+             #{answer.buildEmp},
+             now(),
+             #{answer.updateEmp}, 
+             now(),
+             #{answer.answerAdopt},
+             #{answer.showEmp}
+            )
+		</foreach>	
+		</insert>
+		
+		<update id="updateAnswer" parameterType="map" >  
+   		UPDATE t_question_answer SET  answer_status= #{answerStatus},build_emp={buildEmp},build_time=now() WHERE id IN   
+    	<foreach collection="list" index="index" item="ids" open="(" separator="," close=")">   
+        #{ids}   
+    	</foreach>  
+		</update>
+		<update id="updateAnswers" >  
+   		UPDATE t_question_answer SET  answer_status= #{answerStatus},update_emp=#{buildEmp},update_time=now() WHERE id IN 
+		<foreach collection="list" index="index" item="id" open=" (" separator="," close=")">
+             #{id}
+         </foreach>
+    
+		</update>
+		<delete id="deleteAnswer" parameterType="list">  
+    	DELETE FROM t_question_answer WHERE id IN  
+    	<foreach collection="list" index="index" item="answerIds" open="(" separator="," close=")">   
+        #{answerIds}   
+    	</foreach>  
+		</delete>
+		<delete id="deleteNull">
+		DELETE FROM t_question_answer WHERE content IS NULL OR build_id IS NULL
+		</delete>
+		<update id="deleteAnswersWithQ" > 
+		  UPDATE t_question_answer SET  answer_status= #{answerStatus},build_emp=#{buildEmp},build_time=now() WHERE question_id =#{id}
+		</update>  
+		<!-- 修改问题答案状态 -->
+		<!-- type==1 最佳  type==2  取消最佳   type==3 显示  type==4 隐藏 type==5 删除 -->
+		<update id="updateState">
+			UPDATE t_question_answer SET
+				<if test="type==1">
+					answer_adopt=1,
+				</if>
+				<if test="type==2">
+					answer_adopt=0,
+				</if>
+				<if test="type==3 || type==4">
+					answer_status=#{type},
+				</if>
+				<if test="type==5 ">
+					answer_status=0,
+				</if>
+				update_emp=#{eid},update_time=(NOW())
+				WHERE id=#{id}
+		</update>
+		<insert id="saveAnswer">
+			INSERT INTO t_question_answer(
+				content,
+				question_id,
+				answer_status,
+				build_emp,
+				build_time,
+				answer_adopt,
+				show_emp
+				)
+             VALUES(
+             #{content},#{questionId},#{answerStatus},#{buildEmp},(NOW()),#{answerAdopt},#{showEmp}
+             )
+		</insert>
+</mapper>

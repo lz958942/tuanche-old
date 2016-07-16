@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	<mapper namespace="com.tuanche.mapper.sem.write.AccountWriteMapper">
+		<insert id="insert">
+			insert into t_account
+				(company_id,account_name,company_code,account_code,biz_code,add_date,add_user_id,remark)
+			values 
+				(#{companyId},#{accountName},#{companyCode},#{accountCode},#{bizCode},now(),#{addUserId},#{remark})
+		</insert>
+		<update id="update">
+			update t_account
+				set account_name=#{accountName},
+					company_code=#{companyCode},
+					company_id=#{companyId},
+					account_code=#{accountCode},
+					remark=#{remark},
+					biz_code=#{bizCode}
+			where id=#{id}
+		</update>
+	</mapper>

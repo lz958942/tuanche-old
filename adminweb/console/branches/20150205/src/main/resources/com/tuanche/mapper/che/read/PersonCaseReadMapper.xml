@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.mapper.che.read.PersonCaseReadMapper" >
+  <sql id="Base_Column_List" >
+    id, city_id cityId, brand_id brandId, style_id styleId, price_evaluate priceEvaluate, 
+    user_name userName, picture, create_uid createUid, 
+    crate_time crateTime, update_uid updateUid, update_time updateTime, status,content
+  </sql>
+    <sql id="Base_Column_List_pc" >
+    pc.id, pc.city_id cityId, pc.brand_id brandId, pc.style_id styleId, pc.price_evaluate priceEvaluate, 
+    pc. user_name userName, pc.picture, pc.create_uid createUid, 
+    pc.crate_time crateTime, pc.update_uid updateUid, pc.update_time updateTime, pc.status 
+  </sql>
+  
+  <select id="PEListByConditionByPage" resultType="com.tuanche.bean.che.PersonCase">
+  	SELECT  DISTINCT 
+  		td.py AS cityCode, b.name AS brabdName ,c.style AS styleName, td.dname AS cityName,  <include refid="Base_Column_List_pc"/> FROM t_person_case  pc
+	LEFT JOIN tc_brand b  ON  b.id=pc.brand_id
+	LEFT JOIN tc_carstyle c ON pc.style_id=c.id
+	LEFT JOIN tc_district td  ON pc.city_id=td.id
+  		WHERE 1=1 AND
+			<foreach collection="condition" item="condition" separator="AND">
+				${condition}
+			</foreach>
+			order by id desc
+  </select>
+  <select id="updateTo" resultType="com.tuanche.bean.che.PersonCase">
+  		SELECT
+  			 <include refid="Base_Column_List"/> 
+  			FROM `t_person_case` WHERE id=#{id}
+  </select>
+</mapper>

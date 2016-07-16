@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.cms.adminwrite.ContentWriteMapper" >
+  <insert id="insert" parameterType="com.tuanche.cms.bean.Content" >
+    insert into t_cm_content (id, city_id, plate_id, plate_name,data_type,sort, title, descriction, 
+      imag_url, hyperlink, con_id, create_user_id, create_user_name, create_time, 
+      update_user_id, update_user_name, update_time,  city_name, car_type_id,group_leader_id,
+      expand)
+    values (#{id}, #{cityId}, #{plateId}, #{plateName}, #{dataType},#{sort}, #{title}, #{descriction}, 
+      #{imagUrl}, #{hyperlink}, #{conId}, #{createUserId}, #{createUserName}, now(), 
+      #{updateUserId}, #{updateUserName}, #{updateTime}, #{cityName}, #{carTypeId},#{groupLeaderId},
+      #{expand})
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tuanche.cms.bean.Content" >
+    update t_cm_content
+    <set >
+      <if test="cityId != null" >
+        city_id = #{cityId},
+      </if>
+      <if test="plateId != null" >
+        plate_id = #{plateId},
+      </if>
+       <if test="sort != null" >
+        sort = #{sort},
+      </if>
+      <if test="plateName != null" >
+        plate_name = #{plateName},
+      </if>
+      <if test="dataType != null" >
+        data_type = #{dataType},
+      </if>
+      <if test="title != null" >
+        title = #{title},
+      </if>
+      <if test="descriction != null" >
+        descriction = #{descriction},
+      </if>
+      <if test="imagUrl != null" >
+        imag_url = #{imagUrl},
+      </if>
+      <if test="hyperlink != null" >
+        hyperlink = #{hyperlink},
+      </if>
+      <if test="conId != null" >
+        con_id = #{conId},
+      </if>
+      <if test="createUserId != null" >
+        create_user_id = #{createUserId},
+      </if>
+      <if test="createUserName != null" >
+        create_user_name = #{createUserName},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime},
+      </if>
+      <if test="updateUserId != null" >
+        update_user_id = #{updateUserId},
+      </if>
+      <if test="updateUserName != null" >
+        update_user_name = #{updateUserName},
+      </if>
+        update_time = now(),
+      <if test="deleteFlay != null" >
+        delete_flay = #{deleteFlay},
+      </if>
+      <if test="cityName != null" >
+        city_name = #{cityName},
+      </if>
+      <if test="expand != null" >
+        expand = #{expand},
+      </if>
+      <if test="upSort != null" >
+        sort = sort +1,
+      </if>
+      <if test="doSort != null" >
+        sort = sort -1,
+      </if>
+      <if test="carTypeId != null" >
+        car_type_id =#{carTypeId} ,
+      </if>
+      <if test="groupLeaderId != null" >
+        group_leader_id  = #{groupLeaderId}
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+
+</mapper>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace和定义的Mapper接口对应，并实现其中的方法 -->
+<mapper namespace="com.tuanche.smc.persistence.write.admin.zixun.ZixunClassMapper">
+
+		<update id="updateZixunClassStatus">
+			update t_zixun_class 
+			set status = #{status}
+			where id = #{id}
+			<if test="status==-1" >
+				and status = 0
+			</if>
+		</update>
+		
+		<update id="updateZixunClass">
+			update t_zixun_class 
+			 set status = #{status},
+			 pid = #{pId},
+			 level = #{level},
+			 name = #{name},
+			 url = #{url},
+			 city_attr = #{cityAttr},
+			 keyword = #{keyword},
+			 title = #{title}
+			 where id = #{id}
+		</update>
+		
+		<insert id="save" >
+			insert into t_zixun_class(
+				pid,
+				level,
+				name,
+				url,
+				city_attr,
+				title,
+				keyword,
+				status
+			)
+			values(
+				#{pId},
+				#{level},
+				#{name},
+				#{url},
+				#{cityAttr},
+				#{title},
+				#{keyword},
+				#{status}
+			)
+		</insert>
+</mapper>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tuanche.mapper.che.read.PicAtlasReadMapper">
+<sql id="sqls">
+		id,name, 
+		atlas_title atlasTitle ,
+		atlas_desc atlasDesc ,
+		create_uid createUid,
+		create_time createTime
+</sql>
+<select id="findByName" resultType="com.tuanche.bean.che.PicAtlasBean">
+	SELECT id FROM tc_pic_collection WHERE name=#{name}
+</select>
+<select id="getAtlas" resultType="com.tuanche.bean.che.PicAtlasBean">
+	SELECT id,name FROM tc_pic_collection
+</select>
+<select id="findByid" resultType="com.tuanche.bean.che.PicAtlasBean">
+	SELECT id,atlas_title AS atlasTitle,atlas_desc AS atlasDesc FROM tc_pic_collection WHERE id=#{id}
+</select>
+
+<select id="getAtlasByName" resultType="com.tuanche.bean.che.PicAtlasBean">
+	SELECT id,NAME FROM tc_pic_collection WHERE  NAME LIKE '%' #{name} '%' LIMIT 0,6
+</select>
+</mapper>
